@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 // import 'package:flutter/src/widgets/framework.dart';
 // import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:yts_flutter/Classes/Author.dart';
+import 'package:yts_flutter/widgets/pages/RabbiPage.dart';
 
-const double _defaultCardDimentions = 200;
+const double _defaultCardDimentions = 140;
 
 class HomeRabbiCard extends StatelessWidget {
   final Author rabbi;
@@ -31,6 +32,20 @@ class HomeRabbiCard extends StatelessWidget {
                 fit: BoxFit.cover,
                 width: _defaultCardDimentions,
                 height: _defaultCardDimentions),
+            Positioned.fill(
+                child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                // splashColor: Colors.white.withOpacity(0.5),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RabbiPage(rabbi: rabbi)),
+                  );
+                },
+              ),
+            )),
             Align(
               alignment: Alignment.bottomLeft,
               child: ClipRRect(

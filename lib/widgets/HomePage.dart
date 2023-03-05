@@ -54,7 +54,7 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final sections = {
       "Recent Shiurim": SizedBox(
-        height: 200,
+        height: 120,
         child: Center(
             child: ListView.separated(
           scrollDirection: Axis.horizontal,
