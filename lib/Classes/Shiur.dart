@@ -3,15 +3,13 @@ import 'package:yts_flutter/Classes/Author.dart';
 
 class Shiur {
   String attributionID;
-  late Author author;
+  late BasicAuthor author;
   DateTime date;
   String description;
   int duration;
   String sourcePath;
   String title;
   ShiurType type;
-
-  static List<Shiur>? shiurim;
 
   Shiur({
     required this.attributionID,
@@ -27,7 +25,8 @@ class Shiur {
   factory Shiur.fromJson(Map<String, dynamic> json) {
     return Shiur(
       attributionID: json['attributionID'],
-      author: json['author'],
+      author: BasicAuthor(id: json['attributionID'], name: json['author']),
+      //json['author'],
       date: (json['date'] as Timestamp).toDate(),
       description: json['description'],
       duration: json['duration'] as int,
@@ -35,6 +34,21 @@ class Shiur {
       title: json['title'],
       type: ShiurType.audio,
     );
+  }
+
+  static Future<List<Shiur>> loadShiurim() async {
+    List<Shiur> shiurim = [];
+    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await FirebaseFirestore.instance
+            .collection('content')
+            .orderBy('date', descending: true)
+            .limit(20)
+            .get();
+    for (final doc in querySnapshot.docs) {
+      final Shiur shiur = Shiur.fromJson(doc.data());
+      shiurim.add(shiur);
+    }
+    return shiurim;
   }
 }
 
