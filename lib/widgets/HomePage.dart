@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/Classes/Author.dart';
 import 'package:yts_flutter/widgets/cards/HomeRabbiCard.dart';
+import 'package:yts_flutter/widgets/helpers/TextDivider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({key}) : super(key: key);
@@ -46,7 +47,9 @@ class HomePageState extends State<HomePage> {
     // ),
     return Column(
       children: [
-        Expanded(
+        TextDivider(text: "Rebbeim"),
+        SizedBox(
+          height: 200,
           child: Center(
               child: ListView.separated(
             scrollDirection: Axis.horizontal,
@@ -58,6 +61,7 @@ class HomePageState extends State<HomePage> {
                 HomeRabbiCard(rabbi: rebbeim[index]),
           )),
         ),
+        Divider()
       ],
     );
     // Center(
