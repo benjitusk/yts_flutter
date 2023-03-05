@@ -1,3 +1,4 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:yts_flutter/widgets/HomePage.dart';
@@ -10,6 +11,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // App Check
+  await FirebaseAppCheck.instance.activate(
+      androidProvider: AndroidProvider.debug,
+      webRecaptchaSiteKey: "recaptcha-v3-site-key");
   // Anonymously sign in
   await FirebaseAuth.instance.signInAnonymously();
   runApp(const MyApp());
