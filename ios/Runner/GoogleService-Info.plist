@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>3976870161-0eralstkbl3m6efe0tv7h2cq34p6io63.apps.googleusercontent.com</string>
+	<string>3976870161-9c4hbmni8av1jl1clfgpoo7b59855aun.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.3976870161-0eralstkbl3m6efe0tv7h2cq34p6io63</string>
+	<string>com.googleusercontent.apps.3976870161-9c4hbmni8av1jl1clfgpoo7b59855aun</string>
 	<key>API_KEY</key>
 	<string>AIzaSyATIYlSE0mRHxyTILjup8BEvPZz35z4qsA</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.ytsFlutter</string>
+	<string>com.benjitusk.YTS</string>
 	<key>PROJECT_ID</key>
 	<string>yeshivat-torat-shraga</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:3976870161:ios:53b9b12fb087dc2b0d74b0</string>
+	<string>1:3976870161:ios:f29f7981fb5b0b1f0d74b0</string>
 	<key>DATABASE_URL</key>
 	<string>https://yeshivat-torat-shraga-default-rtdb.firebaseio.com</string>
 </dict>
