@@ -41,42 +41,6 @@
           ]
         }
       }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:3976870161:android:054bc2a299d06b090d74b0",
-        "android_client_info": {
-          "package_name": "com.example.yts_flutter"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "3976870161-ais1uvrlkdhabvoj9ro80288r9g0rldf.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDlc_OYJqpkis9_5zmQMf4FZ4f8d_s31Og"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "3976870161-ais1uvrlkdhabvoj9ro80288r9g0rldf.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "3976870161-0eralstkbl3m6efe0tv7h2cq34p6io63.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.ytsFlutter"
-              }
-            }
-          ]
-        }
-      }
     }
   ],
   "configuration_version": "1"
