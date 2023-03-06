@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/Classes/Shiur.dart';
-import 'package:yts_flutter/widgets/helpers/Constants.dart';
+import 'package:yts_flutter/widgets/helpers/BaseCard.dart';
 
 const _defaultCardWidth = 200.0;
 
@@ -9,28 +9,11 @@ class HomeShiurCard extends StatelessWidget {
   final Shiur shiur;
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Container(
-      width: _defaultCardWidth,
+    return BaseCard(
+      dimentions: (width: _defaultCardWidth, height: null),
       constraints: BoxConstraints(minWidth: _defaultCardWidth),
-      child: ClipRRect(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          borderRadius: BorderRadius.circular(12),
-          child: Stack(children: [
-            Positioned.fill(
-                child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                  // splashColor: Colors.white.withOpacity(0.5),
-                  // onTap: () {
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => RabbiPage(rabbi: rabbi)),
-                  //   );
-                  // },
-                  ),
-            )),
+      inkWell: InkWell(),
+      children: [
             Container(
                 constraints: BoxConstraints(minWidth: _defaultCardWidth),
                 decoration: BoxDecoration(
@@ -63,7 +46,7 @@ class HomeShiurCard extends StatelessWidget {
                     )
                   ],
                 )),
-          ])),
-    ));
+          ]
+    );
   }
 }

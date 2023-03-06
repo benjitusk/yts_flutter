@@ -1,9 +1,8 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/src/widgets/container.dart';
-// import 'package:flutter/src/widgets/framework.dart';
-// import 'package:flutter/src/widgets/placeholder.dart';
+import "../helpers/BaseCard.dart";
 import 'package:yts_flutter/Classes/Author.dart';
 import 'package:yts_flutter/widgets/pages/RabbiPage.dart';
 
@@ -15,27 +14,15 @@ class HomeRabbiCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Container(
-      width: _defaultCardDimentions,
-      height: _defaultCardDimentions,
+    return BaseCard(
+      dimentions: const (height: _defaultCardDimentions, width: _defaultCardDimentions),
       constraints: const BoxConstraints(
           maxWidth: _defaultCardDimentions,
           maxHeight: _defaultCardDimentions,
           minHeight: _defaultCardDimentions,
-          minWidth: _defaultCardDimentions),
-      child: ClipRRect(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          borderRadius: BorderRadius.circular(12),
-          child: Stack(children: [
-            Image.network(rabbi.profilePictureURL,
-                fit: BoxFit.cover,
-                width: _defaultCardDimentions,
-                height: _defaultCardDimentions),
-            Positioned.fill(
-                child: Material(
-              color: Colors.transparent,
-              child: InkWell(
+          minWidth: _defaultCardDimentions
+    ),
+    inkWell: InkWell(
                 // splashColor: Colors.white.withOpacity(0.5),
                 onTap: () {
                   Navigator.push(
@@ -45,7 +32,12 @@ class HomeRabbiCard extends StatelessWidget {
                   );
                 },
               ),
-            )),
+      children: [
+            CachedNetworkImage(
+                imageUrl: rabbi.profilePictureURL,
+                fit: BoxFit.cover,
+                width: _defaultCardDimentions,
+                height: _defaultCardDimentions),
             Align(
               alignment: Alignment.bottomLeft,
               child: ClipRRect(
@@ -69,7 +61,7 @@ class HomeRabbiCard extends StatelessWidget {
                 ),
               ),
             )
-          ])),
-    ));
+          ],
+    );
   }
 }
