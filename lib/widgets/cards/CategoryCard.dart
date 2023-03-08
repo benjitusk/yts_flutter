@@ -16,13 +16,25 @@ class CategoryCard extends StatelessWidget {
             // constraints: BoxConstraints(maxWidth: 600),
             onClick: () {},
             children: [
-              if (category.imageURL != null)
               Container(
                 height: double.infinity,
                 decoration: BoxDecoration(
-                      image: DecorationImage(
+                  image: (category.imageURL != null)
+                      ? DecorationImage(
                           image: CachedNetworkImageProvider(category.imageURL!),
-                          fit: BoxFit.cover)),
+                          fit: BoxFit.cover)
+                      : null,
+                  gradient: (category.imageURL == null)
+                      ? LinearGradient(
+                          begin: Alignment.bottomLeft,
+                          end: Alignment.topRight,
+                          colors: [
+                            Colors.red.withOpacity(1),
+                            Colors.orange.withOpacity(1),
+                          ],
+                        )
+                      : null,
+                ),
                 child: Container(
                   color: Colors.black.withOpacity(0.2),
                   child: Padding(
