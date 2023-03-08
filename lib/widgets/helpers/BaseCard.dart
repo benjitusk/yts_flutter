@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BaseCard extends StatelessWidget {
-  const BaseCard({super.key, this.children = const [], this.dimentions, this.constraints, this.inkWell});
-  final InkWell? inkWell;
+  const BaseCard({super.key, this.children = const [], this.dimentions, this.constraints, this.onClick});
+  final VoidCallback? onClick;
   final List<Widget> children;
   final ({double? height, double? width})? dimentions;
   final BoxConstraints? constraints;
@@ -18,10 +18,14 @@ class BaseCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           child: Stack(children:[
             ...children,
-            if (inkWell != null) Positioned.fill(
+            if (onClick != null) Positioned.fill(
                 child: Material(
               color: Colors.transparent,
-              child: inkWell,
+              child: InkWell(
+                onTap: onClick,
+                // splashColor: Colors.black.withOpacity(0.2),
+                // highlightColor: Colors.black.withOpacity(0.1),
+              )
             )),
             ]),
         )));

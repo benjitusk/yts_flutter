@@ -12,7 +12,7 @@ class HomeShiurCard extends StatelessWidget {
     return BaseCard(
       dimentions: (width: _defaultCardWidth, height: null),
       constraints: BoxConstraints(minWidth: _defaultCardWidth),
-      inkWell: InkWell(),
+      onClick: () {},
       children: [
             Container(
                 constraints: BoxConstraints(minWidth: _defaultCardWidth),

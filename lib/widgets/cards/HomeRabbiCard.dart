@@ -22,16 +22,13 @@ class HomeRabbiCard extends StatelessWidget {
           minHeight: _defaultCardDimentions,
           minWidth: _defaultCardDimentions
     ),
-    inkWell: InkWell(
-                // splashColor: Colors.white.withOpacity(0.5),
-                onTap: () {
+    onClick: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => RabbiPage(rabbi: rabbi)),
                   );
                 },
-              ),
       children: [
             CachedNetworkImage(
                 imageUrl: rabbi.profilePictureURL,

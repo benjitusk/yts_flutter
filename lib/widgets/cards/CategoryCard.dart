@@ -13,33 +13,32 @@ class CategoryCard extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         BaseCard(
-            inkWell: InkWell(
-              onTap: () {},
-            ),
+            // constraints: BoxConstraints(maxWidth: 600),
+            onClick: () {},
             children: [
               if (category.imageURL != null)
-                Container(
-                  height: double.infinity,
-                  decoration: BoxDecoration(
+              Container(
+                height: double.infinity,
+                decoration: BoxDecoration(
                       image: DecorationImage(
                           image: CachedNetworkImageProvider(category.imageURL!),
                           fit: BoxFit.cover)),
-                  child: Container(
-                    color: Colors.black.withOpacity(0.2),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                      child: Center(
-                        child: Text(category.displayName,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineLarge!
-                                .copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold)),
-                      ),
+                child: Container(
+                  color: Colors.black.withOpacity(0.2),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                    child: Center(
+                      child: Text(category.displayName,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineLarge!
+                              .copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ),
+              ),
             ]),
       ],
     );
