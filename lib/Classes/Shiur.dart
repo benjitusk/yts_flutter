@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:yts_flutter/Classes/Author.dart';
 
 class Shiur {
@@ -36,7 +37,7 @@ class Shiur {
     );
   }
 
-  static Future<List<Shiur>> loadShiurim() async {
+  static Future<List<Shiur>> loadShiurim(List<Author> authors) async {
     List<Shiur> shiurim = [];
     final QuerySnapshot<Map<String, dynamic>> querySnapshot =
         await FirebaseFirestore.instance
@@ -46,6 +47,9 @@ class Shiur {
             .get();
     for (final doc in querySnapshot.docs) {
       final Shiur shiur = Shiur.fromJson(doc.data());
+      Author? possibleAuthor = authors
+          .firstWhereOrNull((element) => element.id == shiur.attributionID);
+      if (possibleAuthor != null) shiur.author = possibleAuthor;
       shiurim.add(shiur);
     }
     return shiurim;

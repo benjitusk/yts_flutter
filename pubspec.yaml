@@ -10,6 +10,7 @@ dependencies:
   cached_network_image: ^3.2.3
   carousel_slider: ^4.2.1
   cloud_firestore: ^4.4.3
+  collection: ^1.17.0
   firebase_app_check: ^0.1.1+12
   firebase_auth: ^4.2.9
   firebase_core: ^2.7.0

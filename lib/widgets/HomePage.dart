@@ -1,6 +1,5 @@
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/Classes/Author.dart';
@@ -47,14 +46,16 @@ class HomePageState extends State<HomePage> {
       setState(() {
         rebbeim.addAll(authors);
       });
-    });
-    print(" 2) Fetching recent shiurim...");
-    Shiur.loadShiurim().then((shiurim) {
-      recentShiurim.clear();
-      setState(() {
-        recentShiurim.addAll(shiurim);
+    }).then((_) {
+      print(" 2) Fetching recent shiurim...");
+      Shiur.loadShiurim(rebbeim).then((shiurim) {
+        recentShiurim.clear();
+        setState(() {
+          recentShiurim.addAll(shiurim);
+        });
       });
     });
+
     print(" 3) Fetching featured pictures...");
     FirebaseFirestore.instance
         .collection("slideshowImages")
