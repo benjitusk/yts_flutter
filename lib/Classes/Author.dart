@@ -4,14 +4,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 typedef FirebaseID = String;
 
 class Author extends BasicAuthor {
-  String name;
   String profilePictureURL;
-  FirebaseID id;
 
-  // Inherited from BasicAuthor
+  // Inherited from BasicAuthor, but we need to pass it to super. We'll do this WITHOUT an explicit call to super.
   Author(
-      {required this.name, required this.profilePictureURL, required this.id})
-      : super(name: name, id: id);
+      {required super.name,
+      required this.profilePictureURL,
+      required super.id});
 
   static List<Author>? authors;
 
