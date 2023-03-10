@@ -95,7 +95,7 @@ class HomePageState extends State<HomePage> {
           scrollDirection: Axis.horizontal,
           // Space the cards out a bit
           padding: const EdgeInsets.all(8),
-          separatorBuilder: (context, index) => const SizedBox(width: 15),
+          separatorBuilder: (context, index) => const SizedBox(width: 6),
           itemCount: recentShiurim.length,
           itemBuilder: (context, index) =>
               HomeShiurCard(shiur: recentShiurim[index]),
@@ -107,7 +107,7 @@ class HomePageState extends State<HomePage> {
             child: ListView.separated(
           padding: const EdgeInsets.all(8.0),
           scrollDirection: Axis.horizontal,
-          separatorBuilder: (context, index) => const SizedBox(width: 15),
+          separatorBuilder: (context, index) => const SizedBox(width: 6),
           itemCount: rebbeim.length,
           itemBuilder: (context, index) => HomeRabbiCard(rabbi: rebbeim[index]),
         )),
@@ -119,7 +119,7 @@ class HomePageState extends State<HomePage> {
           scrollDirection: Axis.horizontal,
           // Space the cards out a bit
           padding: const EdgeInsets.all(8),
-          separatorBuilder: (context, index) => const SizedBox(width: 15),
+          separatorBuilder: (context, index) => const SizedBox(width: 6),
           itemCount: categories.length,
           itemBuilder: (context, index) =>
               CategoryCard(category: categories[index]),
