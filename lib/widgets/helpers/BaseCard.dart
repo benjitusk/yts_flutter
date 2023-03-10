@@ -15,7 +15,7 @@ class BaseCard extends StatelessWidget {
       constraints: constraints,
       child: ClipRRect(
           clipBehavior: Clip.antiAliasWithSaveLayer,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
           child: Stack(children:[
             ...children,
             if (onClick != null) Positioned.fill(
