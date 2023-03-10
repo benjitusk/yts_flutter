@@ -7,7 +7,7 @@ class Shiur {
   late BasicAuthor author;
   DateTime date;
   String description;
-  int duration;
+  Duration duration;
   String sourcePath;
   String title;
   ShiurType type;
@@ -30,7 +30,7 @@ class Shiur {
       //json['author'],
       date: (json['date'] as Timestamp).toDate(),
       description: json['description'],
-      duration: json['duration'] as int,
+      duration: Duration(seconds: json['duration'] as int),
       sourcePath: json['source_path'],
       title: json['title'],
       type: ShiurType.audio,
