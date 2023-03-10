@@ -9,7 +9,11 @@ class TextDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(text, style: Theme.of(context).textTheme.titleLarge),
+        Text(text,
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge!
+                .copyWith(color: Theme.of(context).colorScheme.primary)),
         SizedBox(width: 8),
         Expanded(
           child: Divider(
