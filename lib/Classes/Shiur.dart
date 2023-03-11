@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:collection/collection.dart';
 import 'package:yts_flutter/Classes/Author.dart';
+import 'package:yts_flutter/Classes/Streamable.dart';
 
-class Shiur {
+class Shiur implements Streamable {
   String attributionID;
   late BasicAuthor author;
   DateTime date;
   String description;
   Duration duration;
-  String sourcePath;
+  @override
+  String playbackUrl;
   String title;
   ShiurType type;
 
@@ -18,7 +21,7 @@ class Shiur {
     required this.author,
     required this.description,
     required this.duration,
-    required this.sourcePath,
+    required this.playbackUrl,
     required this.title,
     required this.type,
   });
@@ -31,28 +34,31 @@ class Shiur {
       date: (json['date'] as Timestamp).toDate(),
       description: json['description'],
       duration: Duration(seconds: json['duration'] as int),
-      sourcePath: json['source_path'],
+      playbackUrl: json['url'],
       title: json['title'],
       type: ShiurType.audio,
     );
   }
 
   static Future<List<Shiur>> loadShiurim(List<Author> authors) async {
-    List<Shiur> shiurim = [];
     final QuerySnapshot<Map<String, dynamic>> querySnapshot =
         await FirebaseFirestore.instance
             .collection('content')
             .orderBy('date', descending: true)
             .limit(20)
             .get();
-    for (final doc in querySnapshot.docs) {
-      final Shiur shiur = Shiur.fromJson(doc.data());
+    return await Future.wait(querySnapshot.docs.map((doc) async {
+      final docData = doc.data();
+      final url = await FirebaseFunctions.instance
+          .httpsCallable('loadSignedUrlBySourcePath')
+          .call({'sourcePath': docData['source_path']});
+      docData['url'] = url.data;
+      final Shiur shiur = Shiur.fromJson(docData);
       Author? possibleAuthor = authors
           .firstWhereOrNull((element) => element.id == shiur.attributionID);
       if (possibleAuthor != null) shiur.author = possibleAuthor;
-      shiurim.add(shiur);
-    }
-    return shiurim;
+      return shiur;
+    }));
   }
 }
 

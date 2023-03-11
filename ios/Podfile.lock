@@ -1,9 +1,17 @@
 PODS:
+  - assets_audio_player (0.0.1):
+    - Flutter
+  - assets_audio_player_web (0.0.1):
+    - Flutter
   - cloud_firestore (4.4.3):
     - Firebase/Firestore (= 10.3.0)
     - firebase_core
     - Flutter
     - nanopb (< 2.30910.0, >= 2.30908.0)
+  - cloud_functions (4.0.12):
+    - Firebase/Functions (= 10.3.0)
+    - firebase_core
+    - Flutter
   - Firebase/Auth (10.3.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 10.3.0)
@@ -12,6 +20,9 @@ PODS:
   - Firebase/Firestore (10.3.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 10.3.0)
+  - Firebase/Functions (10.3.0):
+    - Firebase/CoreOnly
+    - FirebaseFunctions (~> 10.3.0)
   - Firebase/Storage (10.3.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 10.3.0)
@@ -24,7 +35,7 @@ PODS:
     - Firebase/Auth (= 10.3.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.7.0):
+  - firebase_core (2.7.1):
     - Firebase/CoreOnly (= 10.3.0)
     - Flutter
   - firebase_storage (11.0.14):
@@ -58,6 +69,16 @@ PODS:
   - FirebaseFirestore/Base (10.3.0)
   - FirebaseFirestore/WithLeveldb (10.3.0):
     - FirebaseFirestore/Base
+  - FirebaseFunctions (10.3.0):
+    - FirebaseAppCheckInterop (~> 10.0)
+    - FirebaseAuthInterop (~> 10.0)
+    - FirebaseCore (~> 10.0)
+    - FirebaseCoreExtension (~> 10.0)
+    - FirebaseMessagingInterop (~> 10.0)
+    - FirebaseSharedSwift (~> 10.0)
+    - GTMSessionFetcher/Core (< 4.0, >= 2.1)
+  - FirebaseMessagingInterop (10.6.0)
+  - FirebaseSharedSwift (10.6.0)
   - FirebaseStorage (10.3.0):
     - FirebaseAppCheckInterop (~> 10.0)
     - FirebaseAuthInterop (~> 10.0)
@@ -98,7 +119,10 @@ PODS:
     - FMDB (>= 2.7.5)
 
 DEPENDENCIES:
+  - assets_audio_player (from `.symlinks/plugins/assets_audio_player/ios`)
+  - assets_audio_player_web (from `.symlinks/plugins/assets_audio_player_web/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
+  - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
   - firebase_app_check (from `.symlinks/plugins/firebase_app_check/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -118,6 +142,9 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseCoreExtension
     - FirebaseCoreInternal
+    - FirebaseFunctions
+    - FirebaseMessagingInterop
+    - FirebaseSharedSwift
     - FirebaseStorage
     - FMDB
     - GoogleUtilities
@@ -126,8 +153,14 @@ SPEC REPOS:
     - PromisesObjC
 
 EXTERNAL SOURCES:
+  assets_audio_player:
+    :path: ".symlinks/plugins/assets_audio_player/ios"
+  assets_audio_player_web:
+    :path: ".symlinks/plugins/assets_audio_player_web/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
+  cloud_functions:
+    :path: ".symlinks/plugins/cloud_functions/ios"
   firebase_app_check:
     :path: ".symlinks/plugins/firebase_app_check/ios"
   firebase_auth:
@@ -152,11 +185,14 @@ CHECKOUT OPTIONS:
     :tag: 10.3.0
 
 SPEC CHECKSUMS:
+  assets_audio_player: edee322b9cb625571b830b35872ead1a295fd917
+  assets_audio_player_web: 19826380c44375761aa0b9053665c1e3fbc3b86b
   cloud_firestore: 94326bb743acbfe43c68f933dab8a094e84d5849
+  cloud_functions: 2f94f15bda6cfb61f02b2d6bf49c2be508ccaef4
   Firebase: f92fc551ead69c94168d36c2b26188263860acd9
   firebase_app_check: 55495f7c33ed2c37c7a10e92cae1a4fec59472ee
   firebase_auth: 4e8c693e848ed13b263de2d702d55fa82ed04a79
-  firebase_core: 128d8c43c3a453a4a67463314fc3761bedff860b
+  firebase_core: 1ae9f9aa76e6e1edc14fb181637ad466fd6c6fa4
   firebase_storage: bdbef04ce485eb426152016c735736bc3615b8c0
   FirebaseAppCheck: edbc4d99f30a2762603d618330f28046a47c031d
   FirebaseAppCheckInterop: 13e5394346a811e7158cc136c01f10e3302a3514
@@ -166,6 +202,9 @@ SPEC CHECKSUMS:
   FirebaseCoreExtension: 318e5ee9ad4092b00423c2bddd51c3f5c3585973
   FirebaseCoreInternal: c7cd505e2136811096b225ac388d6254a2622362
   FirebaseFirestore: ef5e47e1489c03dc978f94e8b43ad5f67a77df8c
+  FirebaseFunctions: d8415d2237cc807d05fa0a921d645f50a0d9d803
+  FirebaseMessagingInterop: 9607c116534fc11e11925a312da989a5dd8e6827
+  FirebaseSharedSwift: 103ae5bacb5468cd7727ae141f338fa94d7ee1f2
   FirebaseStorage: 0efbff0ac978981866d89804191688ae50d64033
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
