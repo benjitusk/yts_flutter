@@ -19,7 +19,7 @@ class HomeShiurCard extends StatelessWidget {
         children: [
           Container(
               padding: EdgeInsets.all(10),
-              constraints: BoxConstraints(minWidth: 175),
+              constraints: BoxConstraints(minWidth: 200),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,

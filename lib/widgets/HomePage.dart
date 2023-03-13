@@ -35,8 +35,6 @@ class HomePageState extends State<HomePage> {
   void loadData() async {
     // Log a clearly identifiable message
     // that we're making production API calls
-    print("====== PRODUCTION API CALLS ======");
-    print(" 1) Fetching rebbeim...");
     Author.loadAuthors().then((authors) {
       rebbeim.clear();
       // Sort by last name
@@ -47,7 +45,6 @@ class HomePageState extends State<HomePage> {
         rebbeim.addAll(authors);
       });
     }).then((_) {
-      print(" 2) Fetching recent shiurim...");
       Shiur.loadShiurim(rebbeim).then((shiurim) {
         recentShiurim.clear();
         setState(() {
@@ -56,7 +53,6 @@ class HomePageState extends State<HomePage> {
       });
     });
 
-    print(" 3) Fetching featured pictures...");
     FirebaseFirestore.instance
         .collection("slideshowImages")
         .orderBy("uploaded", descending: true)
@@ -75,21 +71,19 @@ class HomePageState extends State<HomePage> {
         });
       });
     });
-    print(" 4) Fetching categories...");
     Category.loadCategories().then((categories) {
       this.categories.clear();
       setState(() {
         this.categories.addAll(categories);
       });
     });
-    print("==================================");
   }
 
   @override
   Widget build(BuildContext context) {
     final sections = {
       "Recent Shiurim": SizedBox(
-        height: 120,
+        height: 137,
         child: Center(
             child: ListView.separated(
           scrollDirection: Axis.horizontal,
@@ -102,7 +96,7 @@ class HomePageState extends State<HomePage> {
         )),
       ),
       "Rebbeim": SizedBox(
-        height: 200,
+        height: 156,
         child: Center(
             child: ListView.separated(
           padding: const EdgeInsets.all(8.0),
