@@ -10,7 +10,6 @@ class Shiur implements Streamable {
   DateTime date;
   String description;
   Duration duration;
-  @override
   String playbackUrl;
   String title;
   ShiurType type;
