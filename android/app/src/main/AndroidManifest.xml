@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.benjitusk.YTS">
    <application
-        android:label="yts_flutter"
+        android:label="YTS"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
