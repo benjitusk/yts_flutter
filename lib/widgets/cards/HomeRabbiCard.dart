@@ -15,50 +15,47 @@ class HomeRabbiCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseCard(
-      dimentions: const (height: _defaultCardDimentions, width: _defaultCardDimentions),
       constraints: const BoxConstraints(
           maxWidth: _defaultCardDimentions,
           maxHeight: _defaultCardDimentions,
           minHeight: _defaultCardDimentions,
-          minWidth: _defaultCardDimentions
-    ),
-    onClick: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => RabbiPage(rabbi: rabbi)),
-                  );
-                },
+          minWidth: _defaultCardDimentions),
+      onClick: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => RabbiPage(rabbi: rabbi)),
+        );
+      },
       children: [
-            CachedNetworkImage(
-                imageUrl: rabbi.profilePictureURL,
-                fit: BoxFit.cover,
-                width: _defaultCardDimentions,
-                height: _defaultCardDimentions),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: ClipRRect(
-                borderRadius:
-                    const BorderRadius.only(topRight: Radius.circular(12)),
-                child: Container(
-                  color: Colors.black.withOpacity(0.5),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                    child: Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: Text(
-                        rabbi.name,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
+        CachedNetworkImage(
+            imageUrl: rabbi.profilePictureURL,
+            fit: BoxFit.cover,
+            width: _defaultCardDimentions,
+            height: _defaultCardDimentions),
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: ClipRRect(
+            borderRadius:
+                const BorderRadius.only(topRight: Radius.circular(12)),
+            child: Container(
+              color: Colors.black.withOpacity(0.5),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                child: Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Text(
+                    rabbi.name,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
-            )
-          ],
+            ),
+          ),
+        )
+      ],
     );
   }
 }
