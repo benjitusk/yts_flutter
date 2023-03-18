@@ -57,7 +57,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyATIYlSE0mRHxyTILjup8BEvPZz35z4qsA',
-    appId: '1:3976870161:ios:f29f7981fb5b0b1f0d74b0',
+    appId: '1:3976870161:ios:cc657b3b144a3e7c0d74b0',
     messagingSenderId: '3976870161',
     projectId: 'yeshivat-torat-shraga',
     databaseURL: 'https://yeshivat-torat-shraga-default-rtdb.firebaseio.com',
@@ -68,7 +68,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyATIYlSE0mRHxyTILjup8BEvPZz35z4qsA',
-    appId: '1:3976870161:ios:f29f7981fb5b0b1f0d74b0',
+    appId: '1:3976870161:ios:cc657b3b144a3e7c0d74b0',
     messagingSenderId: '3976870161',
     projectId: 'yeshivat-torat-shraga',
     databaseURL: 'https://yeshivat-torat-shraga-default-rtdb.firebaseio.com',

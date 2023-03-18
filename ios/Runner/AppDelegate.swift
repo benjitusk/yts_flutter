@@ -1,4 +1,5 @@
 import UIKit
+import FirebaseAppCheck
 import Flutter
 import Firebase
 
@@ -8,23 +9,10 @@ import Firebase
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-#if DEBUG
     let providerFactory = AppCheckDebugProviderFactory()
-#else
-    let providerFactory = YTSAppCheckProviderFactory()
-#endif
     AppCheck.setAppCheckProviderFactory(providerFactory)
+      FirebaseApp.configure()
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-  }
-}
-
-class YTSAppCheckProviderFactory: NSObject, AppCheckProviderFactory {
-  func createProvider(with app: FirebaseApp) -> AppCheckProvider? {
-    if #available(iOS 14.0, *) {
-      return AppAttestProvider(app: app)
-    } else {
-      return DeviceCheckProvider(app: app)
-    }
   }
 }

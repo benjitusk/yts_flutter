@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:3976870161:ios:f29f7981fb5b0b1f0d74b0</string>
+	<string>1:3976870161:ios:cc657b3b144a3e7c0d74b0</string>
 	<key>DATABASE_URL</key>
 	<string>https://yeshivat-torat-shraga-default-rtdb.firebaseio.com</string>
 </dict>

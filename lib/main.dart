@@ -15,6 +15,7 @@ void main() async {
   // App Check
   await FirebaseAppCheck.instance.activate(
       androidProvider: AndroidProvider.debug,
+      appleProvider: AppleProvider.debug,
       webRecaptchaSiteKey: "recaptcha-v3-site-key");
   // Anonymously sign in
   await FirebaseAuth.instance.signInAnonymously();
