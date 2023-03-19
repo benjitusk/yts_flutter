@@ -25,10 +25,17 @@ class Shiur implements Streamable {
     required this.type,
   });
 
-  factory Shiur.fromJson(Map<String, dynamic> json) {
+  static Future<Shiur> fromJson(Map<String, dynamic> json,
+      {Author? author}) async {
+    final url = await FirebaseFunctions.instance
+        .httpsCallable('loadSignedUrlBySourcePath')
+        .call({'sourcePath': json['source_path']});
+    json['url'] = url.data;
+    if (author != null) assert(author.id == json["attributionID"]);
     return Shiur(
       attributionID: json['attributionID'],
-      author: BasicAuthor(id: json['attributionID'], name: json['author']),
+      author: author ??
+          BasicAuthor(id: json['attributionID'], name: json['author']),
       //json['author'],
       date: (json['date'] as Timestamp).toDate(),
       description: json['description'],
@@ -48,14 +55,9 @@ class Shiur implements Streamable {
             .get();
     return await Future.wait(querySnapshot.docs.map((doc) async {
       final docData = doc.data();
-      final url = await FirebaseFunctions.instance
-          .httpsCallable('loadSignedUrlBySourcePath')
-          .call({'sourcePath': docData['source_path']});
-      docData['url'] = url.data;
-      final Shiur shiur = Shiur.fromJson(docData);
-      Author? possibleAuthor = authors
-          .firstWhereOrNull((element) => element.id == shiur.attributionID);
-      if (possibleAuthor != null) shiur.author = possibleAuthor;
+      Author? possibleAuthor = authors.firstWhereOrNull(
+          (element) => element.id == docData["attributionID"]);
+      final Shiur shiur = await Shiur.fromJson(docData, author: possibleAuthor);
       return shiur;
     }));
   }
