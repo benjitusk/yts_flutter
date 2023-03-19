@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 class BaseCard extends StatelessWidget {
   const BaseCard(
-      {super.key, this.children = const [], this.constraints, this.onClick});
+      {super.key,
+      this.children = const [],
+      this.constraints,
+      this.onClick,
+      this.decoration});
   final VoidCallback? onClick;
+  final BoxDecoration? decoration;
   final List<Widget> children;
   final BoxConstraints? constraints;
   @override
@@ -11,6 +16,7 @@ class BaseCard extends StatelessWidget {
     return Center(
         child: Container(
             constraints: constraints,
+            decoration: decoration,
             child: ClipRRect(
               clipBehavior: Clip.antiAliasWithSaveLayer,
               borderRadius: BorderRadius.circular(8),
