@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TextDivider extends StatelessWidget {
-  const TextDivider({super.key, required this.text});
+  const TextDivider(this.text, {super.key});
   static const dividerColor = Colors.grey;
   final String text;
 

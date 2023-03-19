@@ -134,7 +134,7 @@ class HomePageState extends State<HomePage> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(UI.PAGE_PADDING),
-                      child: TextDivider(text: title),
+                      child: TextDivider(title),
                     ),
                     widget,
                   ],
