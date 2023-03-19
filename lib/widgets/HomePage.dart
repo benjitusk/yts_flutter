@@ -1,6 +1,3 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/Classes/Author.dart';
 import 'package:yts_flutter/Classes/Category.dart';
@@ -12,73 +9,20 @@ import 'package:yts_flutter/widgets/cards/HomeShiurCard.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
 import 'package:yts_flutter/widgets/helpers/TextDivider.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({key}) : super(key: key);
-
-  @override
-  HomePageState createState() => HomePageState();
-}
-
-class HomePageState extends State<HomePage> {
-  // This will hold the list of news titles (list of strings)
-  final List<Author> rebbeim = [];
-  final List<Shiur> recentShiurim = [];
-  final List<String> featuredImageURLs = [];
-  final List<Category> categories = [];
-  // Load rebbeim from Firebase when the page is loaded
-  @override
-  void initState() {
-    super.initState();
-    loadData();
-  }
+class HomePage extends StatelessWidget {
+  HomePage(
+      {key,
+      required this.rebbeim,
+      required this.categories,
+      required this.featuredImageURLs,
+      required this.recentShiurim})
+      : super(key: key);
+  final List<Author> rebbeim;
+  final List<Shiur> recentShiurim;
+  final List<String> featuredImageURLs;
+  final List<Category> categories;
 
   // This will fetch the news titles from Firebase
-  void loadData() async {
-    // Log a clearly identifiable message
-    // that we're making production API calls
-    Author.loadAuthors().then((authors) {
-      rebbeim.clear();
-      // Sort by last name
-      authors.sort((lhs, rhs) =>
-          lhs.name.split(" ").last.compareTo(rhs.name.split(" ").last));
-      Author.authors = authors;
-      setState(() {
-        rebbeim.addAll(authors);
-      });
-    }).then((_) {
-      Shiur.loadShiurim(rebbeim).then((shiurim) {
-        recentShiurim.clear();
-        setState(() {
-          recentShiurim.addAll(shiurim);
-        });
-      });
-    });
-
-    FirebaseFirestore.instance
-        .collection("slideshowImages")
-        .orderBy("uploaded", descending: true)
-        .limit(15)
-        .get()
-        .then((snapshot) async {
-      Future.wait(snapshot.docs.map((doc) async {
-        final String url = await FirebaseStorage.instance
-            .ref("slideshow/${doc.data()['image_name']}")
-            .getDownloadURL();
-        return url;
-      })).then((urls) {
-        featuredImageURLs.clear();
-        setState(() {
-          featuredImageURLs.addAll(urls);
-        });
-      });
-    });
-    Category.loadCategories().then((categories) {
-      this.categories.clear();
-      setState(() {
-        this.categories.addAll(categories);
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
