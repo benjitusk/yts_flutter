@@ -23,4 +23,11 @@ class NewsArticle {
       title: json['title'] as String,
     );
   }
+
+  static Future<List<NewsArticle>> loadArticles() async {
+    return FirebaseFirestore.instance.collection("news").get().then(
+        (querySnapshot) => querySnapshot.docs
+            .map((doc) => NewsArticle.fromJson(doc.data()))
+            .toList());
+  }
 }

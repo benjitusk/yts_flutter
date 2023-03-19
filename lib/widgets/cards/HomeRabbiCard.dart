@@ -21,8 +21,7 @@ class HomeRabbiCard extends StatelessWidget {
           minHeight: _defaultCardDimentions,
           minWidth: _defaultCardDimentions),
       onClick: () {
-        Navigator.push(
-          context,
+        Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => RabbiPage(rabbi: rabbi)),
         );
       },
