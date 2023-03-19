@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/Classes/Author.dart';
 import 'package:yts_flutter/Classes/Shiur.dart';
+import 'package:yts_flutter/widgets/cards/StandardShiurCard.dart';
+import 'package:yts_flutter/widgets/helpers/TextDivider.dart';
 
 class RabbiPage extends StatefulWidget {
   const RabbiPage({super.key, required this.rabbi});
@@ -26,7 +28,9 @@ class _RabbiPageState extends State<RabbiPage> {
       return Future.wait(querySnapshot.docs.map((doc) async {
         return await Shiur.fromJson(doc.data(), author: widget.rabbi);
       }));
-    }).then((newContent) => setState(() => content.addAll(newContent)));
+    }).then((newContent) {
+      if (mounted) setState(() => content.addAll(newContent));
+    });
   }
 
   @override
@@ -51,11 +55,37 @@ class _RabbiPageState extends State<RabbiPage> {
             )
           ],
         ),
-        body: ListView.builder(
-          itemBuilder: ((context, index) {
-            return Text(content[index].title);
-          }),
-          itemCount: content.length,
+        body: Padding(
+          padding: EdgeInsets.zero,
+          // padding: const EdgeInsets.only(
+          //     left: UI.PAGE_PADDING,
+          //     right: UI.PAGE_PADDING,
+          //     top: UI.PAGE_PADDING),
+          child: Column(
+            children: [
+              // SizedBox(height: 8),
+              Expanded(
+                child: ListView.separated(
+                  separatorBuilder: (ctx, i) =>
+                      SizedBox(height: (i > 0) ? 8 : 0),
+                  itemBuilder: ((context, index) {
+                    if (index == 0)
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextDivider("Recents"),
+                      );
+                    final shiur = content[index - 1];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 6),
+                      child: ShiurCard(shiur: shiur),
+                    );
+                  }),
+                  itemCount: content.length + 1,
+                ),
+              ),
+            ],
+          ),
         ));
   }
 }
