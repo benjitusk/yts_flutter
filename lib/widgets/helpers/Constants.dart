@@ -9,4 +9,5 @@ class UI {
       Color.fromARGB(255, 74, 91, 130),
     ],
   );
+  static const PAGE_PADDING = 8.0;
 }

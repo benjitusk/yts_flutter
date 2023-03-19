@@ -9,6 +9,7 @@ import 'package:yts_flutter/widgets/Slideshow.dart';
 import 'package:yts_flutter/widgets/cards/CategoryCard.dart';
 import 'package:yts_flutter/widgets/cards/HomeRabbiCard.dart';
 import 'package:yts_flutter/widgets/cards/HomeShiurCard.dart';
+import 'package:yts_flutter/widgets/helpers/Constants.dart';
 import 'package:yts_flutter/widgets/helpers/TextDivider.dart';
 
 class HomePage extends StatefulWidget {
@@ -132,7 +133,7 @@ class HomePageState extends State<HomePage> {
                 Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(UI.PAGE_PADDING),
                       child: TextDivider(text: title),
                     ),
                     widget,
