@@ -7,6 +7,7 @@ import 'package:yts_flutter/Classes/Author.dart';
 import 'package:yts_flutter/Classes/Category.dart';
 import 'package:yts_flutter/Classes/NewsArticle.dart';
 import 'package:yts_flutter/Classes/Shiur.dart';
+import 'package:yts_flutter/theme.dart';
 import 'package:yts_flutter/widgets/screens/HomeScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
@@ -28,8 +29,6 @@ void main() async {
   runApp(const MyApp());
 }
 
-final theme = ThemeData();
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -38,11 +37,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: theme.copyWith(
-          colorScheme: theme.colorScheme.copyWith(
-        primary: const Color(0xFF526B98),
-        secondary: const Color(0xFFFCC730),
-      )),
+      theme: generateTheme(context),
       home: AppBody(),
     );
   }
