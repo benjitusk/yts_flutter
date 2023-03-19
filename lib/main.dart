@@ -7,7 +7,7 @@ import 'package:yts_flutter/Classes/Author.dart';
 import 'package:yts_flutter/Classes/Category.dart';
 import 'package:yts_flutter/Classes/NewsArticle.dart';
 import 'package:yts_flutter/Classes/Shiur.dart';
-import 'package:yts_flutter/widgets/HomePage.dart';
+import 'package:yts_flutter/widgets/screens/HomePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 
