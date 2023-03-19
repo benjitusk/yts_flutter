@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
 class UI {
+  static final lightTheme = ThemeData(
+      colorSchemeSeed: const Color(0xFF526B98),
+      useMaterial3: true,
+      brightness: Brightness.light);
+  static final darkTheme = ThemeData(
+      colorSchemeSeed: const Color(0xFF526B98),
+      useMaterial3: true,
+      brightness: Brightness.dark);
   static final cardGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,

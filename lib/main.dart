@@ -7,9 +7,10 @@ import 'package:yts_flutter/Classes/Author.dart';
 import 'package:yts_flutter/Classes/Category.dart';
 import 'package:yts_flutter/Classes/NewsArticle.dart';
 import 'package:yts_flutter/Classes/Shiur.dart';
-import 'package:yts_flutter/theme.dart';
+import 'package:yts_flutter/widgets/helpers/Constants.dart';
 import 'package:yts_flutter/widgets/screens/HomeScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:yts_flutter/widgets/screens/NewsScreen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -37,7 +38,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: generateTheme(context),
+      theme: UI.lightTheme,
+      darkTheme: UI.darkTheme,
+      themeMode: ThemeMode.system,
       home: AppBody(),
     );
   }
