@@ -114,27 +114,29 @@ class _AppBodyState extends State<AppBody> {
         this.categories.addAll(categories);
       });
     });
+    NewsArticle.loadArticles().then((articles) {
+      this.articles.clear();
+      setState(() {
+        this.articles.addAll(articles);
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
+          elevation: 4,
+          shadowColor: Theme.of(context).shadowColor,
           title: const Text('Yeshivat Torat Shraga'),
-          bottom: const TabBar(
-            tabs: [
-              Tab(
-                // icon: Icon(Icons.home),
-                text: "Home",
-              ),
-              Tab(text: "Favorites"),
-              Tab(text: "News"),
-              Tab(icon: Icon(Icons.settings)),
-            ],
-          ),
         ),
+        bottomNavigationBar: TabBar(tabs: [
+          Tab(icon: Icon(Icons.home), text: "Home"),
+          Tab(icon: Icon(Icons.favorite), text: "Favorites"),
+          Tab(icon: Icon(Icons.article), text: "Articles"),
+        ]),
         body: TabBarView(
           children: [
             HomePage(
@@ -143,8 +145,10 @@ class _AppBodyState extends State<AppBody> {
                 featuredImageURLs: featuredImageURLs,
                 recentShiurim: recentShiurim),
             Placeholder(),
-            Placeholder(),
-            Placeholder(),
+            NewsScreen(
+              articles: articles,
+            ),
+            // Placeholder(),
           ],
         ),
       ),
