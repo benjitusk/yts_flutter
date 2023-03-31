@@ -5,7 +5,7 @@ import 'package:yts_flutter/Classes/Author.dart';
 import 'package:yts_flutter/Classes/Streamable.dart';
 
 class Shiur implements Streamable {
-  String attributionID;
+  String id;
   late BasicAuthor author;
   DateTime date;
   String description;
@@ -15,7 +15,7 @@ class Shiur implements Streamable {
   ShiurType type;
 
   Shiur({
-    required this.attributionID,
+    required this.id,
     required this.date,
     required this.author,
     required this.description,
@@ -33,13 +33,12 @@ class Shiur implements Streamable {
     json['url'] = url.data;
     if (author != null) assert(author.id == json["attributionID"]);
     return Shiur(
-      attributionID: json['attributionID'],
       author: author ??
           BasicAuthor(id: json['attributionID'], name: json['author']),
-      //json['author'],
       date: (json['date'] as Timestamp).toDate(),
       description: json['description'],
       duration: Duration(seconds: json['duration'] as int),
+      id: json['id'],
       playbackUrl: json['url'],
       title: json['title'],
       type: ShiurType.audio,
@@ -55,6 +54,7 @@ class Shiur implements Streamable {
             .get();
     return await Future.wait(querySnapshot.docs.map((doc) async {
       final docData = doc.data();
+      docData['id'] = doc.id;
       Author? possibleAuthor = authors.firstWhereOrNull(
           (element) => element.id == docData["attributionID"]);
       final Shiur shiur = await Shiur.fromJson(docData, author: possibleAuthor);

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:yts_flutter/Classes/Author.dart';
 import 'package:yts_flutter/Classes/Category.dart';
+import 'package:yts_flutter/Classes/audio_manager.dart';
+import 'package:yts_flutter/services/service_locator.dart';
 import 'package:yts_flutter/Classes/NewsArticle.dart';
 import 'package:yts_flutter/Classes/Shiur.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
@@ -27,6 +29,9 @@ void main() async {
       webRecaptchaSiteKey: "recaptcha-v3-site-key");
   // Anonymously sign in
   await FirebaseAuth.instance.signInAnonymously();
+
+  // Initialize services
+  await setupServiceLocator();
   runApp(const MyApp());
 }
 
@@ -40,7 +45,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: UI.lightTheme,
       darkTheme: UI.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.dark,
       home: AppBody(),
     );
   }
@@ -66,6 +71,7 @@ class _AppBodyState extends State<AppBody> {
   @override
   void initState() {
     _loadData();
+    getIt<AudioManager>().init();
     super.initState();
   }
 
@@ -153,5 +159,11 @@ class _AppBodyState extends State<AppBody> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    getIt<AudioManager>().dispose();
+    super.dispose();
   }
 }

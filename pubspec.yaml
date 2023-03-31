@@ -10,6 +10,8 @@ dependencies:
   assets_audio_player:
     git:
       url: https://github.com/benjitusk/Flutter-AssetsAudioPlayer.git
+  audio_service: ^0.18.9
+  audioplayers: ^3.0.1
   cached_network_image: ^3.2.3
   carousel_slider: ^4.2.1
   cloud_firestore: ^4.4.3
@@ -21,7 +23,9 @@ dependencies:
   firebase_storage: ^11.0.14
   flutter:
     sdk: flutter
+  get_it: ^7.2.0
   intl: ^0.17.0
+  just_audio: ^0.9.32
 
 dev_dependencies:
   flutter_test:
