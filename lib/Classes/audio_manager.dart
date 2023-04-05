@@ -3,6 +3,7 @@ import 'package:yts_flutter/Classes/Streamable.dart';
 import 'package:yts_flutter/notifiers/play_button_notifier.dart';
 import 'package:yts_flutter/notifiers/progress_notifier.dart';
 import 'package:yts_flutter/notifiers/repeat_button_notifier.dart';
+import 'package:yts_flutter/notifiers/streamable_notifier.dart';
 import '../services/service_locator.dart';
 import 'package:flutter/material.dart';
 
@@ -10,8 +11,8 @@ class AudioManager {
   final AudioHandler _audioHandler = getIt<AudioHandler>();
 
   // Listeners: Updates going to the UI
-  final currentSongTitleNotifier = ValueNotifier<String>("");
   final playlistNotifier = ValueNotifier<List<String>>([]);
+  final currentlyPlayingContent = StreamableNotifier();
   final progressNotifier = ProgressNotifier();
   final repeatButtonNotifier = RepeatButtonNotifier();
   final playButtonNotifier = PlayButtonNotifier();
@@ -62,6 +63,7 @@ class AudioManager {
     final mediaItem = MediaItem(
       id: content.id,
       album: content.date.toLocal().toString(),
+      duration: content.duration,
       title: content.title,
       artist: content.author.name,
       extras: {'url': content.playbackUrl},
@@ -99,7 +101,7 @@ class AudioManager {
 
   void _listenToChangesInSong() {
     _audioHandler.mediaItem.listen((mediaItem) {
-      currentSongTitleNotifier.value = mediaItem?.title ?? '';
+      currentlyPlayingContent.value = mediaItem?.extras?['streamable'];
       _updateSkipButtons();
     });
   }
@@ -120,7 +122,6 @@ class AudioManager {
     _audioHandler.queue.listen((playlist) {
       if (playlist.isEmpty) {
         playlistNotifier.value = [];
-        currentSongTitleNotifier.value = '';
       } else {
         final newList = playlist.map((item) => item.title).toList();
         playlistNotifier.value = newList;

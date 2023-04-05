@@ -14,6 +14,7 @@ class HomeShiurCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseCard(
         onClick: () {
+          MediaController.instance.showMediaPlayer(context);
           MediaController.instance.play(shiur);
         },
         children: [

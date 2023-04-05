@@ -5,5 +5,6 @@ abstract class Streamable {
   late BasicAuthor author;
   late String title;
   late String id;
+  late Duration duration;
   late DateTime date;
 }
