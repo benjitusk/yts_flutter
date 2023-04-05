@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:yts_flutter/Classes/Shiur.dart';
+import 'package:yts_flutter/classes/shiur.dart';
 import 'package:yts_flutter/extensions/Duration.dart';
 import 'package:yts_flutter/widgets/helpers/BaseCard.dart';
 

@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:yts_flutter/Classes/Category.dart';
+import 'package:yts_flutter/classes/category.dart';
 import 'package:yts_flutter/widgets/helpers/BaseCard.dart';
 
 class CategoryCard extends StatelessWidget {

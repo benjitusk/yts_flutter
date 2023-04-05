@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:yts_flutter/Classes/audio_manager.dart';
+import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/notifiers/play_button_notifier.dart';
 import 'package:yts_flutter/notifiers/progress_notifier.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';

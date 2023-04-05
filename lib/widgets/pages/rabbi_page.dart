@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:yts_flutter/Classes/Author.dart';
-import 'package:yts_flutter/Classes/Shiur.dart';
-import 'package:yts_flutter/widgets/cards/StandardShiurCard.dart';
+import 'package:yts_flutter/classes/author.dart';
+import 'package:yts_flutter/classes/shiur.dart';
+import 'package:yts_flutter/widgets/cards/standard_shiur_card.dart';
 import 'package:yts_flutter/widgets/helpers/TextDivider.dart';
 
 class RabbiPage extends StatefulWidget {

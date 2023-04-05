@@ -3,16 +3,16 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:yts_flutter/Classes/Author.dart';
-import 'package:yts_flutter/Classes/Category.dart';
-import 'package:yts_flutter/Classes/audio_manager.dart';
+import 'package:yts_flutter/classes/author.dart';
+import 'package:yts_flutter/classes/category.dart';
+import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/services/service_locator.dart';
-import 'package:yts_flutter/Classes/NewsArticle.dart';
-import 'package:yts_flutter/Classes/Shiur.dart';
+import 'package:yts_flutter/classes/news_article.dart';
+import 'package:yts_flutter/classes/shiur.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
-import 'package:yts_flutter/widgets/screens/HomeScreen.dart';
+import 'package:yts_flutter/widgets/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:yts_flutter/widgets/screens/NewsScreen.dart';
+import 'package:yts_flutter/widgets/screens/news_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {

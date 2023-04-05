@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:yts_flutter/Classes/NewsArticle.dart';
+import 'package:yts_flutter/classes/news_article.dart';
 
 class NewsScreen extends StatelessWidget {
   const NewsScreen({super.key, required this.articles});

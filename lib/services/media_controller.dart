@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:yts_flutter/Classes/Streamable.dart';
-import 'package:yts_flutter/Classes/audio_manager.dart';
+import 'package:yts_flutter/classes/streamable.dart';
+import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/widgets/pages/media_player.dart';
 
 class MediaController {

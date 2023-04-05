@@ -1,6 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:get_it/get_it.dart';
-import 'package:yts_flutter/Classes/audio_manager.dart';
+import 'package:yts_flutter/classes/audio_manager.dart';
 import 'audio_handler.dart';
 
 final getIt = GetIt.instance;

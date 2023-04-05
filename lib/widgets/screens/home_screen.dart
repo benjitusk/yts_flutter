@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:yts_flutter/Classes/Author.dart';
-import 'package:yts_flutter/Classes/Category.dart';
-import 'package:yts_flutter/Classes/Shiur.dart';
-import 'package:yts_flutter/widgets/Slideshow.dart';
-import 'package:yts_flutter/widgets/cards/CategoryCard.dart';
-import 'package:yts_flutter/widgets/cards/HomeRabbiCard.dart';
-import 'package:yts_flutter/widgets/cards/HomeShiurCard.dart';
+import 'package:yts_flutter/classes/author.dart';
+import 'package:yts_flutter/classes/category.dart';
+import 'package:yts_flutter/classes/shiur.dart';
+import 'package:yts_flutter/widgets/slideshow.dart';
+import 'package:yts_flutter/widgets/cards/category_card.dart';
+import 'package:yts_flutter/widgets/cards/home_rabbi_card.dart';
+import 'package:yts_flutter/widgets/cards/home_shiur_card.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
 import 'package:yts_flutter/widgets/helpers/TextDivider.dart';
 

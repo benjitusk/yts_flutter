@@ -1,4 +1,4 @@
-import 'package:yts_flutter/Classes/Author.dart';
+import 'package:yts_flutter/classes/author.dart';
 
 abstract class Streamable {
   late String playbackUrl;

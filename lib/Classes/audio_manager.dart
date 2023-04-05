@@ -1,5 +1,5 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:yts_flutter/Classes/Streamable.dart';
+import 'package:yts_flutter/classes/streamable.dart';
 import 'package:yts_flutter/notifiers/play_button_notifier.dart';
 import 'package:yts_flutter/notifiers/progress_notifier.dart';
 import 'package:yts_flutter/notifiers/repeat_button_notifier.dart';

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:collection/collection.dart';
-import 'package:yts_flutter/Classes/Author.dart';
-import 'package:yts_flutter/Classes/Streamable.dart';
+import 'package:yts_flutter/classes/author.dart';
+import 'package:yts_flutter/classes/streamable.dart';
 
 class Shiur implements Streamable {
   String id;
