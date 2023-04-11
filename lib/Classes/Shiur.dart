@@ -47,7 +47,7 @@ class Shiur implements Streamable {
   }
 
   static Shiur getShiurFromDoc(FirebaseDoc doc) {
-    final docData = doc.data();
+    final docData = doc.data()!;
     docData['id'] = doc.id;
     return Shiur(
       authorID: docData['attributionID'],

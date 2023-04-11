@@ -1,9 +1,12 @@
 import 'package:collection/collection.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:yts_flutter/classes/content_filterable.dart';
 import 'package:yts_flutter/classes/misc_types.dart';
 
-class Author extends BasicAuthor {
+class Author extends BasicAuthor implements ContentFilterable {
   String profilePictureURL;
+  FirebaseID get filterID => this.id;
+  String filterName = "attributionID";
 
   Author(
       {required super.name,

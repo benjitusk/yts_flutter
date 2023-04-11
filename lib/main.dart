@@ -6,7 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/category.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
-import 'package:yts_flutter/services/backendManager.dart';
+import 'package:yts_flutter/services/backend_manager.dart';
 import 'package:yts_flutter/services/service_locator.dart';
 import 'package:yts_flutter/classes/news_article.dart';
 import 'package:yts_flutter/classes/shiur.dart';
@@ -115,7 +115,8 @@ class _AppBodyState extends State<AppBody> {
         });
       });
     });
-    Category.loadCategories().then((categories) {
+
+    BackendManager.loadCategories().then((categories) {
       this.categories.clear();
       setState(() {
         this.categories.addAll(categories);

@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/shiur.dart';
-import 'package:yts_flutter/services/backendManager.dart';
+import 'package:yts_flutter/services/backend_manager.dart';
 import 'package:yts_flutter/widgets/cards/standard_shiur_card.dart';
 import 'package:yts_flutter/widgets/helpers/TextDivider.dart';
 
@@ -18,9 +18,7 @@ class _RabbiPageState extends State<RabbiPage> {
   final List<Shiur> content = [];
 
   void fetchContent() {
-    BackendManager.fetchContentByFilter(
-            ContentFetchFilter.AUTHOR, widget.rabbi.id)
-        .then((newContent) {
+    BackendManager.fetchContentByFilter(widget.rabbi).then((newContent) {
       if (mounted) setState(() => content.addAll(newContent));
     });
   }
