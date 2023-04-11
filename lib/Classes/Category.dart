@@ -23,7 +23,8 @@ class Category implements ContentFilterable {
       this.children = null});
 
   static Future<Category> getCategoryFromDoc(FirebaseDoc doc) async {
-    final String? url = doc.id == MISC_ID
+    final docData = doc.data()!;
+    final String? url = (doc.id == MISC_ID || docData['isParent'] != true)
         ? null
         : await FirebaseStorage.instance
             .ref("assets/${doc.id}")
@@ -32,7 +33,6 @@ class Category implements ContentFilterable {
             print("Error fetching assets/${doc.id}");
             return "";
           });
-    final docData = doc.data()!;
     final subcategories = docData['subCategories'] as List<dynamic>?;
     // I _promise_ subcategories is List<String>?. I just need to convince Dart.
     final children = subcategories?.cast<String>();
