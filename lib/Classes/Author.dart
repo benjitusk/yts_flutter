@@ -1,45 +1,36 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
-typedef FirebaseID = String;
+import 'package:yts_flutter/classes/misc_types.dart';
 
 class Author extends BasicAuthor {
   String profilePictureURL;
 
-  // Inherited from BasicAuthor, but we need to pass it to super. We'll do this WITHOUT an explicit call to super.
   Author(
       {required super.name,
       required this.profilePictureURL,
       required super.id});
 
-  static List<Author>? authors;
+  bool operator ==(Object other) {
+    return other is Author && other.id == this.id;
+  }
 
-  static Future<List<Author>> loadAuthors() async {
-    // Use Future.wait to run multiple async functions in parallel.
-    // This will return a list of all the authors in the database.
+  static Set<Author> _authorRegistry = {};
+  static void addToRegistry(List<Author> authors) {
+    _authorRegistry.addAll(authors);
+  }
 
-    // Step 1: Get a list of all the documents in the "authors" collection
-    // Step 2: For each document, get the url using the filename
-    // Step 3: Create an Author object with the name and url
+  static Author? registryLookup({required FirebaseID id}) {
+    return _authorRegistry.firstWhereOrNull((element) => element.id == id);
+  }
 
-    // Step 1: Get a list of all the documents in the "authors" collection
-    QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.collection("rebbeim").get();
-
-    // Step 2: For each document, get the url using the filename
-    List<Future<Author>> authorFutures = querySnapshot.docs.map((doc) async {
-      // Create a new Author object with the name and url
-      return FirebaseStorage.instance
-          .ref()
-          .child("profile-pictures")
-          .child(doc["profile_picture_filename"])
-          .getDownloadURL()
-          .then((url) =>
-              Author(name: doc["name"], profilePictureURL: url, id: doc.id));
-    }).toList();
-
-    // Step 3: Create an Author object with the name and url
-    return Future.wait(authorFutures);
+  static Future<Author> getAuthorFromDoc(FirebaseDoc doc) async {
+    return FirebaseStorage.instance
+        .ref()
+        .child("profile-pictures")
+        .child(doc["profile_picture_filename"])
+        .getDownloadURL()
+        .then((url) =>
+            Author(name: doc["name"], profilePictureURL: url, id: doc.id));
   }
 }
 

@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/category.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
+import 'package:yts_flutter/services/backendManager.dart';
 import 'package:yts_flutter/services/service_locator.dart';
 import 'package:yts_flutter/classes/news_article.dart';
 import 'package:yts_flutter/classes/shiur.dart';
@@ -78,17 +79,17 @@ class _AppBodyState extends State<AppBody> {
   void _loadData() {
     // Log a clearly identifiable message
     // that we're making production API calls
-    Author.loadAuthors().then((authors) {
+    BackendManager.loadAuthors().then((authors) {
       rebbeim.clear();
       // Sort by last name
       authors.sort((lhs, rhs) =>
           lhs.name.split(" ").last.compareTo(rhs.name.split(" ").last));
-      Author.authors = authors;
+      Author.addToRegistry(authors);
       setState(() {
         rebbeim.addAll(authors);
       });
     }).then((_) {
-      Shiur.loadShiurim(rebbeim).then((shiurim) {
+      BackendManager.fetchRecentContent().then((shiurim) {
         recentShiurim.clear();
         setState(() {
           recentShiurim.addAll(shiurim);

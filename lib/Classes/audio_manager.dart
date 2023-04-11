@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/streamable.dart';
 import 'package:yts_flutter/notifiers/play_button_notifier.dart';
 import 'package:yts_flutter/notifiers/progress_notifier.dart';
@@ -60,13 +61,21 @@ class AudioManager {
 
   void add(Streamable content) async {
     // final song = await songRepository.fetchAnotherSong();
+    final url = await content.getStreamableURL();
+    if (url == null) {
+      print("Failed to get URL for ${content.title}. Skipping...");
+      return;
+    }
+    final author = Author.registryLookup(id: content.authorID) ??
+        BasicAuthor(id: content.authorID, name: "Unknown");
     final mediaItem = MediaItem(
       id: content.id,
       album: content.date.toLocal().toString(),
       duration: content.duration,
       title: content.title,
-      artist: content.author.name,
-      extras: {'url': content.playbackUrl},
+      artist: author.name,
+      artUri: author is Author ? Uri.parse(author.profilePictureURL) : null,
+      extras: {'url': url},
     );
     _audioHandler.addQueueItem(mediaItem);
   }

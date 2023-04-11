@@ -1,10 +1,11 @@
-import 'package:yts_flutter/classes/author.dart';
+import 'package:yts_flutter/classes/misc_types.dart';
 
 abstract class Streamable {
-  late String playbackUrl;
-  late BasicAuthor author;
-  late String title;
-  late String id;
-  late Duration duration;
-  late DateTime date;
+  FirebaseID get authorID;
+  String get title;
+  String get id;
+  Duration get duration;
+  DateTime get date;
+
+  Future<URL?> getStreamableURL();
 }

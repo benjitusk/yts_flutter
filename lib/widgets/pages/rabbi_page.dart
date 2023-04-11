@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/shiur.dart';
+import 'package:yts_flutter/services/backendManager.dart';
 import 'package:yts_flutter/widgets/cards/standard_shiur_card.dart';
 import 'package:yts_flutter/widgets/helpers/TextDivider.dart';
 
@@ -18,17 +18,9 @@ class _RabbiPageState extends State<RabbiPage> {
   final List<Shiur> content = [];
 
   void fetchContent() {
-    FirebaseFirestore.instance
-        .collection("content")
-        .where("attributionID", isEqualTo: widget.rabbi.id)
-        .orderBy("date", descending: true)
-        .limit(10)
-        .get()
-        .then((querySnapshot) {
-      return Future.wait(querySnapshot.docs.map((doc) async {
-        return await Shiur.fromJson(doc.data(), author: widget.rabbi);
-      }));
-    }).then((newContent) {
+    BackendManager.fetchContentByFilter(
+            ContentFetchFilter.AUTHOR, widget.rabbi.id)
+        .then((newContent) {
       if (mounted) setState(() => content.addAll(newContent));
     });
   }
