@@ -24,7 +24,20 @@ class _CategoryPageState extends State<CategoryPage> {
 
   // Methods:
   void fetchContent() async {
-    await BackendManager.fetchContentByFilter(widget.category)
+    if (widget.category.isParent) {
+      subCategories = [];
+      widget.category.children?.forEach((childCategoryID) async {
+        await BackendManager.fetchCategoryByID(childCategoryID)
+            .then((newCategory) {
+          if (mounted)
+            setState(() => subCategories!
+              ..add(newCategory)
+              ..sort((a, b) => a.displayName.compareTo(b.displayName)));
+        });
+      });
+    }
+    await BackendManager.fetchContentByFilter(widget.category,
+            sortByRecent: true)
         .then((newContent) {
       if (mounted) setState(() => content = newContent);
     });

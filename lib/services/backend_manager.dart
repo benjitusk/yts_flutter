@@ -24,38 +24,6 @@ class BackendManager {
 
   static Future<List<Shiur>> fetchContentByFilter(ContentFilterable filter,
       {int limit = 10, bool sortByRecent = true}) async {
-    print(
-        "Fetching content by filter: ${filter.filterName} = ${filter.filterID}");
-    if (filter is Category && filter.children != null) {
-      return await Future.wait(filter.children!.map((filterID) async {
-        return await FirebaseFirestore.instance
-            .collection("tags")
-            .doc(filterID)
-            .get()
-            .then((querySnapshot) async {
-          return await Category.getCategoryFromDoc(
-              querySnapshot as FirebaseDoc);
-        });
-      }).toList())
-          .then((subcategories) async {
-        // First start with a List<Future<List<Shiur>>>
-        // In order to get a Future<List<Shiur>>, we need to call Future.wait
-        // Future.wait takes a List<Future<T>> and returns a Future<List<T>>
-        // So we need to call Future.wait on each Future<List<Shiur>>
-        // So, as follows, let's get our List<Future<List<Shiur>>>:
-
-        final listOfFutureLists = subcategories.map((subcategory) {
-          return fetchContentByFilter(subcategory,
-              limit: limit, sortByRecent: sortByRecent);
-        }).toList();
-
-        // Now return a flattened list of the results
-        return Future.wait(listOfFutureLists).then((listOfLists) {
-          return listOfLists.expand((element) => element).toList();
-        });
-      });
-    }
-
     return FirebaseFirestore.instance
         .collection("content")
         .where(filter.filterName, isEqualTo: filter.filterID)
@@ -90,6 +58,16 @@ class BackendManager {
         return await Category.getCategoryFromDoc(doc);
       }));
       return results;
+    });
+  }
+
+  static Future<Category> fetchCategoryByID(FirebaseID categoryID) {
+    return FirebaseFirestore.instance
+        .collection('tags')
+        .doc(categoryID)
+        .get()
+        .then((doc) {
+      return Category.getCategoryFromDoc(doc);
     });
   }
 }
