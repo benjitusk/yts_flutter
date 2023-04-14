@@ -67,7 +67,9 @@ class ShiurCard extends StatelessWidget {
                                     .textTheme
                                     .titleLarge!
                                     .copyWith(
-                                        color: Colors.black,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
                                         fontWeight: FontWeight.bold)),
                           ),
                           SizedBox(height: 8),
