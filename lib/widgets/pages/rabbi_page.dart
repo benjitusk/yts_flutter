@@ -47,13 +47,8 @@ class _RabbiPageState extends State<RabbiPage> {
         ),
         body: Padding(
           padding: EdgeInsets.zero,
-          // padding: const EdgeInsets.only(
-          //     left: UI.PAGE_PADDING,
-          //     right: UI.PAGE_PADDING,
-          //     top: UI.PAGE_PADDING),
           child: Column(
             children: [
-              // SizedBox(height: 8),
               Expanded(
                 child: ListView.separated(
                   separatorBuilder: (ctx, i) =>
