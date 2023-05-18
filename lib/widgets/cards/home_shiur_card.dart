@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/classes/author.dart';
+import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/classes/shiur.dart';
-import 'package:yts_flutter/services/media_controller.dart';
 import 'package:yts_flutter/widgets/helpers/BaseCard.dart';
 import 'package:yts_flutter/extensions/Duration.dart';
 import 'package:intl/intl.dart';
@@ -14,8 +14,8 @@ class HomeShiurCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseCard(
         onClick: () {
-          MediaController.instance.showMediaPlayer(context);
-          MediaController.instance.play(shiur);
+          AudioManager().showMediaPlayer(context);
+          AudioManager().play(shiur);
         },
         children: [
           Container(

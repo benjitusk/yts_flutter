@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/category.dart';
-import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/services/backend_manager.dart';
-import 'package:yts_flutter/services/service_locator.dart';
 import 'package:yts_flutter/classes/news_article.dart';
 import 'package:yts_flutter/classes/shiur.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
@@ -32,7 +30,6 @@ void main() async {
   await FirebaseAuth.instance.signInAnonymously();
 
   // Initialize services
-  await setupServiceLocator();
   runApp(const MyApp());
 }
 
@@ -72,7 +69,6 @@ class _AppBodyState extends State<AppBody> {
   @override
   void initState() {
     _loadData();
-    getIt<AudioManager>().init();
     super.initState();
   }
 
@@ -161,11 +157,5 @@ class _AppBodyState extends State<AppBody> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    getIt<AudioManager>().dispose();
-    super.dispose();
   }
 }
