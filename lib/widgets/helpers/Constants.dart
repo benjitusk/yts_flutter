@@ -5,10 +5,14 @@ class UI {
   static final lightTheme = ThemeData(
       colorSchemeSeed: const Color(0xFF526B98),
       useMaterial3: true,
+      // Default divider color
+      dividerColor: null,
       brightness: Brightness.light);
   static final darkTheme = ThemeData(
       colorSchemeSeed: const Color(0xFF526B98),
       useMaterial3: true,
+      // Darker divider color
+      dividerColor: Colors.grey.shade800,
       brightness: Brightness.dark);
   static final darkCardGradient = LinearGradient(
     begin: Alignment.topLeft,

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:yts_flutter/classes/news_article.dart';
@@ -9,6 +7,8 @@ import 'package:yts_flutter/widgets/helpers/markdown_helper.dart';
 import 'package:yts_flutter/widgets/pages/article_page.dart';
 
 const double _iconPadding = 3;
+const double _outerBorderRadius = 8.0;
+const double _innerBorderRadiusRatio = 8.0 / 6.9;
 
 class NewsCard extends StatelessWidget {
   final NewsArticle article;
@@ -16,13 +16,15 @@ class NewsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Theme.of(context).dividerColor),
-        ),
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(_outerBorderRadius),
+          border: Border.all(
+            color: Theme.of(context).dividerColor,
+          )),
+      child: ClipRRect(
+        borderRadius:
+            BorderRadius.circular(_innerBorderRadiusRatio * _outerBorderRadius),
         child: Stack(
           children: [
             Column(
