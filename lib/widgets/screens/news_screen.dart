@@ -8,10 +8,12 @@ class NewsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: ListView.separated(
         itemBuilder: (context, index) {
-          return NewsCard(article: articles[index]);
+          return Padding(
+              padding: index == 0 ? EdgeInsets.only(top: 16) : EdgeInsets.zero,
+              child: NewsCard(article: articles[index]));
         },
         itemCount: articles.length,
         separatorBuilder: (context, index) {
