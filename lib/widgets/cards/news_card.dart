@@ -8,7 +8,7 @@ import 'package:yts_flutter/widgets/pages/article_page.dart';
 
 const double _iconPadding = 3;
 const double _outerBorderRadius = 8.0;
-const double _innerBorderRadiusRatio = 8.0 / 6.9;
+const double _innerBorderRadiusRatio = 6.9 / 8.0;
 
 class NewsCard extends StatelessWidget {
   final NewsArticle article;
