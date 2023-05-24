@@ -1,3 +1,4 @@
+import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/misc_types.dart';
 
 abstract class Streamable {
@@ -6,6 +7,7 @@ abstract class Streamable {
   String get id;
   Duration get duration;
   DateTime get date;
+  BasicAuthor get author;
 
   Future<URL?> getStreamableURL();
 }

@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/extensions/BuildContext.dart';
+import 'package:yts_flutter/widgets/helpers/slider_padding.dart';
 
 class UI {
   static final lightTheme = ThemeData(
       colorSchemeSeed: const Color(0xFF526B98),
       useMaterial3: true,
+      sliderTheme: SliderThemeData(
+        trackShape: CustomTrackShape(),
+      ),
+
       // Default divider color
       dividerColor: null,
       brightness: Brightness.light);
   static final darkTheme = ThemeData(
       colorSchemeSeed: const Color(0xFF526B98),
       useMaterial3: true,
+      sliderTheme: SliderThemeData(
+        trackShape: CustomTrackShape(),
+      ),
+
       // Darker divider color
       dividerColor: Colors.grey.shade800,
       brightness: Brightness.dark);
