@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/streamable.dart';
-import 'dart:math' as math;
+import 'package:yts_flutter/extensions/AudioManagerState.dart';
 
 class MediaPlayer extends StatefulWidget {
   final AudioPlayer player;
@@ -20,32 +22,51 @@ class MediaPlayer extends StatefulWidget {
 }
 
 class _MediaPlayerState extends State<MediaPlayer> {
-  PlayerState? _playerState;
+  AudioManagerState? _playerState;
   Duration? _duration;
   Duration? _position;
   Streamable? _currentContent;
+  List<StreamSubscription> _subscriptions = [];
 
-  bool get _isPlaying => _playerState == PlayerState.playing;
+  bool get _isPlaying => _playerState == AudioManagerState.PLAYING;
 
-  String get _durationText => _duration?.toString().split('.').first ?? '';
-  String get _positionText => _position?.toString().split('.').first ?? '';
+  String get _durationText {
+    if (widget.audioManager.mediaIsInitailized == false) {
+      return "--:--";
+    }
+    return _duration?.toString().split('.').first ?? '';
+  }
 
-  AudioPlayer get _player => widget.player;
+  String get _positionText {
+    if (widget.audioManager.mediaIsInitailized == false) {
+      return "--:--";
+    }
+    return _position?.toString().split('.').first ?? '';
+  }
+
+  // AudioPlayer get _player => widget.player;
 
   @override
   void initState() {
     super.initState();
+    print("MediaPlayer init state");
     // Use initial values from player
     _currentContent = widget.initialContent;
-    _playerState = _player.state;
-    _player.getDuration().then((value) {
+    _playerState = widget.audioManager.state;
+    widget.player.getDuration().then((value) {
       if (mounted) setState(() => _duration = value);
     });
-    _player.getCurrentPosition().then((value) {
+    widget.player.getCurrentPosition().then((value) {
       if (mounted) setState(() => _position = value);
     });
 
     _initStreams();
+  }
+
+  @override
+  void dispose() {
+    _deinitStreams();
+    super.dispose();
   }
 
   @override
@@ -69,12 +90,14 @@ class _MediaPlayerState extends State<MediaPlayer> {
                 return;
               }
               final position = v * duration.inMilliseconds;
-              _player.seek(Duration(milliseconds: position.round()));
+              widget.audioManager
+                  .seek(Duration(milliseconds: position.round()));
             },
             value: (_position != null &&
                     _duration != null &&
                     _position!.inMilliseconds > 0 &&
-                    _position!.inMilliseconds < _duration!.inMilliseconds)
+                    _position!.inMilliseconds < _duration!.inMilliseconds &&
+                    widget.audioManager.mediaIsInitailized)
                 ? _position!.inMilliseconds / _duration!.inMilliseconds
                 : 0.0,
           ),
@@ -136,7 +159,24 @@ class _MediaPlayerState extends State<MediaPlayer> {
   }
 
   Widget _buildMediaControls(BuildContext context) {
-    final IconData icon = _isPlaying ? Icons.pause : Icons.play_arrow;
+    IconData? icon = null;
+    switch (_playerState) {
+      case AudioManagerState.PLAYING:
+      case AudioManagerState.STOPPED:
+        icon = Icons.pause;
+        break;
+      case AudioManagerState.PAUSED:
+        icon = Icons.play_arrow;
+        break;
+      case AudioManagerState.COMPLETED:
+        icon = Icons.replay;
+        break;
+
+      // case AudioManagerState.BUFFERING:
+      default:
+      //   icon = Icons.sync;
+      //   break;
+    }
 
     return Row(
       // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -148,23 +188,30 @@ class _MediaPlayerState extends State<MediaPlayer> {
           iconSize: 40.0,
           icon: const Icon(Icons.replay_10),
         ),
-        IconButton(
-            onPressed: () {
-              if (_isPlaying) {
-                widget.audioManager.pause();
-              } else {
-                widget.audioManager.resume();
-              }
-            },
-            icon: Icon(
-              icon,
-              size: 64.0,
-            )),
+        (icon == null)
+            ? Container(
+                margin: const EdgeInsets.all(20.0),
+                width: 40.0,
+                height: 40.0,
+                child: const CircularProgressIndicator(),
+              )
+            : IconButton(
+                onPressed: () {
+                  if (_isPlaying) {
+                    widget.audioManager.pause();
+                  } else {
+                    widget.audioManager.resume();
+                  }
+                },
+                icon: Icon(
+                  icon,
+                  size: 64.0,
+                )),
         IconButton(
           onPressed: () =>
               widget.audioManager.relativeSeek(Duration(seconds: 15)),
           iconSize: 40.0,
-          icon:const Icon(Icons.forward_10),
+          icon: const Icon(Icons.forward_10),
         ),
         Spacer()
       ],
@@ -210,27 +257,35 @@ class _MediaPlayerState extends State<MediaPlayer> {
   }
 
   void _initStreams() {
-    widget.audioManager.contentStream.listen((_) {
-      if (mounted)
-        setState(() {
-          _currentContent = widget.audioManager.currentContent;
-        });
-    });
-    _player.onDurationChanged.listen((duration) {
-      if (mounted) setState(() => _duration = duration);
-    });
-    _player.onPositionChanged.listen((position) {
-      if (mounted) setState(() => _position = position);
-    });
-    _player.onPlayerComplete.listen((event) {
-      if (mounted)
-        setState(() {
-          _playerState = PlayerState.stopped;
-          _position = Duration.zero;
-        });
-    });
-    _player.onPlayerStateChanged.listen((state) {
-      if (mounted) setState(() => _playerState = state);
-    });
+    _subscriptions.addAll([
+      widget.audioManager.contentStream.listen((_) {
+        if (mounted)
+          setState(() {
+            _currentContent = widget.audioManager.currentContent;
+          });
+      }),
+      widget.audioManager.stateStream.listen((state) {
+        print('State changed to $state');
+        if (mounted) setState(() => _playerState = state);
+      }),
+      widget.player.onDurationChanged.listen((duration) {
+        if (mounted) setState(() => _duration = duration);
+      }),
+      widget.player.onPositionChanged.listen((position) {
+        if (mounted) setState(() => _position = position);
+      }),
+      widget.player.onPlayerComplete.listen((event) {
+        if (mounted)
+          setState(() {
+            widget.audioManager.pause();
+            widget.audioManager.seek(Duration.zero);
+          });
+      }),
+    ]);
+  }
+
+  void _deinitStreams() {
+    _subscriptions.forEach((s) => s.cancel());
+    // _player.onPlayerComplete.drain();
   }
 }
