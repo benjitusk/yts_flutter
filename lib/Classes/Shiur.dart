@@ -13,6 +13,7 @@ class Shiur implements Streamable {
   String title;
   ShiurType type;
   String sourcePath;
+  URL? cachedURL;
   BasicAuthor get author {
     return Author.registryLookup(id: authorID) ??
         BasicAuthor(

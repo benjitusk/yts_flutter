@@ -8,6 +8,7 @@ abstract class Streamable {
   Duration get duration;
   DateTime get date;
   BasicAuthor get author;
+  URL? get cachedURL;
 
   Future<URL?> getStreamableURL();
 }
