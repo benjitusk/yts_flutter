@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yts_flutter/classes/streamable.dart';
+import 'package:yts_flutter/services/backend_manager.dart';
 
 class FavoritesManager {
   static final FavoritesManager _instance = FavoritesManager._internal();
@@ -17,23 +18,25 @@ class FavoritesManager {
   Future<void> _init() async {
     // Load data from disk
     final prefs = await SharedPreferences.getInstance();
-    _favorites = prefs.getStringList('favorites') ?? [];
+    final _favoriteIDs = prefs.getStringList('favorites') ?? [];
+    _favorites = await BackendManager.fetchContentByIDs(_favoriteIDs);
     _favoritesStream.add(null);
   }
 
-  List<String> _favorites = [];
+  List<Streamable> _favorites = [];
+
   StreamController<void> _favoritesStream = StreamController<void>.broadcast();
   Stream<void> get favoritesStream => _favoritesStream.stream;
   // List<String> get favorites => _favorites;
 
   void _flush() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setStringList('favorites', _favorites);
+    prefs.setStringList('favorites', _favorites.map((e) => e.id).toList());
   }
 
   void add(Streamable? content) {
     if (content == null) return;
-    _favorites.add(content.id);
+    _favorites.add(content);
     _favoritesStream.add(null);
     _flush();
   }
@@ -46,7 +49,7 @@ class FavoritesManager {
 
   void remove(Streamable? content) {
     if (content == null) return;
-    _favorites.remove(content.id);
+    _favorites.remove(content);
     _favoritesStream.add(null);
     _flush();
   }
@@ -62,6 +65,6 @@ class FavoritesManager {
 
   bool isFavorite(Streamable? content) {
     if (content == null) return false;
-    return _favorites.contains(content.id);
+    return _favorites.contains(content);
   }
 }

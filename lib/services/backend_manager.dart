@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:yts_flutter/classes/streamable.dart';
 import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/category.dart';
 import 'package:yts_flutter/classes/content_filterable.dart';
@@ -68,6 +69,19 @@ class BackendManager {
         .get()
         .then((doc) {
       return Category.getCategoryFromDoc(doc);
+    });
+  }
+
+  static Future<List<Streamable>> fetchContentByIDs(
+      List<FirebaseID> contentIDs) async {
+    return FirebaseFirestore.instance
+        .collection("content")
+        .where(FieldPath.documentId, whereIn: contentIDs)
+        .get()
+        .then((querySnapshot) async {
+      return querySnapshot.docs
+          .map((doc) => Shiur.getShiurFromDoc(doc) as Streamable)
+          .toList();
     });
   }
 }
