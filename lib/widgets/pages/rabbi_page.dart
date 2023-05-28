@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/shiur.dart';
 import 'package:yts_flutter/services/backend_manager.dart';
-import 'package:yts_flutter/widgets/cards/standard_shiur_card.dart';
+import 'package:yts_flutter/widgets/content_table_row.dart';
 import 'package:yts_flutter/widgets/helpers/TextDivider.dart';
 
 class RabbiPage extends StatefulWidget {
@@ -51,8 +51,7 @@ class _RabbiPageState extends State<RabbiPage> {
             children: [
               Expanded(
                 child: ListView.separated(
-                  separatorBuilder: (ctx, i) =>
-                      SizedBox(height: (i > 0) ? 8 : 0),
+                  separatorBuilder: (context, index) => const Divider(),
                   itemBuilder: ((context, index) {
                     if (index == 0)
                       return Padding(
@@ -60,11 +59,7 @@ class _RabbiPageState extends State<RabbiPage> {
                         child: TextDivider("Recents"),
                       );
                     final shiur = content[index - 1];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 6),
-                      child: ShiurCard(shiur: shiur),
-                    );
+                    return ContentTableRow(shiur: shiur, showAuthor: false);
                   }),
                   itemCount: content.length + 1,
                 ),
