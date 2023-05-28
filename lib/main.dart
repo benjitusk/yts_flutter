@@ -10,6 +10,7 @@ import 'package:yts_flutter/services/backend_manager.dart';
 import 'package:yts_flutter/classes/news_article.dart';
 import 'package:yts_flutter/classes/shiur.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
+import 'package:yts_flutter/widgets/screens/favorites_screen.dart';
 import 'package:yts_flutter/widgets/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:yts_flutter/widgets/screens/news_screen.dart';
@@ -173,7 +174,7 @@ class _AppBodyState extends State<AppBody> {
                 categories: categories,
                 featuredImageURLs: featuredImageURLs,
                 recentShiurim: recentShiurim),
-            Placeholder(),
+            FavoritesScreen(),
             NewsScreen(
               articles: articles,
             ),
