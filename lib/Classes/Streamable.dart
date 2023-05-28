@@ -10,5 +10,9 @@ abstract class Streamable {
   BasicAuthor get author;
   URL? get cachedURL;
 
+  bool operator ==(Object other) {
+    return other is Streamable && other.id == this.id;
+  }
+
   Future<URL?> getStreamableURL();
 }

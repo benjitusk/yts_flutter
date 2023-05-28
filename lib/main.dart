@@ -3,6 +3,7 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/category.dart';
 import 'package:yts_flutter/services/backend_manager.dart';
@@ -12,7 +13,10 @@ import 'package:yts_flutter/widgets/helpers/Constants.dart';
 import 'package:yts_flutter/widgets/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:yts_flutter/widgets/screens/news_screen.dart';
+import 'package:audio_service/audio_service.dart';
 import 'firebase_options.dart';
+
+late AudioHandler audioHandler;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +33,27 @@ void main() async {
   // Anonymously sign in
   await FirebaseAuth.instance.signInAnonymously();
 
+  // Initialize audio service
+  print("Initializing audio service");
+  audioHandler = await AudioService.init(
+    builder: () => AudioManager(),
+    config: const AudioServiceConfig(
+      androidNotificationChannelId: 'com.benjitusk.yts_flutter',
+      androidNotificationChannelName: 'YTS Flutter',
+      androidNotificationOngoing: true,
+      androidStopForegroundOnPause: true,
+      androidNotificationIcon: 'mipmap/ic_launcher',
+      androidShowNotificationBadge: true,
+      androidNotificationClickStartsActivity: true,
+      // androidEnableQueue: true,
+      androidResumeOnClick: true,
+      // androidNotificationColor: 0xFF2196f3,
+      // androidNotificationClickIntentAction: 'com.benjitusk.yts_flutter.action.toggle',
+      // androidNotificationClickIntentPackage: 'com.benjitusk.yts_flutter',
+      // androidNotificationClickIntentClass: 'com.benjitusk.yts_flutter.MainActivity',
+    ),
+  );
+  print("Audio service initialized");
   // Initialize services
   runApp(const MyApp());
 }

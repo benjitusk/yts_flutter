@@ -1,97 +1,147 @@
-import 'dart:async';
-
-import 'package:audioplayers/audioplayers.dart';
-import 'package:yts_flutter/classes/misc_types.dart';
-import 'package:yts_flutter/classes/streamable.dart';
-import 'package:yts_flutter/extensions/AudioManagerState.dart';
-import '../widgets/pages/media_player.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:yts_flutter/classes/author.dart';
+import 'package:yts_flutter/classes/streamable.dart';
+import 'package:yts_flutter/classes/misc_types.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:yts_flutter/main.dart';
+import 'package:yts_flutter/widgets/pages/media_player.dart';
 
-class AudioManager {
+const MEDIA_URL =
+    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3";
+
+class AudioManager extends BaseAudioHandler {
+  // static AudioHandler? audioHandler;
+  // final _handler = audioHandler;
   static final AudioManager _instance = AudioManager._internal();
-  final AudioPlayer _player = AudioPlayer();
-  final StreamController<void> _contentStream = StreamController.broadcast();
-  final StreamController<AudioManagerState> _stateStream =
-      StreamController.broadcast();
-  Stream<void> get contentStream => _contentStream.stream;
-  Stream<AudioManagerState> get stateStream => _stateStream.stream;
-  AudioManagerState state = AudioManagerState.BUFFERING;
-  bool mediaIsInitailized = false;
-  // AudioManagerState get _state => state;
-  set _state(AudioManagerState state) {
-    this.state = state;
-    _stateStream.add(state);
-  }
-
-  Streamable? currentContent;
+  static AudioManager get instance => _instance;
   factory AudioManager() {
     return _instance;
   }
 
+  Streamable? currentContent;
+  Stream<PlayerState> get playerStateStream => _player.playerStateStream;
+  Stream<MediaState> get mediaStateStream =>
+      Rx.combineLatest3<MediaItem?, Duration, Duration, MediaState>(
+          audioHandler.mediaItem,
+          _player.positionStream,
+          _player.bufferedPositionStream,
+          (mediaItem, position, buffpos) =>
+              MediaState(mediaItem, position, buffpos));
+
+  //final StreamController<void> _contentStream = StreamController.broadcast();
+  //Stream<void> get contentStream => _contentStream.stream;
+
+  @override
   AudioManager._internal() {
-    // _player.onPlayerStateChanged.listen((PlayerState state) {
-    //   print('Internal state changed from ${this.state} to $state.');
-    //   this._state = AudioManagerState.fromPlayerState(state);
+    // playbackState.add(playbackState.value.copyWith(
+    //   controls: [
+    //     MediaControl.skipToPrevious,
+    //     MediaControl.pause,
+    //     MediaControl.stop,
+    //     MediaControl.play,
+    //     MediaControl.skipToNext,
+    //   ],
+    //   androidCompactActionIndices: const [0, 1, 3, 4],
+    //   processingState: AudioProcessingState.ready,
+    //   playing: false,
+    // ));
+    // _player.setUrl(MEDIA_URL).then((value) {
+    //   playbackState.add(playbackState.value.copyWith(
+    //     processingState: AudioProcessingState.ready,
+    //     playing: false,
+    //   ));
     // });
   }
 
-  void resume() {
-    _player.resume();
-    _state = AudioManagerState.PLAYING;
+  // AudioHandler get _audioHandler => AudioPlayerHandler.audioHandler;
+  final _player = AudioPlayer();
+
+  @override
+  Future<void> play() async {
+    playbackState.add(playbackState.value.copyWith(
+      playing: true,
+      controls: [
+        MediaControl.pause,
+        MediaControl.fastForward,
+        MediaControl.rewind,
+      ],
+    ));
+    await _player.play();
   }
 
-  void pause() {
-    _player.pause();
-    _state = AudioManagerState.PAUSED;
+  @override
+  Future<void> pause() {
+    playbackState.add(playbackState.value.copyWith(
+      playing: false,
+      controls: [MediaControl.play],
+    ));
+    return _player.pause();
   }
 
+  @override
+  Future<void> stop() {
+    playbackState.add(playbackState.value.copyWith(
+      playing: false,
+      processingState: AudioProcessingState.idle,
+      controls: [MediaControl.play],
+    ));
+    currentContent = null;
+    return _player.stop();
+  }
+
+  @override
   Future<void> seek(Duration position) async {
-    final previousState = state;
-    _state = AudioManagerState.BUFFERING;
     await _player.seek(position);
-    _state = previousState;
+    playbackState.add(playbackState.value.copyWith(
+      updatePosition: position,
+      bufferedPosition: _player.bufferedPosition,
+    ));
   }
 
-  void relativeSeek(Duration offset) async {
-    final position = await _player.getCurrentPosition();
-    if (position != null) {
-      await seek(position + offset);
-    }
+  Future<void> relativeSeek(Duration offset) async {
+    final position = await _player.position;
+    return await seek(position + offset);
   }
 
-  void stop() {
-    _player.stop();
-    // currentContent = null;
-    // _contentStream.add(null); // Notify listeners of change
-    _state = AudioManagerState.STOPPED;
-  }
-
-  void play(Streamable content) async {
-    if (currentContent?.id == content.id) {
-      if (this.state != AudioManagerState.PLAYING) {
-        _player.resume();
-        _state = AudioManagerState.PLAYING;
-      }
+  Future<void> loadContent(Streamable content) async {
+    if (content == currentContent) {
       return;
     }
-    mediaIsInitailized = false;
-    // _player.
     currentContent = content;
-    _contentStream.add(null); // Notify listeners of change
-    _state = AudioManagerState.BUFFERING;
-    URL contentURL =
-        (content.cachedURL) ?? (await content.getStreamableURL()) as URL;
-    try {
-      await _player.play(UrlSource(contentURL));
-    } catch (e) {
-      print('Error playing $contentURL');
-      print(e);
-      currentContent = null;
-      return;
-    }
-    mediaIsInitailized = true;
-    _state = AudioManagerState.PLAYING;
-    print('Playing ${content.title}');
+    // mediaIsInitailized = false;
+
+    URL url = (content.cachedURL) ?? (await content.getStreamableURL()) as URL;
+    mediaItem.add(MediaItem(
+      id: content.id,
+      title: content.title,
+      album: content.title,
+      artist: content.author.name,
+      artUri: (content.author is Author)
+          ? Uri.parse((content.author as Author).profilePictureURL)
+          : null,
+      duration: content.duration,
+      // artUri: content.posterURL,
+    ));
+    await _player.setUrl(url);
+    playbackState.add(playbackState.value.copyWith(
+      controls: [MediaControl.pause],
+      processingState: AudioProcessingState.ready,
+      systemActions: const {
+        MediaAction.seek,
+        MediaAction.seekForward,
+        MediaAction.seekBackward,
+        MediaAction.setSpeed
+      },
+      playing: false,
+      updatePosition: _player.position,
+      bufferedPosition: _player.bufferedPosition,
+    ));
+    // currentContent = content;
+    // await _player.setUrl(content.url);
+    // mediaIsInitailized = true;
+    // _contentStream.add(null);
   }
 
   void showMediaPlayer(BuildContext ctx) {
@@ -101,11 +151,19 @@ class AudioManager {
       builder: (BuildContext context) {
         return Column(mainAxisSize: MainAxisSize.min, children: [
           MediaPlayer(
-            player: _player,
+            // player: _player,
             initialContent: currentContent!,
           )
         ]);
       },
     );
   }
+}
+
+class MediaState {
+  final MediaItem? mediaItem;
+  final Duration position;
+  final Duration bufferedPosition;
+
+  MediaState(this.mediaItem, this.position, this.bufferedPosition);
 }
