@@ -1,12 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/category.dart';
 import 'package:yts_flutter/classes/misc_types.dart';
 import 'package:yts_flutter/classes/shiur.dart';
-import 'package:yts_flutter/extensions/Duration.dart';
 import 'package:yts_flutter/services/backend_manager.dart';
+import 'package:yts_flutter/widgets/content_table_row.dart';
 
 class CategoryPage extends StatefulWidget {
   const CategoryPage({super.key, required this.category});
@@ -105,7 +102,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                   category: subCategories![index]))),
                     );
                   }
-                  return ContentDataTable(shiur: content![index]);
+                  return ContentTableRow(shiur: content![index]);
                 },
                 separatorBuilder: (context, index) => const Divider(),
                 itemCount: numberOfSubCategories + content!.length);
@@ -146,43 +143,5 @@ class _CategoryPageState extends State<CategoryPage> {
       //             ),
       //         itemCount: (content?.length ?? 0) + numberOfSubCategories)
     );
-  }
-}
-
-class ContentDataTable extends StatelessWidget {
-  const ContentDataTable({super.key, required this.shiur});
-  final _imageSize = 50.0;
-  final Shiur shiur;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-        leading: (shiur.author is Author)
-            ? CachedNetworkImage(
-                imageUrl: (shiur.author as Author).profilePictureURL,
-                imageBuilder: (context, imageProvider) => Container(
-                  width: _imageSize,
-                  height: _imageSize,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              )
-            : const Icon(Icons.mic),
-        title: Text(shiur.title),
-        subtitle: Text(
-          DateFormat.yMMMd().format(shiur.date),
-        ),
-        // isThreeLine: true,
-
-        trailing: Text(shiur.duration.toHoursMinutesSeconds()),
-        onTap: () => null);
   }
 }
