@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
@@ -131,6 +133,8 @@ class _MediaPlayerState extends State<MediaPlayer> {
           final mediaState = snapshot.data;
           final duration = mediaState?.mediaItem?.duration ?? Duration.zero;
           final position = mediaState?.position ?? Duration.zero;
+          final bufferedPosition =
+              mediaState?.bufferedPosition.inMilliseconds ?? 0;
           return Slider(
             onChanged: (v) {
               final position = v * duration.inMilliseconds;
@@ -144,11 +148,12 @@ class _MediaPlayerState extends State<MediaPlayer> {
                 )
                 ? position.inMilliseconds / duration.inMilliseconds
                 : 0.0,
-            secondaryTrackValue:
-                (position.inMilliseconds > 0 && duration.inMilliseconds > 0)
-                    ? (mediaState?.bufferedPosition.inMilliseconds ?? 0) /
-                        duration.inMilliseconds
-                    : 0.0,
+            secondaryTrackValue: (position.inMilliseconds > 0 &&
+                    duration.inMilliseconds > 0 &&
+                    bufferedPosition < duration.inMilliseconds &&
+                    bufferedPosition > 0)
+                ? bufferedPosition / duration.inMilliseconds
+                : 0.0,
           );
         });
   }
