@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
+import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 
 class MediaPlayer extends StatelessWidget {
   final AudioManager audioManager = AudioManager();
@@ -75,6 +78,10 @@ class MediaPlayer extends StatelessWidget {
           final position = mediaState?.position ?? Duration.zero;
           final bufferedPosition =
               mediaState?.bufferedPosition.inMilliseconds ?? 0;
+          double bufferedPositionPercent =
+              bufferedPosition / duration.inMilliseconds;
+          bufferedPositionPercent = max(0.0, min(1.0, bufferedPositionPercent));
+          if (bufferedPositionPercent.isNaN) bufferedPositionPercent = 0.0;
           return Slider(
             onChanged: (v) {
               final position = v * duration.inMilliseconds;
@@ -84,12 +91,7 @@ class MediaPlayer extends StatelessWidget {
                     position.inMilliseconds < duration.inMilliseconds)
                 ? position.inMilliseconds / duration.inMilliseconds
                 : 0.0,
-            secondaryTrackValue: (position.inMilliseconds > 0 &&
-                    duration.inMilliseconds > 0 &&
-                    bufferedPosition < duration.inMilliseconds &&
-                    bufferedPosition > 0)
-                ? bufferedPosition / duration.inMilliseconds
-                : 0.0,
+            secondaryTrackValue: bufferedPositionPercent,
           );
         });
   }
@@ -177,37 +179,89 @@ class MediaPlayer extends StatelessWidget {
   }
 
   Widget _buildBottomButtons(BuildContext context) {
-    List<Map<IconData, VoidCallback>> buttons = [
-      {
-        Icons.favorite: () => null,
-      },
-      {
-        Icons.speed: () => null,
-      },
-      {
-        Icons.share: () => null,
-      },
-    ];
     return Row(
       children: [
         Spacer(),
-        ...buttons.map((button) {
-          final icon = button.keys.first;
-          final onPressed = button.values.first;
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                ),
-                padding: const EdgeInsets.all(16.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16.0)),
               ),
-              onPressed: onPressed,
-              child: Icon(icon),
+              padding: const EdgeInsets.all(16.0),
             ),
-          );
-        }),
+            onPressed: () => null,
+            child: const Icon(Icons.favorite_border),
+          ),
+        ),
+        StreamBuilder(
+            stream: audioManager.playbackSpeedStream,
+            builder: (context, snapshot) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      ),
+                      padding: const EdgeInsets.all(16.0),
+                    ),
+                    onPressed: () => showAdaptiveActionSheet(
+                        context: context,
+                        actions: PlaybackSpeed.values
+                            .map(
+                              (speed) => BottomSheetAction(
+                                title: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 4.0, horizontal: 12.0),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'x' + speed.value.toString(),
+                                        style: TextStyle(
+                                            fontWeight: (snapshot.data == speed)
+                                                ? FontWeight.bold
+                                                : FontWeight.normal),
+                                      ),
+                                      Spacer(),
+                                      if (snapshot.data == speed)
+                                        Icon(
+                                          Icons.check,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                                onPressed: (_) {
+                                  audioManager.setSpeedByEnum(speed);
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            )
+                            .toList()),
+                    child: Text(
+                      'x' + (snapshot.data?.value.toString() ?? '1.0'),
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
+              );
+            }),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+              ),
+              padding: const EdgeInsets.all(16.0),
+            ),
+            onPressed: () => null,
+            child: const Icon(Icons.share),
+          ),
+        ),
         Spacer(),
       ],
     );

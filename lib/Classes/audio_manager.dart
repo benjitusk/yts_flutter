@@ -16,6 +16,8 @@ class AudioManager extends BaseAudioHandler {
   }
 
   Streamable? currentContent;
+  Stream<PlaybackSpeed> get playbackSpeedStream =>
+      _player.speedStream.map((event) => PlaybackSpeed.fromValue(event));
   Stream<PlayerState> get playerStateStream => _player.playerStateStream;
   Stream<MediaState> get mediaStateStream =>
       Rx.combineLatest3<MediaItem?, Duration, Duration, MediaState>(
@@ -81,6 +83,15 @@ class AudioManager extends BaseAudioHandler {
     ));
     currentContent = null;
     return _player.stop();
+  }
+
+  @override
+  Future<void> setSpeed(double speed) async {
+    return _player.setSpeed(speed);
+  }
+
+  Future<void> setSpeedByEnum(PlaybackSpeed speed) async {
+    return setSpeed(speed.value);
   }
 
   @override
@@ -154,4 +165,55 @@ class MediaState {
   final Duration bufferedPosition;
 
   MediaState(this.mediaItem, this.position, this.bufferedPosition);
+}
+
+enum PlaybackSpeed {
+  x0_5,
+  x0_75,
+  x1,
+  x1_25,
+  x1_5,
+  x2,
+  x2_5;
+
+  double get value {
+    switch (this) {
+      case PlaybackSpeed.x0_5:
+        return 0.5;
+      case PlaybackSpeed.x0_75:
+        return 0.75;
+      case PlaybackSpeed.x1:
+        return 1;
+      case PlaybackSpeed.x1_25:
+        return 1.25;
+      case PlaybackSpeed.x1_5:
+        return 1.5;
+      case PlaybackSpeed.x2:
+        return 2;
+      case PlaybackSpeed.x2_5:
+        return 2.5;
+      default:
+        return 1;
+    }
+  }
+
+  static PlaybackSpeed fromValue(double value) {
+    if (value == 0.5) {
+      return PlaybackSpeed.x0_5;
+    } else if (value == 0.75) {
+      return PlaybackSpeed.x0_75;
+    } else if (value == 1) {
+      return PlaybackSpeed.x1;
+    } else if (value == 1.25) {
+      return PlaybackSpeed.x1_25;
+    } else if (value == 1.5) {
+      return PlaybackSpeed.x1_5;
+    } else if (value == 2) {
+      return PlaybackSpeed.x2;
+    } else if (value == 2.5) {
+      return PlaybackSpeed.x2_5;
+    } else {
+      return PlaybackSpeed.x1;
+    }
+  }
 }

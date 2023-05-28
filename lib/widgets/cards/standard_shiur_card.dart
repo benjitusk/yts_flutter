@@ -31,25 +31,25 @@ class ShiurCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Flexible(
-                    fit: FlexFit.tight,
-                    flex: 1,
-                    child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              Color(0xFF182030),
-                              Color(0xFF4A5B82),
-                            ],
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.mic,
-                          size: 35,
-                          color: Theme.of(context).colorScheme.secondary,
-                        ))),
+                // Flexible(
+                //     fit: FlexFit.tight,
+                //     flex: 1,
+                //     child: Container(
+                //         decoration: BoxDecoration(
+                //           gradient: LinearGradient(
+                //             begin: Alignment.topLeft,
+                //             end: Alignment.bottomRight,
+                //             colors: [
+                //               Color(0xFF182030),
+                //               Color(0xFF4A5B82),
+                //             ],
+                //           ),
+                //         ),
+                //         child: Icon(
+                //           Icons.mic,
+                //           size: 35,
+                //           color: Theme.of(context).colorScheme.secondary,
+                //         ))),
                 Flexible(
                     flex: 3,
                     child: Container(
@@ -75,20 +75,20 @@ class ShiurCard extends StatelessWidget {
                           SizedBox(height: 8),
                           Column(
                             children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.person,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary),
-                                  SizedBox(width: 5),
-                                  Text(shiur.author.name,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge!
-                                          .copyWith(color: Colors.grey)),
-                                ],
-                              ),
+                              // Row(
+                              //   children: [
+                              //     Icon(Icons.person,
+                              //         color: Theme.of(context)
+                              //             .colorScheme
+                              //             .primary),
+                              //     SizedBox(width: 5),
+                              //     Text(shiur.author.name,
+                              //         style: Theme.of(context)
+                              //             .textTheme
+                              //             .bodyLarge!
+                              //             .copyWith(color: Colors.grey)),
+                              //   ],
+                              // ),
                               Row(
                                 children: [
                                   Row(
