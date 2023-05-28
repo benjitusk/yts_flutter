@@ -24,7 +24,7 @@ class FavoritesManager {
   }
 
   List<Streamable> _favorites = [];
-
+  List<Streamable> get favorites => _favorites;
   StreamController<void> _favoritesStream = StreamController<void>.broadcast();
   Stream<void> get favoritesStream => _favoritesStream.stream;
   // List<String> get favorites => _favorites;

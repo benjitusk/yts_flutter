@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/favorites_manager.dart';
-import 'package:yts_flutter/classes/shiur.dart';
+import 'package:yts_flutter/classes/streamable.dart';
 import 'package:yts_flutter/extensions/Duration.dart';
 
 class ContentTableRow extends StatelessWidget {
@@ -15,7 +16,7 @@ class ContentTableRow extends StatelessWidget {
   final _imageSize = 50.0;
   final bool showAuthor;
   final bool showFav;
-  final Shiur shiur;
+  final Streamable shiur;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +65,10 @@ class ContentTableRow extends StatelessWidget {
                   }),
           ],
         ),
-        onTap: () => null);
+        onTap: () async {
+          AudioManager().showMediaPlayer(context);
+          await AudioManager().loadContent(shiur);
+          await AudioManager().play();
+        });
   }
 }

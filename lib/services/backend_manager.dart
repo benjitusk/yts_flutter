@@ -80,7 +80,7 @@ class BackendManager {
         .get()
         .then((querySnapshot) async {
       return querySnapshot.docs
-          .map((doc) => Shiur.getShiurFromDoc(doc) as Streamable)
+          .map((doc) => Shiur.getShiurFromDoc(doc))
           .toList();
     });
   }
