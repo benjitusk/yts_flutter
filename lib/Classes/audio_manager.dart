@@ -8,12 +8,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:yts_flutter/main.dart';
 import 'package:yts_flutter/widgets/pages/media_player.dart';
 
-const MEDIA_URL =
-    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3";
-
 class AudioManager extends BaseAudioHandler {
-  // static AudioHandler? audioHandler;
-  // final _handler = audioHandler;
   static final AudioManager _instance = AudioManager._internal();
   static AudioManager get instance => _instance;
   factory AudioManager() {
@@ -29,9 +24,6 @@ class AudioManager extends BaseAudioHandler {
           _player.bufferedPositionStream,
           (mediaItem, position, buffpos) =>
               MediaState(mediaItem, position, buffpos));
-
-  //final StreamController<void> _contentStream = StreamController.broadcast();
-  //Stream<void> get contentStream => _contentStream.stream;
 
   @override
   AudioManager._internal() {
@@ -149,12 +141,8 @@ class AudioManager extends BaseAudioHandler {
       context: ctx,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return Column(mainAxisSize: MainAxisSize.min, children: [
-          MediaPlayer(
-            // player: _player,
-            initialContent: currentContent!,
-          )
-        ]);
+        return Column(
+            mainAxisSize: MainAxisSize.min, children: [MediaPlayer()]);
       },
     );
   }
