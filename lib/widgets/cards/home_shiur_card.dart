@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:yts_flutter/classes/author.dart';
 // import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
+import 'package:yts_flutter/classes/favorites_manager.dart';
 import 'package:yts_flutter/classes/shiur.dart';
 import 'package:yts_flutter/widgets/helpers/BaseCard.dart';
 import 'package:yts_flutter/extensions/Duration.dart';
@@ -84,6 +85,18 @@ class HomeShiurCard extends StatelessWidget {
                                 .textTheme
                                 .bodyMedium!
                                 .copyWith(color: Colors.white)),
+                        Spacer(),
+                        StreamBuilder(
+                            stream: FavoritesManager().favoritesStream,
+                            builder: (context, _) {
+                              final isFavorite =
+                                  FavoritesManager().isFavorite(shiur);
+
+                              if (isFavorite)
+                                return Icon(Icons.bookmark_added,
+                                    color: Colors.white);
+                              return Container();
+                            }),
                       ],
                     ),
                     SizedBox(height: 5),

@@ -163,7 +163,7 @@ class _AppBodyState extends State<AppBody> {
         ),
         bottomNavigationBar: TabBar(tabs: [
           Tab(icon: Icon(Icons.home), text: "Home"),
-          Tab(icon: Icon(Icons.favorite), text: "Favorites"),
+          Tab(icon: Icon(Icons.bookmark), text: "Bookmarked"),
           Tab(icon: Icon(Icons.article), text: "Articles"),
         ]),
         body: TabBarView(

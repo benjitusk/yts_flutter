@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
+import 'package:yts_flutter/classes/favorites_manager.dart';
 
 class MediaPlayer extends StatelessWidget {
   final AudioManager audioManager = AudioManager();
@@ -182,19 +183,37 @@ class MediaPlayer extends StatelessWidget {
     return Row(
       children: [
         Spacer(),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16.0)),
-              ),
-              padding: const EdgeInsets.all(16.0),
-            ),
-            onPressed: () => null,
-            child: const Icon(Icons.favorite_border),
-          ),
-        ),
+        StreamBuilder(
+            stream: FavoritesManager()
+                .favoritesStream, // This stream fires whenever the favorites list changes.
+            builder: (context, snapshot) {
+              final isFavorite =
+                  FavoritesManager().isFavorite(audioManager.currentContent);
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                    ),
+                    padding: const EdgeInsets.all(16.0),
+                  ),
+                  onPressed: audioManager.currentContent == null
+                      ? null
+                      : () {
+                          if (isFavorite) {
+                            FavoritesManager()
+                                .remove(audioManager.currentContent);
+                          } else {
+                            FavoritesManager().add(audioManager.currentContent);
+                          }
+                        },
+                  child: Icon(isFavorite
+                      ? Icons.bookmark_added
+                      : Icons.bookmark_add_outlined),
+                ),
+              );
+            }),
         StreamBuilder(
             stream: audioManager.playbackSpeedStream,
             builder: (context, snapshot) {
