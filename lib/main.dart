@@ -13,6 +13,7 @@ import 'package:yts_flutter/widgets/helpers/Constants.dart';
 import 'package:yts_flutter/widgets/screens/favorites_screen.dart';
 import 'package:yts_flutter/widgets/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:yts_flutter/widgets/screens/loading_screen.dart';
 import 'package:yts_flutter/widgets/screens/news_screen.dart';
 import 'package:audio_service/audio_service.dart';
 import 'firebase_options.dart';
@@ -90,8 +91,11 @@ class _AppBodyState extends State<AppBody> {
   final List<String> featuredImageURLs = [];
   final List<Category> categories = [];
   final List<NewsArticle> articles = [];
-  final List<Shiur> favorites = [];
-
+  bool get isReady => !(rebbeim.isEmpty ||
+      recentShiurim.isEmpty ||
+      featuredImageURLs.isEmpty ||
+      categories.isEmpty ||
+      articles.isEmpty);
   @override
   void initState() {
     _loadData();
@@ -154,6 +158,7 @@ class _AppBodyState extends State<AppBody> {
 
   @override
   Widget build(BuildContext context) {
+    if (!isReady) return LoadingScreen();
     return DefaultTabController(
       length: 3,
       child: Scaffold(
