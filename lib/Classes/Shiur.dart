@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/misc_types.dart';
 import 'package:yts_flutter/classes/streamable.dart';
@@ -14,6 +15,7 @@ class Shiur implements Streamable {
   ShiurType type;
   String sourcePath;
   URL? cachedURL;
+  URL? cachedShareURL;
   BasicAuthor get author {
     return Author.registryLookup(id: authorID) ??
         BasicAuthor(
@@ -32,6 +34,40 @@ class Shiur implements Streamable {
     required this.title,
     required this.type,
   });
+
+  @override
+  Future<URL?> getShareLink() async {
+    // if (cachedShareURL != null) return cachedShareURL;
+    Uri link = Uri(
+      scheme: "https",
+      host: "app.toratshraga.com",
+      path: "/content",
+      queryParameters: {"id": id},
+    );
+
+    final dynamicLinkParams = DynamicLinkParameters(
+      link: link,
+      uriPrefix: "https://app.toratshraga.com/content",
+      androidParameters:
+          const AndroidParameters(packageName: "com.benjitusk.YTS"),
+      iosParameters: const IOSParameters(
+          bundleId: "com.reesedevelopment.YTS", appStoreId: "1598556472"),
+      socialMetaTagParameters: SocialMetaTagParameters(
+        title: title,
+        description:
+            "Listen to this shiur by ${author.name} on the Torat Shraga app!",
+        imageUrl: Uri.parse(
+            "http://toratshraga.com/wp-content/uploads/2016/11/cropped-torat.jpg"),
+      ),
+      navigationInfoParameters: NavigationInfoParameters(
+        forcedRedirectEnabled: true,
+      ),
+    );
+    final dynamicLink =
+        await FirebaseDynamicLinks.instance.buildLink(dynamicLinkParams);
+    cachedShareURL = dynamicLink.toString();
+    return cachedShareURL;
+  }
 
   @override
   Future<URL?> getStreamableURL() async {

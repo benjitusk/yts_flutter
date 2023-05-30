@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
@@ -191,32 +190,32 @@ class MediaPlayer extends StatelessWidget {
               return StreamBuilder(
                   stream: FavoritesManager().favoritesStream,
                   builder: (context, _) {
-              final isFavorite =
+                    final isFavorite =
                         FavoritesManager().isFavorite(currentContent?.id);
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: const RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(16.0)),
-                    ),
-                    padding: const EdgeInsets.all(16.0),
-                  ),
+                          ),
+                          padding: const EdgeInsets.all(16.0),
+                        ),
                         onPressed: currentContent == null
-                      ? null
-                      : () {
-                          if (isFavorite) {
+                            ? null
+                            : () {
+                                if (isFavorite) {
                                   FavoritesManager().remove(currentContent.id);
-                          } else {
+                                } else {
                                   FavoritesManager().add(currentContent.id);
-                          }
-                        },
-                  child: Icon(isFavorite
-                      ? Icons.bookmark_added
-                      : Icons.bookmark_add_outlined),
-                ),
-              );
+                                }
+                              },
+                        child: Icon(isFavorite
+                            ? Icons.bookmark_added
+                            : Icons.bookmark_add_outlined),
+                      ),
+                    );
                   });
             }),
         StreamBuilder(
@@ -273,21 +272,56 @@ class MediaPlayer extends StatelessWidget {
                     )),
               );
             }),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16.0)),
-              ),
-              padding: const EdgeInsets.all(16.0),
-            ),
-            onPressed: () => null,
-            child: const Icon(Icons.share),
-          ),
-        ),
+        ShareButton(),
         Spacer(),
       ],
     );
+  }
+}
+
+class ShareButton extends StatefulWidget {
+  const ShareButton({
+    super.key,
+  });
+  @override
+  State<ShareButton> createState() => _ShareButtonState();
+}
+
+class _ShareButtonState extends State<ShareButton> {
+  bool isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream: AudioManager().currentContentStream,
+        builder: (context, state) {
+          final currentContent = state.data;
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                ),
+                padding: const EdgeInsets.all(16.0),
+              ),
+              onPressed: currentContent == null
+                  ? null
+                  : () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      final url = await currentContent.getShareLink();
+                      print(url);
+                      setState(() {
+                        isLoading = false;
+                      });
+                    },
+              child: isLoading
+                  ? const CircularProgressIndicator()
+                  : const Icon(Icons.share),
+            ),
+          );
+        });
   }
 }
