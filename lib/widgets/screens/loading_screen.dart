@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
-import 'package:yts_flutter/widgets/screens/loading_screen.modal.dart';
+import 'package:yts_flutter/widgets/screens/loading_screen_model.dart';
 
 class LoadingScreen extends StatelessWidget {
   LoadingScreen({super.key});
