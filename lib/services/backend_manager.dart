@@ -103,7 +103,7 @@ class BackendManager {
           .map((doc) {
             return Sponsorship.getSponsorshipFromDoc(doc);
           })
-          .where((s) => s.dateBegin.isBefore(DateTime.now()))
+          .where((s) => s.isActive)
           .firstOrNull;
     });
   }
