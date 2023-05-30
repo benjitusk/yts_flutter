@@ -90,7 +90,7 @@ class HomeShiurCard extends StatelessWidget {
                             stream: FavoritesManager().favoritesStream,
                             builder: (context, _) {
                               final isFavorite =
-                                  FavoritesManager().isFavorite(shiur);
+                                  FavoritesManager().isFavorite(shiur.id);
 
                               if (isFavorite)
                                 return Icon(Icons.bookmark_added,

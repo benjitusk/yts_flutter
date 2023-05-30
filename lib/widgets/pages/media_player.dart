@@ -184,28 +184,32 @@ class MediaPlayer extends StatelessWidget {
       children: [
         Spacer(),
         StreamBuilder(
-            stream: FavoritesManager()
-                .favoritesStream, // This stream fires whenever the favorites list changes.
+            stream: AudioManager.instance.mediaStateStream,
             builder: (context, snapshot) {
+              final currentContent = snapshot.data?.mediaItem;
+              // FavoritesManager().isFavorite(currentContent);
+              return StreamBuilder(
+                  stream: FavoritesManager().favoritesStream,
+                  builder: (context, _) {
               final isFavorite =
-                  FavoritesManager().isFavorite(audioManager.currentContent);
+                        FavoritesManager().isFavorite(currentContent?.id);
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(16.0)),
                     ),
                     padding: const EdgeInsets.all(16.0),
                   ),
-                  onPressed: audioManager.currentContent == null
+                        onPressed: currentContent == null
                       ? null
                       : () {
                           if (isFavorite) {
-                            FavoritesManager()
-                                .remove(audioManager.currentContent);
+                                  FavoritesManager().remove(currentContent.id);
                           } else {
-                            FavoritesManager().add(audioManager.currentContent);
+                                  FavoritesManager().add(currentContent.id);
                           }
                         },
                   child: Icon(isFavorite
@@ -213,6 +217,7 @@ class MediaPlayer extends StatelessWidget {
                       : Icons.bookmark_add_outlined),
                 ),
               );
+                  });
             }),
         StreamBuilder(
             stream: audioManager.playbackSpeedStream,

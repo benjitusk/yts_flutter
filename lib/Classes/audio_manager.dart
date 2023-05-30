@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -15,10 +17,13 @@ class AudioManager extends BaseAudioHandler {
     return _instance;
   }
 
-  Streamable? currentContent;
+  // Streamable? currentContent;
   Stream<PlaybackSpeed> get playbackSpeedStream =>
       _player.speedStream.map((event) => PlaybackSpeed.fromValue(event));
   Stream<PlayerState> get playerStateStream => _player.playerStateStream;
+  StreamController<Streamable?> _currentContentStream =
+      StreamController<Streamable?>.broadcast();
+  Stream<Streamable?> get currentContentStream => _currentContentStream.stream;
   Stream<MediaState> get mediaStateStream =>
       Rx.combineLatest3<MediaItem?, Duration, Duration, MediaState>(
           audioHandler.mediaItem,
@@ -81,7 +86,7 @@ class AudioManager extends BaseAudioHandler {
       processingState: AudioProcessingState.idle,
       controls: [MediaControl.play],
     ));
-    currentContent = null;
+    // currentContent = null;
     return _player.stop();
   }
 
@@ -109,12 +114,11 @@ class AudioManager extends BaseAudioHandler {
   }
 
   Future<void> loadContent(Streamable content) async {
-    if (content == currentContent) {
-      return;
-    }
-    currentContent = content;
+    // if (content == currentContent) {
+    //   return;
+    // }
+    // currentContent = content;
     // mediaIsInitailized = false;
-
     URL url = (content.cachedURL) ?? (await content.getStreamableURL()) as URL;
     mediaItem.add(MediaItem(
       id: content.id,
@@ -141,6 +145,8 @@ class AudioManager extends BaseAudioHandler {
       updatePosition: _player.position,
       bufferedPosition: _player.bufferedPosition,
     ));
+    _currentContentStream.add(content);
+
     // currentContent = content;
     // await _player.setUrl(content.url);
     // mediaIsInitailized = true;

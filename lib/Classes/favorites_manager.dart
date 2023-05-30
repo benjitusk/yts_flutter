@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yts_flutter/classes/streamable.dart';
-import 'package:yts_flutter/services/backend_manager.dart';
+import 'package:yts_flutter/classes/misc_types.dart';
 
 class FavoritesManager {
   static final FavoritesManager _instance = FavoritesManager._internal();
-
+  final List<FirebaseID> _favorites = [];
   factory FavoritesManager() {
     return _instance;
   }
@@ -18,25 +17,22 @@ class FavoritesManager {
   Future<void> _init() async {
     // Load data from disk
     final prefs = await SharedPreferences.getInstance();
-    final _favoriteIDs = prefs.getStringList('favorites') ?? [];
-    _favorites = await BackendManager.fetchContentByIDs(_favoriteIDs);
+    _favorites.addAll(prefs.getStringList('favorites') ?? []);
     _favoritesStream.add(null);
   }
 
-  List<Streamable> _favorites = [];
-  List<Streamable> get favorites => _favorites;
   StreamController<void> _favoritesStream = StreamController<void>.broadcast();
   Stream<void> get favoritesStream => _favoritesStream.stream;
   // List<String> get favorites => _favorites;
 
   void _flush() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setStringList('favorites', _favorites.map((e) => e.id).toList());
+    prefs.setStringList('favorites', _favorites);
   }
 
-  void add(Streamable? content) {
-    if (content == null) return;
-    _favorites.add(content);
+  void add(FirebaseID? id) {
+    if (id == null) return;
+    _favorites.add(id);
     _favoritesStream.add(null);
     _flush();
   }
@@ -47,24 +43,24 @@ class FavoritesManager {
     _flush();
   }
 
-  void remove(Streamable? content) {
-    if (content == null) return;
-    _favorites.remove(content);
+  void remove(FirebaseID? id) {
+    if (id == null) return;
+    _favorites.remove(id);
     _favoritesStream.add(null);
     _flush();
   }
 
-  void toggle(Streamable? content) {
-    if (content == null) return;
-    if (isFavorite(content)) {
-      remove(content);
+  void toggle(FirebaseID? id) {
+    if (id == null) return;
+    if (isFavorite(id)) {
+      remove(id);
     } else {
-      add(content);
+      add(id);
     }
   }
 
-  bool isFavorite(Streamable? content) {
-    if (content == null) return false;
-    return _favorites.contains(content);
+  bool isFavorite(FirebaseID? id) {
+    if (id == null) return false;
+    return _favorites.contains(id);
   }
 }

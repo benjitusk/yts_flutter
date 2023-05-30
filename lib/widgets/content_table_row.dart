@@ -57,7 +57,7 @@ class ContentTableRow extends StatelessWidget {
               StreamBuilder(
                   stream: FavoritesManager().favoritesStream,
                   builder: (context, _) {
-                    final isFavorite = FavoritesManager().isFavorite(shiur);
+                    final isFavorite = FavoritesManager().isFavorite(shiur.id);
 
                     if (isFavorite)
                       return Icon(Icons.bookmark_added, color: Colors.white);
