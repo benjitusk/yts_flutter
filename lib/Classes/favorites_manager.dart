@@ -6,6 +6,7 @@ import 'package:yts_flutter/classes/misc_types.dart';
 class FavoritesManager {
   static final FavoritesManager _instance = FavoritesManager._internal();
   final List<FirebaseID> _favorites = [];
+  List<FirebaseID> get favorites => _favorites;
   factory FavoritesManager() {
     return _instance;
   }
