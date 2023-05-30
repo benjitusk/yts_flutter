@@ -44,8 +44,8 @@ class NewsCard extends StatelessWidget {
                   padding: EdgeInsets.all(8),
                   width: double.infinity,
                   child: CustomMarkdownBody(
-                    data: article.body,
-                    maxLines: 3,
+                    // at most 3 lines
+                    data: article.body.split('\n').take(8).join('\n'),
                     overflow: TextOverflow.ellipsis,
                     styleSheet: MarkdownStyleSheet(
                         a: TextStyle(
