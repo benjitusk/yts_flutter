@@ -1,12 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/category.dart';
-import 'package:yts_flutter/services/backend_manager.dart';
 import 'package:yts_flutter/classes/news_article.dart';
 import 'package:yts_flutter/classes/shiur.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
@@ -86,11 +83,11 @@ class AppBody extends StatefulWidget {
 }
 
 class _AppBodyState extends State<AppBody> {
-  final List<Author> rebbeim = [];
-  final List<Shiur> recentShiurim = [];
-  final List<String> featuredImageURLs = [];
-  final List<Category> categories = [];
-  final List<NewsArticle> articles = [];
+  // final List<Author> rebbeim = [];
+  // final List<Shiur> recentShiurim = [];
+  // final List<String> featuredImageURLs = [];
+  // final List<Category> categories = [];
+  // final List<NewsArticle> articles = [];
   bool get isReady => true;
   @override
   void initState() {
@@ -176,9 +173,7 @@ class _AppBodyState extends State<AppBody> {
             // featuredImageURLs: featuredImageURLs,
             // recentShiurim: recentShiurim),
             FavoritesScreen(),
-            NewsScreen(
-              articles: articles,
-            ),
+            NewsScreen(),
             // Placeholder(),
           ],
         ),

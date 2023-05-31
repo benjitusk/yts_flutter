@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:yts_flutter/classes/news_article.dart';
 import 'package:yts_flutter/classes/sponsorship.dart';
 import 'package:yts_flutter/classes/streamable.dart';
 import 'package:yts_flutter/classes/author.dart';
@@ -106,6 +107,13 @@ class BackendManager {
           .where((s) => s.isActive)
           .firstOrNull;
     });
+  }
+
+  static Future<List<NewsArticle>> loadArticles() async {
+    return FirebaseFirestore.instance.collection("news").get().then(
+        (querySnapshot) => querySnapshot.docs
+            .map((doc) => NewsArticle.fromJson(doc.data()))
+            .toList());
   }
 }
 
