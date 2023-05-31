@@ -30,13 +30,13 @@ void main() async {
   // App Check
   await FirebaseAppCheck.instance.activate(
       androidProvider: AndroidProvider.debug,
-      appleProvider: AppleProvider.debug,
-      webRecaptchaSiteKey: "recaptcha-v3-site-key");
+      appleProvider: AppleProvider.debug);
   // Anonymously sign in
   await FirebaseAuth.instance.signInAnonymously();
 
   // Initialize audio service
   print("Initializing audio service");
+  FirebaseAppCheck.instance.getToken().then((value) => print(value));
   audioHandler = await AudioService.init(
     builder: () => AudioManager(),
     config: const AudioServiceConfig(
@@ -91,70 +91,66 @@ class _AppBodyState extends State<AppBody> {
   final List<String> featuredImageURLs = [];
   final List<Category> categories = [];
   final List<NewsArticle> articles = [];
-  bool get isReady => !(rebbeim.isEmpty ||
-      recentShiurim.isEmpty ||
-      featuredImageURLs.isEmpty ||
-      categories.isEmpty ||
-      articles.isEmpty);
+  bool get isReady => true;
   @override
   void initState() {
-    _loadData();
+    // _loadData();
     super.initState();
   }
 
-  void _loadData() {
-    // Log a clearly identifiable message
-    // that we're making production API calls
-    BackendManager.loadAuthors().then((authors) {
-      rebbeim.clear();
-      // Sort by last name
-      authors.sort((lhs, rhs) =>
-          lhs.name.split(" ").last.compareTo(rhs.name.split(" ").last));
-      Author.addToRegistry(authors);
-      setState(() {
-        rebbeim.addAll(authors);
-      });
-    }).then((_) {
-      BackendManager.fetchRecentContent().then((shiurim) {
-        recentShiurim.clear();
-        setState(() {
-          recentShiurim.addAll(shiurim);
-        });
-      });
-    });
+  // void _loadData() {
+  //   // Log a clearly identifiable message
+  //   // that we're making production API calls
+  //   BackendManager.loadAuthors().then((authors) {
+  //     rebbeim.clear();
+  //     // Sort by last name
+  //     authors.sort((lhs, rhs) =>
+  //         lhs.name.split(" ").last.compareTo(rhs.name.split(" ").last));
+  //     Author.addToRegistry(authors);
+  //     setState(() {
+  //       rebbeim.addAll(authors);
+  //     });
+  //   }).then((_) {
+  //     BackendManager.fetchRecentContent().then((shiurim) {
+  //       recentShiurim.clear();
+  //       setState(() {
+  //         recentShiurim.addAll(shiurim);
+  //       });
+  //     });
+  //   });
 
-    FirebaseFirestore.instance
-        .collection("slideshowImages")
-        .orderBy("uploaded", descending: true)
-        .limit(15)
-        .get()
-        .then((snapshot) async {
-      Future.wait(snapshot.docs.map((doc) async {
-        final String url = await FirebaseStorage.instance
-            .ref("slideshow/${doc.data()['image_name']}")
-            .getDownloadURL();
-        return url;
-      })).then((urls) {
-        featuredImageURLs.clear();
-        setState(() {
-          featuredImageURLs.addAll(urls);
-        });
-      });
-    });
+  //   FirebaseFirestore.instance
+  //       .collection("slideshowImages")
+  //       .orderBy("uploaded", descending: true)
+  //       .limit(15)
+  //       .get()
+  //       .then((snapshot) async {
+  //     Future.wait(snapshot.docs.map((doc) async {
+  //       final String url = await FirebaseStorage.instance
+  //           .ref("slideshow/${doc.data()['image_name']}")
+  //           .getDownloadURL();
+  //       return url;
+  //     })).then((urls) {
+  //       featuredImageURLs.clear();
+  //       setState(() {
+  //         featuredImageURLs.addAll(urls);
+  //       });
+  //     });
+  //   });
 
-    BackendManager.loadCategories().then((categories) {
-      this.categories.clear();
-      setState(() {
-        this.categories.addAll(categories);
-      });
-    });
-    NewsArticle.loadArticles().then((articles) {
-      this.articles.clear();
-      setState(() {
-        this.articles.addAll(articles);
-      });
-    });
-  }
+  //   BackendManager.loadCategories().then((categories) {
+  //     this.categories.clear();
+  //     setState(() {
+  //       this.categories.addAll(categories);
+  //     });
+  //   });
+  //   NewsArticle.loadArticles().then((articles) {
+  //     this.articles.clear();
+  //     setState(() {
+  //       this.articles.addAll(articles);
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -174,11 +170,11 @@ class _AppBodyState extends State<AppBody> {
         ]),
         body: TabBarView(
           children: [
-            HomePage(
-                rebbeim: rebbeim,
-                categories: categories,
-                featuredImageURLs: featuredImageURLs,
-                recentShiurim: recentShiurim),
+            HomePage(),
+            // rebbeim: rebbeim,
+            // categories: categories,
+            // featuredImageURLs: featuredImageURLs,
+            // recentShiurim: recentShiurim),
             FavoritesScreen(),
             NewsScreen(
               articles: articles,
