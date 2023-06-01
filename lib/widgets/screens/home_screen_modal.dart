@@ -11,19 +11,18 @@ class HomeScreenModel extends ChangeNotifier {
   List<Shiur> recentShiurim = [];
   List<String> featuredImageURLs = [];
   List<Category> categories = [];
-  // bool _isLoading = false;
+  VoidCallback? onFinishedLoading;
 
-  // This will fetch the news titles from Firebase
-
-  HomeScreenModel() {
-    _loadAll();
+  HomeScreenModel({this.onFinishedLoading = null}) {
+    _loadAll().then((_) {
+      onFinishedLoading?.call();
+      // throw "This is being called infinitely :(";
+    });
   }
 
   Future<void> _loadAll() async {
-    // _isLoading = true;
     await Future.wait(
         [_loadAuthorsAndContent(), _loadFeaturedImages(), _loadCategories()]);
-    // _isLoading = false;
     notifyListeners();
   }
 

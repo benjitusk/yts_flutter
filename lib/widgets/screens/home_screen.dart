@@ -9,19 +9,11 @@ import 'package:yts_flutter/widgets/helpers/TextDivider.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({
-    key,
-    // required this.rebbeim,
-    // required this.categories,
-    // required this.featuredImageURLs,
-    // required this.recentShiurim
+    Key? key,
+    required this.model,
   }) : super(key: key);
-  final HomeScreenModel model = HomeScreenModel();
-  // final List<Author> rebbeim;
-  // final List<Shiur> recentShiurim;
-  // final List<String> featuredImageURLs;
-  // final List<Category> categories;
 
-  // This will fetch the news titles from Firebase
+  final HomeScreenModel model;
 
   @override
   Widget build(BuildContext context) {
