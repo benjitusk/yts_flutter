@@ -7,8 +7,8 @@ import 'package:yts_flutter/widgets/cards/home_shiur_card.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
 import 'package:yts_flutter/widgets/helpers/TextDivider.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({
+class HomeScreen extends StatelessWidget {
+  HomeScreen({
     Key? key,
     required this.model,
   }) : super(key: key);

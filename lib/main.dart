@@ -107,7 +107,7 @@ class _AppBodyState extends State<AppBody> {
           ]),
           body: TabBarView(
             children: [
-              HomePage(
+              HomeScreen(
                 model: homeScreenModel,
               ),
               FavoritesScreen(),
