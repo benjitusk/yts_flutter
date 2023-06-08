@@ -36,16 +36,22 @@ class BackendManager {
   static Future<BackendResponse<List<Shiur>>> fetchContentByFilter(
       ContentFilterable filter,
       {int limit = 10,
-      bool sortByRecent = true}) async {
-    return FirebaseFirestore.instance
+      bool sortByRecent = true,
+      FirebaseDoc? lastDoc}) async {
+    Query<Map<String, dynamic>> query = FirebaseFirestore.instance
         .collection("content")
         .where(filter.filterName, isEqualTo: filter.filterID)
-        .orderBy("date", descending: sortByRecent)
+        .orderBy("date", descending: sortByRecent);
+    if (lastDoc != null) {
+      query = query.startAfterDocument(lastDoc);
+    }
+    return query
         .get()
         .then((querySnapshot) => BackendResponse(
             result: querySnapshot.docs
                 .map((doc) => Shiur.getShiurFromDoc(doc))
-                .toList()))
+                .toList(),
+            lastDoc: querySnapshot.docs.lastOrNull))
         .catchError((error) => throw error);
   }
 
