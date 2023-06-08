@@ -8,7 +8,7 @@ class RecentShiurimRowModel extends ChangeNotifier {
   bool isLoadingMore = false;
   FirebaseDoc? lastDoc; // For pagination
   Future<void> load() async {
-    return BackendManager.fetchRecentContent(limit: 1).then((result) {
+    return BackendManager.fetchRecentContent(limit: 25).then((result) {
       final shiurim = result.result;
       lastDoc = result.lastDoc;
       recentShiurim.clear();
