@@ -6,7 +6,7 @@ import 'package:yts_flutter/widgets/pages/category_page_model.dart';
 class CategoryPage extends StatelessWidget {
   CategoryPage({super.key, required this.category}) {
     this.model = CategoryPageModel(category: category);
-    this.model.loadContent();
+    this.model.initialLoad();
   }
   final Category category;
   late final CategoryPageModel model;
@@ -25,21 +25,6 @@ class CategoryPage extends StatelessWidget {
             }
             if (model.isEmpty)
               return const Center(child: Text('No content found.'));
-
-            if (model.error != null)
-              showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: const Text('Error'),
-                        content: Text(
-                            'Error: ${model.error.toString()}. Please try again.'),
-                        actions: [
-                          TextButton(
-                            child: const Text('OK'),
-                            onPressed: () => Navigator.of(context).pop(),
-                          ),
-                        ],
-                      ));
             return ListView.separated(
                 itemBuilder: (context, index) {
                   if (index < model.subCategories!.length) {
@@ -53,10 +38,26 @@ class CategoryPage extends StatelessWidget {
                                   category: model.subCategories![index]))),
                     );
                   }
-                  return ContentTableRow(shiur: model.content![index]);
+                  if (index <
+                      model.subCategories!.length + model.content!.length)
+                    return ContentTableRow(shiur: model.content![index]);
+
+                  if (model.isLoadingMore) {
+                    return Center(
+                        child: Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const CircularProgressIndicator()));
+                  }
+                  if (model.hasMore) {
+                    return ElevatedButton(
+                        onPressed: () => model.loadMore(),
+                        child: const Text('Load more'));
+                  }
+                  return const SizedBox.shrink();
                 },
                 separatorBuilder: (context, index) => const Divider(),
-                itemCount: model.subCategories!.length + model.content!.length);
+                itemCount:
+                    model.subCategories!.length + model.content!.length + 1);
           },
         ));
   }

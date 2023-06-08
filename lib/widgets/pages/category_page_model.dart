@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:yts_flutter/classes/misc_types.dart';
 import 'package:yts_flutter/classes/shiur.dart';
 import 'package:yts_flutter/services/backend_manager.dart';
 import 'package:yts_flutter/classes/category.dart';
 
 class CategoryPageModel extends ChangeNotifier {
-  bool get isLoading => _subCategories == null || _content == null;
-  Error? _error = Error();
-  Error? get error => _error;
+  bool get isLoading => _isLoading;
+  bool get isLoadingMore => _isLoadingMore;
+  bool get hasMore => _lastDoc != null;
+  bool _isLoading = false;
+  bool _isLoadingMore = false;
+  FirebaseDoc? _lastDoc;
   Category category;
   List<Category>? _subCategories;
   List<Category>? get subCategories => _subCategories;
@@ -22,53 +26,56 @@ class CategoryPageModel extends ChangeNotifier {
     // fetchContent();
   }
 
-  void loadContent() async {
-    _error = null;
-    _subCategories = null;
-    _content = null;
+  void initialLoad() async {
+    _isLoading = true;
     notifyListeners();
-    if (category.isParent && category.children != null) {
-      // Load child categories
-      Future.wait(category.children!.map((childCategoryID) async {
-        return BackendManager.fetchCategoryByID(childCategoryID)
-            .then((response) {
-          final childCategory = response.result;
-
-          return childCategory;
-        });
-      })).then((categories) {
-        _subCategories = categories;
-        notifyListeners();
-      });
+    final List<Future<dynamic>> tasks = [
+      _loadContent(25).then((value) {
+        _content = value;
+      }),
+    ];
+    if (category.isParent) {
+      tasks.add(loadSubcategories());
     } else {
       _subCategories = [];
-      notifyListeners();
     }
+    await Future.wait(tasks);
+    _isLoading = false;
+    notifyListeners();
+  }
 
-    // Load parent category content
-    BackendManager.fetchContentByFilter(category, sortByRecent: true)
-        .then((response) {
-      final shiurim = response.result;
-      _content = shiurim;
-      notifyListeners();
+  Future loadMore() async {
+    _isLoadingMore = true;
+    notifyListeners();
+    await _loadContent(10).then(
+      (value) {
+        _content!.addAll(value);
+      },
+    );
+    _isLoadingMore = false;
+    notifyListeners();
+  }
+
+  Future loadSubcategories() {
+    return Future.wait(category.children!.map((childCategoryID) async {
+      return BackendManager.fetchCategoryByID(childCategoryID).then((response) {
+        final childCategory = response.result;
+
+        return childCategory;
+      });
+    })).then((categories) {
+      _subCategories = categories;
     });
   }
-  // void showAlertDialog() {
-  //   if (stupidContextHack == null) {
-  //     return;
-  //   }
-  //   showDialog(
-  //     context: stupidContextHack!,
-  //     builder: (context) => AlertDialog(
-  //       title: const Text('Error'),
-  //       content: Text(error.toString()),
-  //       actions: [
-  //         TextButton(
-  //           onPressed: () => Navigator.of(context).pop(),
-  //           child: const Text('OK'),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
+
+  Future<List<Shiur>> _loadContent(int limit) async {
+    // Load parent category content
+    return BackendManager.fetchContentByFilter(category,
+            sortByRecent: true, lastDoc: _lastDoc, limit: limit)
+        .then((response) {
+      final shiurim = response.result;
+      _lastDoc = response.lastDoc;
+      return shiurim;
+    });
+  }
 }
