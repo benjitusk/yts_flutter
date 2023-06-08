@@ -22,9 +22,7 @@ class CategoryPageModel extends ChangeNotifier {
   bool get isEmpty =>
       (_content?.isEmpty ?? true) && (_subCategories?.isEmpty ?? true);
 
-  CategoryPageModel({required this.category}) {
-    // fetchContent();
-  }
+  CategoryPageModel({required this.category});
 
   void initialLoad() async {
     _isLoading = true;
@@ -34,7 +32,7 @@ class CategoryPageModel extends ChangeNotifier {
         _content = value;
       }),
     ];
-    if (category.isParent) {
+    if (category.isParent && category.children != null) {
       tasks.add(loadSubcategories());
     } else {
       _subCategories = [];
