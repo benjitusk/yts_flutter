@@ -14,7 +14,8 @@ class NewsScreenModal extends ChangeNotifier {
   Future<void> _loadArticles() async {
     _isLoading = true;
     notifyListeners();
-    await BackendManager.loadArticles().then((newsArticles) {
+    await BackendManager.loadArticles().then((response) {
+      final newsArticles = response.result;
       articles.clear();
       articles.addAll(newsArticles);
     });

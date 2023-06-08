@@ -6,7 +6,8 @@ class RebbeimRowModel extends ChangeNotifier {
   final List<Author> rebbeim = [];
 
   Future<void> load() async {
-    return BackendManager.loadAuthors().then((authors) {
+    return BackendManager.loadAuthors().then((response) {
+      final authors = response.result;
       rebbeim.clear();
       // Sort by last name
       authors.sort((lhs, rhs) =>

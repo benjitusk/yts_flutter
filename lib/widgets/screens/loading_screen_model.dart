@@ -31,6 +31,7 @@ class LoadingScreenModel with ChangeNotifier {
     if (s == null || !s.isActive) {
       // If not, get it from the database, and save it to the cache if it exists
       s = await BackendManager.fetchCurrentSponsorship()
+          .then((response) => response.result)
         ?..saveToCache();
     }
     setSponsorship(s);

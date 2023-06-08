@@ -18,7 +18,11 @@ class FavoritesScreenModel extends ChangeNotifier {
 
   void _loadFavorites() async {
     final _favoriteIDs = FavoritesManager().favorites;
-    this._favorites = await BackendManager.fetchContentByIDs(_favoriteIDs);
+    this._favorites =
+        await BackendManager.fetchContentByIDs(_favoriteIDs).then((response) {
+      final streamables = response.result;
+      return streamables;
+    });
     notifyListeners();
   }
 
