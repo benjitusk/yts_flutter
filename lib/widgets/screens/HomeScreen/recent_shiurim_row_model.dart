@@ -17,13 +17,14 @@ class RecentShiurimRowModel extends ChangeNotifier {
     });
   }
 
-  Future<void> loadMore() async {
+  Future<void> loadMore(int limit) async {
     if (isLoadingMore) {
       return;
     }
     isLoadingMore = true;
     notifyListeners();
-    return BackendManager.fetchRecentContent(limit: 1).then((response) {
+    return BackendManager.fetchRecentContent(limit: limit, lastDoc: lastDoc)
+        .then((response) {
       final shiurim = response.result;
       lastDoc = response.lastDoc;
       recentShiurim.addAll(shiurim);

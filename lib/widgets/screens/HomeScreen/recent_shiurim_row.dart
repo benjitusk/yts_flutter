@@ -27,13 +27,22 @@ class RecentShiurimRow extends StatelessWidget {
                     itemCount: model.recentShiurim.length + 1,
                     itemBuilder: (context, index) => index ==
                             model.recentShiurim.length
-                        ? Container(
-                            // This is the "Load More" button
-                            child: IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.chevron_right,
-                                    size: 100,
-                                    color: Theme.of(context).primaryColor)))
+                        ? _buildLoadMore(context)
                         : HomeShiurCard(shiur: model.recentShiurim[index])))));
+  }
+
+  Widget _buildLoadMore(BuildContext context) {
+    return Container(
+        child: model.isLoadingMore
+            ? Container(
+                child: const Center(child: const CircularProgressIndicator()),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+              )
+            :
+            // This is the "Load More" button
+            IconButton(
+                onPressed: () => model.loadMore(10),
+                icon: Icon(Icons.chevron_right,
+                    size: 50, color: Theme.of(context).primaryColor)));
   }
 }
