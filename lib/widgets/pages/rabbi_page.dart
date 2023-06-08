@@ -51,8 +51,10 @@ class RabbiPage extends StatelessWidget {
                             );
                           if (index == model.content.length + 1) {
                             if (model.isLoadingMore) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
+                              return Center(
+                                  child: Container(
+                                      margin: const EdgeInsets.all(8),
+                                      child: CircularProgressIndicator()));
                             }
                             if (model.hasMore) {
                               return ElevatedButton(
