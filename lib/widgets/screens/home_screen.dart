@@ -22,10 +22,26 @@ class HomeScreen extends StatelessWidget {
         builder: (context, _) {
           return ListView(
             children: [
-              RecentShiurimRow(model: model.recentShiurimModel),
-              RebbeimRow(model: model.rebbeimRowModel),
-              CategoriesRow(model: model.categoriesRowModel),
-              SlideshowRow(model: model.slideshowRowModel)
+              ListenableBuilder(
+                listenable: model.recentShiurimModel,
+                builder: (context, _) =>
+                    RecentShiurimRow(model: model.recentShiurimModel),
+              ),
+              ListenableBuilder(
+                listenable: model.rebbeimRowModel,
+                builder: (context, _) =>
+                    RebbeimRow(model: model.rebbeimRowModel),
+              ),
+              ListenableBuilder(
+                listenable: model.categoriesRowModel,
+                builder: (context, _) =>
+                    CategoriesRow(model: model.categoriesRowModel),
+              ),
+              ListenableBuilder(
+                listenable: model.slideshowRowModel,
+                builder: (context, _) =>
+                    SlideshowRow(model: model.slideshowRowModel),
+              ),
             ],
           );
         });
