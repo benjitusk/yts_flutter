@@ -27,13 +27,16 @@ class LoadingScreenModel with ChangeNotifier {
   void loadSponsorship() async {
     setLoadingSponsorship(true);
     // First see if we can get anything from the cache
-    Sponsorship? s = await Sponsorship.getSponsorshipFromCache();
-    if (s == null || !s.isActive) {
-      // If not, get it from the database, and save it to the cache if it exists
-      s = await BackendManager.fetchCurrentSponsorship()
-          .then((response) => response.result)
-        ?..saveToCache();
+    Sponsorship? cachedSponsorship =
+        await Sponsorship.getSponsorshipFromCache();
+    if (!(cachedSponsorship?.isActive ?? false)) {
+      cachedSponsorship = null;
     }
-    setSponsorship(s);
+    setSponsorship(cachedSponsorship);
+    setLoadingSponsorship(false);
+    // If not, get it from the database, and save it to the cache if it exists
+    Sponsorship? newSponsor = await BackendManager.fetchCurrentSponsorship()
+        .then((response) => response.result);
+    Sponsorship.saveToCache(newSponsor);
   }
 }

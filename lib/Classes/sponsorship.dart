@@ -49,12 +49,20 @@ class Sponsorship {
         dedication: dedication);
   }
 
-  void saveToCache() async {
+  static void saveToCache(Sponsorship? sp) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString('sponsorship.id', id);
-    prefs.setString('sponsorship.name', name);
-    prefs.setInt('sponsorship.dateBegin', dateBegin.millisecondsSinceEpoch);
-    prefs.setInt('sponsorship.dateEnd', dateEnd.millisecondsSinceEpoch);
-    prefs.setString('sponsorship.dedication', dedication ?? '');
+    if (sp == null) {
+      prefs.remove('sponsorship.id');
+      prefs.remove('sponsorship.name');
+      prefs.remove('sponsorship.dateBegin');
+      prefs.remove('sponsorship.dateEnd');
+      prefs.remove('sponsorship.dedication');
+      return;
+    }
+    prefs.setString('sponsorship.id', sp.id);
+    prefs.setString('sponsorship.name', sp.name);
+    prefs.setInt('sponsorship.dateBegin', sp.dateBegin.millisecondsSinceEpoch);
+    prefs.setInt('sponsorship.dateEnd', sp.dateEnd.millisecondsSinceEpoch);
+    prefs.setString('sponsorship.dedication', sp.dedication ?? '');
   }
 }
