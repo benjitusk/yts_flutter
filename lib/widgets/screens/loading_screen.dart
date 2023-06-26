@@ -59,7 +59,7 @@ class SponsorshipPlaque extends StatelessWidget {
             child: ListenableBuilder(
                 listenable: model,
                 builder: (context, _) {
-                  if (model.isLoadingSponsorship)
+                  if (model.isLoadingSponsorship || model.sponsorship == null)
                     return Center(
                       child: CircularProgressIndicator(),
                     );
@@ -69,7 +69,7 @@ class SponsorshipPlaque extends StatelessWidget {
                     children: [
                       SizedBox(height: 10),
                       Text(
-                          "Learning for the month of Sivan is sponsored by ${model.sponsorship!.name}",
+                          "Learning for the month of Sivan is sponsored by ${model.sponsorship?.name}",
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           textAlign: TextAlign.center,
