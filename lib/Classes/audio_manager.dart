@@ -90,6 +90,14 @@ class AudioManager extends BaseAudioHandler {
     return _player.stop();
   }
 
+  Future<void> togglePlayPause() {
+    if (playbackState.value.playing) {
+      return pause();
+    } else {
+      return play();
+    }
+  }
+
   @override
   Future<void> setSpeed(double speed) async {
     return _player.setSpeed(speed);

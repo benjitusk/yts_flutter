@@ -1,8 +1,11 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
+import 'package:safe_device/safe_device.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
+import 'package:yts_flutter/widgets/mini_player.dart';
 import 'package:yts_flutter/widgets/screens/favorites_screen.dart';
 import 'package:yts_flutter/widgets/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,9 +25,13 @@ void main() async {
   );
 
   // App Check
-  await FirebaseAppCheck.instance.activate(
-      androidProvider: AndroidProvider.debug,
-      appleProvider: AppleProvider.debug);
+  final isPhysicalDevice = await SafeDevice.isRealDevice;
+  AndroidProvider androidProvider =
+      isPhysicalDevice ? AndroidProvider.playIntegrity : AndroidProvider.debug;
+  AppleProvider appleProvider =
+      isPhysicalDevice ? AppleProvider.deviceCheck : AppleProvider.debug;
+  await FirebaseAppCheck.instance
+      .activate(androidProvider: androidProvider, appleProvider: appleProvider);
   // Anonymously sign in
   await FirebaseAuth.instance.signInAnonymously();
 
@@ -59,7 +66,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Yeshivat Torat Shraga',
       debugShowCheckedModeBanner: false,
       theme: UI.lightTheme,
       darkTheme: UI.darkTheme,
@@ -70,7 +77,7 @@ class MyApp extends StatelessWidget {
 }
 
 class AppBody extends StatefulWidget {
-  const AppBody({
+  AppBody({
     super.key,
   });
 
@@ -82,39 +89,41 @@ class _AppBodyState extends State<AppBody> {
   bool isLoading = true;
   final homeScreenModel = HomeScreenModel();
 
-  void doStuff() {
-    setState(() {
-      isLoading = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+    //     overlays: [SystemUiOverlay.top]);
     homeScreenModel.onFinishedLoading = () => setState(() => isLoading = false);
     return Stack(children: [
       DefaultTabController(
         length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 4,
-            shadowColor: Theme.of(context).shadowColor,
-            title: const Text('Yeshivat Torat Shraga'),
-          ),
-          bottomNavigationBar: TabBar(tabs: [
-            Tab(icon: Icon(Icons.home), text: "Home"),
-            Tab(icon: Icon(Icons.bookmark), text: "Bookmarked"),
-            Tab(icon: Icon(Icons.article), text: "Articles"),
-          ]),
-          body: TabBarView(
-            children: [
-              HomeScreen(
-                model: homeScreenModel,
-              ),
-              FavoritesScreen(),
-              NewsScreen(),
-            ],
-          ),
-        ),
+        child: StreamBuilder(
+            stream: audioHandler.mediaItem,
+            builder: (context, snapshot) {
+              return Scaffold(
+                appBar: AppBar(
+                  elevation: 4,
+                  shadowColor: Theme.of(context).shadowColor,
+                  title: const Text('Yeshivat Torat Shraga'),
+                ),
+                persistentFooterButtons:
+                    snapshot.data != null ? [MiniPlayer()] : null,
+                bottomNavigationBar: TabBar(tabs: [
+                  Tab(icon: Icon(Icons.home), text: "Home"),
+                  Tab(icon: Icon(Icons.bookmark), text: "Bookmarked"),
+                  Tab(icon: Icon(Icons.article), text: "Articles"),
+                ]),
+                body: TabBarView(
+                  children: [
+                    HomeScreen(
+                      model: homeScreenModel,
+                    ),
+                    FavoritesScreen(),
+                    NewsScreen(),
+                  ],
+                ),
+              );
+            }),
       ),
       if (isLoading) const LoadingScreen(),
     ]);
