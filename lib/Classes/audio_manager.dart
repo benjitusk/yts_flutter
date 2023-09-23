@@ -32,26 +32,7 @@ class AudioManager extends BaseAudioHandler {
           .asBroadcastStream();
 
   @override
-  AudioManager._internal() {
-    // playbackState.add(playbackState.value.copyWith(
-    //   controls: [
-    //     MediaControl.skipToPrevious,
-    //     MediaControl.pause,
-    //     MediaControl.stop,
-    //     MediaControl.play,
-    //     MediaControl.skipToNext,
-    //   ],
-    //   androidCompactActionIndices: const [0, 1, 3, 4],
-    //   processingState: AudioProcessingState.ready,
-    //   playing: false,
-    // ));
-    // _player.setUrl(MEDIA_URL).then((value) {
-    //   playbackState.add(playbackState.value.copyWith(
-    //     processingState: AudioProcessingState.ready,
-    //     playing: false,
-    //   ));
-    // });
-  }
+  AudioManager._internal() {}
 
   // AudioHandler get _audioHandler => AudioPlayerHandler.audioHandler;
   final _player = AudioPlayer();
