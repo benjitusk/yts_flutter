@@ -310,18 +310,7 @@ class _ShareButtonState extends State<ShareButton> {
                 ),
                 padding: const EdgeInsets.all(16.0),
               ),
-              onPressed: currentContent == null
-                  ? null
-                  : () async {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      final url = await currentContent.getShareLink();
-                      print(url);
-                      setState(() {
-                        isLoading = false;
-                      });
-                    },
+              onPressed: null,
               child: isLoading
                   ? const CircularProgressIndicator()
                   : const Icon(Icons.share),
