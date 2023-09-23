@@ -16,13 +16,13 @@ class MiniPlayer extends StatelessWidget {
           Row(
             children: [
               StreamBuilder(
-                  stream: AudioManager.instance.mediaStateStream,
+                  stream: AudioManager.instance.mediaItem,
                   builder: (context, mediaState) {
-                    return (mediaState.data?.mediaItem?.artUri != null)
+                    return (mediaState.data?.artUri != null)
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: Image.network(
-                                mediaState.data!.mediaItem!.artUri!.toString(),
+                                mediaState.data!.artUri!.toString(),
                                 width: 50,
                                 height: 50,
                                 fit: BoxFit.cover,
@@ -44,7 +44,7 @@ class MiniPlayer extends StatelessWidget {
                   }),
               SizedBox(width: 10),
               StreamBuilder(
-                stream: AudioManager.instance.mediaStateStream,
+                stream: AudioManager.instance.mediaItem,
                 builder: (context, snapshot) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -56,7 +56,7 @@ class MiniPlayer extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      snapshot.data?.mediaItem?.artist ?? "--",
+                      snapshot.data?.artist ?? "--",
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -82,11 +82,10 @@ class MiniPlayer extends StatelessWidget {
             ],
           ),
           StreamBuilder(
-              stream: AudioManager.instance.mediaStateStream,
+              stream: AudioManager.instance.playTimeData,
               builder: (context, snapshot) {
                 final position = snapshot.data?.position ?? Duration.zero;
-                final duration =
-                    snapshot.data?.mediaItem?.duration ?? Duration.zero;
+                final duration = snapshot.data?.duration ?? Duration.zero;
                 if (duration == Duration.zero || position >= duration) {
                   return SizedBox.shrink();
                 }

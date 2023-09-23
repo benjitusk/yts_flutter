@@ -1,7 +1,6 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/services.dart';
 import 'package:safe_device/safe_device.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
@@ -37,7 +36,7 @@ void main() async {
 
   // Initialize audio service
   print("Initializing audio service");
-  audioHandler = await AudioService.init(
+  await AudioService.init(
     builder: () => AudioManager(),
     config: const AudioServiceConfig(
       androidNotificationChannelId: 'com.benjitusk.yts_flutter',
@@ -98,7 +97,7 @@ class _AppBodyState extends State<AppBody> {
       DefaultTabController(
         length: 3,
         child: StreamBuilder(
-            stream: audioHandler.mediaItem,
+            stream: AudioManager.instance.currentContentStream,
             builder: (context, snapshot) {
               return Scaffold(
                 appBar: AppBar(

@@ -35,7 +35,7 @@ class MediaPlayer extends StatelessWidget {
 
   Widget _buildContentMetadeta(BuildContext context) {
     return StreamBuilder(
-      stream: AudioManager.instance.mediaStateStream,
+      stream: AudioManager.instance.mediaItem,
       builder: (context, mediaState) => Row(children: [
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -49,16 +49,16 @@ class MediaPlayer extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             Text(
-              mediaState.data?.mediaItem?.artist ?? '--',
+              mediaState.data?.artist ?? '--',
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ],
         ),
         Spacer(),
-        (mediaState.data?.mediaItem?.artUri != null)
+        (mediaState.data?.artUri != null)
             ? ClipOval(
                 child: Image.network(
-                  mediaState.data!.mediaItem!.artUri!.toString(),
+                  mediaState.data!.artUri!.toString(),
                   width: 50,
                   height: 50,
                   fit: BoxFit.cover,
@@ -71,10 +71,10 @@ class MediaPlayer extends StatelessWidget {
 
   Widget _buildPositionSlider(BuildContext context) {
     return StreamBuilder(
-        stream: AudioManager.instance.mediaStateStream,
+        stream: AudioManager.instance.playTimeData,
         builder: (context, snapshot) {
           final mediaState = snapshot.data;
-          final duration = mediaState?.mediaItem?.duration ?? Duration.zero;
+          final duration = mediaState?.duration ?? Duration.zero;
           final position = mediaState?.position ?? Duration.zero;
           final bufferedPosition =
               mediaState?.bufferedPosition.inMilliseconds ?? 0;
@@ -97,27 +97,33 @@ class MediaPlayer extends StatelessWidget {
   }
 
   Widget _buildTimeLabelRow(BuildContext context) {
-    return StreamBuilder(
-      stream: AudioManager.instance.mediaStateStream,
-      builder: (context, snapshot) {
-        final mediaState = snapshot.data;
-        final duration = mediaState?.mediaItem?.duration ?? Duration.zero;
-        final position = mediaState?.position ?? Duration.zero;
         return Row(
           children: [
-            Text(
-              position.toString().split('.').first,
+        StreamBuilder(
+          stream: AudioManager.instance.playTimeData,
+          builder: (context, snapshot) => Text(
+            (snapshot.data?.position ?? Duration.zero)
+                .toString()
+                .split('.')
+                .first,
               style: const TextStyle(fontSize: 16.0),
             ),
+        ),
             Spacer(),
-            Text(
-              duration.toString().split('.').first,
+        StreamBuilder(
+          stream: AudioManager.instance.mediaItem,
+          builder: (context, snapshot) => Text(
+            (snapshot.data?.duration ?? Duration.zero)
+                .toString()
+                .split('.')
+                .first,
               style: const TextStyle(fontSize: 16.0),
             ),
+        ),
           ],
         );
-      },
-    );
+    // },
+    // );
   }
 
   Widget _buildMediaControls(BuildContext context) {
@@ -183,9 +189,9 @@ class MediaPlayer extends StatelessWidget {
       children: [
         Spacer(),
         StreamBuilder(
-            stream: AudioManager.instance.mediaStateStream,
+            stream: AudioManager.instance.currentContentStream,
             builder: (context, snapshot) {
-              final currentContent = snapshot.data?.mediaItem;
+              final currentContent = snapshot.data;
               // FavoritesManager().isFavorite(currentContent);
               return StreamBuilder(
                   stream: FavoritesManager().favoritesStream,

@@ -7,7 +7,6 @@ import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/streamable.dart';
 import 'package:yts_flutter/classes/misc_types.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:yts_flutter/main.dart';
 import 'package:yts_flutter/widgets/pages/media_player.dart';
 
 class AudioManager extends BaseAudioHandler {
@@ -20,17 +19,17 @@ class AudioManager extends BaseAudioHandler {
   // Streamable? currentContent;
   Stream<PlaybackSpeed> get playbackSpeedStream =>
       _player.speedStream.map((event) => PlaybackSpeed.fromValue(event));
-  Stream<PlayerState> get playerStateStream => _player.playerStateStream;
-  StreamController<Streamable?> _currentContentStream =
-      StreamController<Streamable?>.broadcast();
+  Stream<PlayerState> get playerStateStream =>
+      _player.playerStateStream.asBroadcastStream();
+  StreamController<Streamable?> _currentContentStream = BehaviorSubject();
   Stream<Streamable?> get currentContentStream => _currentContentStream.stream;
-  Stream<MediaState> get mediaStateStream =>
-      Rx.combineLatest3<MediaItem?, Duration, Duration, MediaState>(
-          audioHandler.mediaItem,
-          _player.positionStream,
-          _player.bufferedPositionStream,
-          (mediaItem, position, buffpos) =>
-              MediaState(mediaItem, position, buffpos));
+  Stream<PlaybackTimeData> get playTimeData =>
+      Rx.combineLatest2<Duration, Duration, PlaybackTimeData>(
+              _player.positionStream,
+              _player.bufferedPositionStream,
+              (pos, buffpos) => PlaybackTimeData(
+                  pos, buffpos, _player.duration ?? Duration.zero))
+          .asBroadcastStream();
 
   @override
   AudioManager._internal() {
@@ -173,12 +172,12 @@ class AudioManager extends BaseAudioHandler {
   }
 }
 
-class MediaState {
-  final MediaItem? mediaItem;
+class PlaybackTimeData {
   final Duration position;
   final Duration bufferedPosition;
+  final Duration duration;
 
-  MediaState(this.mediaItem, this.position, this.bufferedPosition);
+  PlaybackTimeData(this.position, this.bufferedPosition, this.duration);
 }
 
 enum PlaybackSpeed {
