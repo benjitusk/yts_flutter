@@ -7,10 +7,10 @@ import 'package:yts_flutter/classes/category.dart';
 class CategoryPageModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   bool get isLoadingMore => _isLoadingMore;
-  bool get hasMore => _lastDoc != null;
+  bool get hasMore => _topOfNextPage != null;
   bool _isLoading = false;
   bool _isLoadingMore = false;
-  FirebaseDoc? _lastDoc;
+  FirebaseDoc? _topOfNextPage;
   Category category;
   List<Category>? _subCategories;
   List<Category>? get subCategories => _subCategories;
@@ -69,10 +69,10 @@ class CategoryPageModel extends ChangeNotifier {
   Future<List<Shiur>> _loadContent(int limit) async {
     // Load parent category content
     return BackendManager.fetchContentByFilter(category,
-            sortByRecent: true, lastDoc: _lastDoc, limit: limit)
+            sortByRecent: true, topOfPage: _topOfNextPage, limit: limit)
         .then((response) {
       final shiurim = response.result;
-      _lastDoc = response.lastDoc;
+      _topOfNextPage = response.firstDocOfNextPage;
       return shiurim;
     });
   }

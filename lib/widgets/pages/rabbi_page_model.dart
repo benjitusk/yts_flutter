@@ -14,8 +14,8 @@ class RabbiPageModel extends ChangeNotifier {
   bool _isLoadingMore = false;
   bool get isloading => _isLoading;
   bool get isLoadingMore => _isLoadingMore;
-  FirebaseDoc? _lastDoc;
-  bool get hasMore => _lastDoc != null;
+  FirebaseDoc? _topOfNextPage;
+  bool get hasMore => _topOfNextPage != null;
   bool get isLoading => _isLoading;
 
   void loadMore() async {
@@ -34,10 +34,12 @@ class RabbiPageModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future _load(int amount) async {
-    return BackendManager.fetchContentByFilter(this.rabbi).then((response) {
+  Future<void> _load(int amount) async {
+    return BackendManager.fetchContentByFilter(this.rabbi,
+            topOfPage: _topOfNextPage)
+        .then((response) {
       final newContent = response.result;
-      _lastDoc = response.lastDoc;
+      _topOfNextPage = response.firstDocOfNextPage;
       _content.addAll(newContent);
       _isLoading = false;
     });

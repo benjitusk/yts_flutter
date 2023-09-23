@@ -15,44 +15,44 @@ class BackendManager {
       : assert(false,
             "Do not. Instantiate. This. Class. Just don't, okay? It's a bad idea. Trust me on this one.");
   static Future<BackendResponse<List<Shiur>>> fetchRecentContent(
-      {int limit = 100, FirebaseDoc? lastDoc}) {
+      {int limit = 100, FirebaseDoc? topOfPage}) {
     Query<Map<String, dynamic>> query = FirebaseFirestore.instance
         .collection("content")
         .orderBy("date", descending: true)
-        .limit(limit);
-    if (lastDoc != null) {
-      query = query.startAfterDocument(lastDoc);
+        .limit(limit + 1); // +1 to check if there's more content
+    if (topOfPage != null) {
+      query = query.startAtDocument(topOfPage);
     }
-    return query
-        .get()
-        .then((querySnapshot) => BackendResponse(
-            result: querySnapshot.docs
-                .map((doc) => Shiur.getShiurFromDoc(doc))
-                .toList(),
-            lastDoc: querySnapshot.docs.lastOrNull))
-        .catchError((error) => throw error);
+    return query.get().then((querySnapshot) {
+      final docs = querySnapshot.docs;
+      return BackendResponse(
+        firstDocOfNextPage: docs.length > limit ? docs.removeLast() : null,
+        result: docs.map((doc) => Shiur.getShiurFromDoc(doc)).toList(),
+      );
+    }).catchError((error) => throw error);
   }
 
   static Future<BackendResponse<List<Shiur>>> fetchContentByFilter(
       ContentFilterable filter,
       {int limit = 10,
       bool sortByRecent = true,
-      FirebaseDoc? lastDoc}) async {
+      FirebaseDoc? topOfPage}) async {
     Query<Map<String, dynamic>> query = FirebaseFirestore.instance
         .collection("content")
         .where(filter.filterName, isEqualTo: filter.filterID)
-        .orderBy("date", descending: sortByRecent);
-    if (lastDoc != null) {
-      query = query.startAfterDocument(lastDoc);
+        .orderBy("date", descending: sortByRecent)
+        .limit(limit + 1); // +1 to check if there's more content
+    if (topOfPage != null) {
+      query = query.startAtDocument(topOfPage);
     }
-    return query
-        .get()
-        .then((querySnapshot) => BackendResponse(
-            result: querySnapshot.docs
-                .map((doc) => Shiur.getShiurFromDoc(doc))
-                .toList(),
-            lastDoc: querySnapshot.docs.lastOrNull))
-        .catchError((error) => throw error);
+    return query.get().then((querySnapshot) {
+      final docs = querySnapshot.docs;
+      final firstDocOfNextPage = docs.length > limit ? docs.removeLast() : null;
+      return BackendResponse(
+        result: docs.map((doc) => Shiur.getShiurFromDoc(doc)).toList(),
+        firstDocOfNextPage: firstDocOfNextPage,
+      );
+    }).catchError((error) => throw error);
   }
 
   static Future<BackendResponse<List<Author>>> loadAuthors() async {

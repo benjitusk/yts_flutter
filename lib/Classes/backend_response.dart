@@ -3,11 +3,12 @@ import 'package:yts_flutter/classes/misc_types.dart';
 class BackendResponse<T> {
   final T result;
   // final Error? error;
-  final FirebaseDoc? lastDoc;
+  final FirebaseDoc? firstDocOfNextPage;
+  final bool hasMore;
 
   BackendResponse({
     required this.result,
-    // this.error,
-    this.lastDoc,
+    this.firstDocOfNextPage,
+    this.hasMore = false,
   });
 }
