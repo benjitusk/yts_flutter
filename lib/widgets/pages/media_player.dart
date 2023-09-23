@@ -4,6 +4,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:yts_flutter/classes/favorites_manager.dart';
+import 'package:yts_flutter/widgets/helpers/TextScrollWrapper.dart';
 
 class MediaPlayer extends StatelessWidget {
   final AudioManager audioManager = AudioManager();
@@ -41,12 +42,10 @@ class MediaPlayer extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              mediaState.data?.mediaItem?.title ?? '--',
-              maxLines: 2,
-              softWrap: true,
+            MarqueeText(
+              width: MediaQuery.of(context).size.width * 0.7,
+              text: mediaState.data?.title ?? '--',
               style: Theme.of(context).textTheme.titleLarge,
-              overflow: TextOverflow.ellipsis,
             ),
             Text(
               mediaState.data?.artist ?? '--',
@@ -97,8 +96,8 @@ class MediaPlayer extends StatelessWidget {
   }
 
   Widget _buildTimeLabelRow(BuildContext context) {
-        return Row(
-          children: [
+    return Row(
+      children: [
         StreamBuilder(
           stream: AudioManager.instance.playTimeData,
           builder: (context, snapshot) => Text(
@@ -106,10 +105,10 @@ class MediaPlayer extends StatelessWidget {
                 .toString()
                 .split('.')
                 .first,
-              style: const TextStyle(fontSize: 16.0),
-            ),
+            style: const TextStyle(fontSize: 16.0),
+          ),
         ),
-            Spacer(),
+        Spacer(),
         StreamBuilder(
           stream: AudioManager.instance.mediaItem,
           builder: (context, snapshot) => Text(
@@ -117,11 +116,11 @@ class MediaPlayer extends StatelessWidget {
                 .toString()
                 .split('.')
                 .first,
-              style: const TextStyle(fontSize: 16.0),
-            ),
+            style: const TextStyle(fontSize: 16.0),
+          ),
         ),
-          ],
-        );
+      ],
+    );
     // },
     // );
   }
