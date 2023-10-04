@@ -39,8 +39,6 @@ class ContentSearch extends SearchDelegate<(Shiur?, Author?)?> {
     if (query.isEmpty) {
       return const Text("Search for shiurim, rebbeim, etc.");
     }
-    model.addToSearchHistory(query);
-    model.search(query);
 
     return FutureBuilder(
         future: model.search(query),

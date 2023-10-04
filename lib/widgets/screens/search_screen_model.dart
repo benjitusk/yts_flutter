@@ -4,7 +4,7 @@ import 'package:yts_flutter/classes/shiur.dart';
 import 'package:yts_flutter/services/backend_manager.dart';
 
 class ContentSearchModel with ChangeNotifier {
-  static const int _maxSearchHistoryLength = 3;
+  static const int _maxSearchHistoryLength = 5;
   List<String> _searchHistory = [];
   List<Shiur> _shiurimResults = [];
   List<Author> _rebbeimResults = [];
@@ -13,7 +13,7 @@ class ContentSearchModel with ChangeNotifier {
   List<Shiur> get shiurimResults => _shiurimResults;
   List<Author> get rebbeimResults => _rebbeimResults;
 
-  void addToSearchHistory(String query) {
+  void _addToSearchHistory(String query) {
     if (!_searchHistory.contains(query)) {
       if (_searchHistory.length >= _maxSearchHistoryLength) {
         _searchHistory.removeAt(0);
@@ -24,7 +24,7 @@ class ContentSearchModel with ChangeNotifier {
   }
 
   Future<(List<Shiur>, List<Author>)> search(String query) {
-    print("Searching for $query");
+    _addToSearchHistory(query);
     return BackendManager.search(query).then((response) {
       _shiurimResults = response.result.$1;
       _rebbeimResults = response.result.$2;
