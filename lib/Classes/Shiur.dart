@@ -71,6 +71,9 @@ class Shiur implements Streamable {
 
   @override
   Future<URL?> getStreamableURL() async {
+    if (this.cachedURL != null) {
+      return (this.cachedURL);
+    }
     try {
       return (await FirebaseFunctions.instance
               .httpsCallable('loadSignedUrlBySourcePath')

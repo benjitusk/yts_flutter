@@ -300,7 +300,6 @@ class _ShareButtonState extends State<ShareButton> {
     return StreamBuilder(
         stream: AudioManager().currentContentStream,
         builder: (context, state) {
-          final currentContent = state.data;
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: ElevatedButton(
