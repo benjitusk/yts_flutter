@@ -129,8 +129,7 @@ class ContentSearch extends SearchDelegate<(Shiur?, Author?)?> {
             title: _buildSearchResultFrom(
                 query: query, match: shiurResults[index].title),
             onTap: () {
-              query = shiurResults[index].title;
-              showResults(context);
+              close(context, (shiurResults[index], null));
             },
           );
         } else {
@@ -140,8 +139,7 @@ class ContentSearch extends SearchDelegate<(Shiur?, Author?)?> {
                 query: query,
                 match: rabbiResults[index - shiurResults.length].name),
             onTap: () {
-              query = rabbiResults[index - shiurResults.length].name;
-              showResults(context);
+              close(context, (null, rabbiResults[index - shiurResults.length]));
             },
           );
         }
@@ -161,8 +159,7 @@ class ContentSearch extends SearchDelegate<(Shiur?, Author?)?> {
                 match.toLowerCase().indexOf(query.toLowerCase()),
                 match.toLowerCase().indexOf(query.toLowerCase()) +
                     query.length),
-            style: const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           TextSpan(
             text: match.substring(
