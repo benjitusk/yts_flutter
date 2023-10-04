@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:yts_flutter/classes/backend_response.dart';
 import 'package:yts_flutter/classes/news_article.dart';
 import 'package:yts_flutter/classes/sponsorship.dart';
@@ -29,6 +30,106 @@ class BackendManager {
         firstDocOfNextPage: docs.length > limit ? docs.removeLast() : null,
         result: docs.map((doc) => Shiur.getShiurFromDoc(doc)).toList(),
       );
+    }).catchError((error) => throw error);
+  }
+
+  static Future<BackendResponse<(List<Shiur>, List<Author>)>> search(
+      String query) async {
+    final searchParameters = {
+      "searchQuery": query,
+      "searchOptions": {
+        "content": {
+          "limit": 100,
+          "includeThumbnailURLs": true,
+          "includeDetailedAuthorInfo": true,
+          // "startAfterDocumentID": ID
+        },
+        "rebbeim": {
+          "limit": 100,
+          "includePictureURLs": true,
+          // "startAfterDocumentID", ID
+        }
+      }
+    };
+
+    final List<Author> authors = [];
+    final List<Shiur> contents = [];
+
+    return FirebaseFunctions.instance
+        .httpsCallable("search",
+            options: HttpsCallableOptions(timeout: const Duration(seconds: 5)))
+        .call(searchParameters)
+        .then((result) {
+      final results = (result.data["results"] as Map).cast<String, List>();
+
+      // We need to process the rebbeim and shiurim separately
+      // Rebbeim:
+      final List? rawRebbeim = results["rebbeim"];
+      if (rawRebbeim == null) {
+        throw Exception("Invalid data received from backend (missing rebbeim)");
+      }
+      // "name", "id", "profile_picture_url"
+
+      rawRebbeim.forEach((rabbi) {
+        if (!(rabbi.containsKey("name") &&
+            rabbi.containsKey("id") &&
+            rabbi.containsKey("profile_picture_url"))) {
+          print("Invalid data received from backend (missing keys for rabbi)");
+          return;
+          // throw Exception("Invalid data received from backend");
+        }
+        final Author author = Author(
+            name: rabbi["name"],
+            id: rabbi["id"],
+            profilePictureURL: rabbi["profile_picture_url"]);
+        authors.add(author);
+      });
+
+      // Shiurim:
+      final List? rawShiurim = results["content"];
+      if (rawShiurim == null) {
+        throw Exception("Invalid data received from backend (missing content)");
+      }
+      // guard let id = contentDocument["id"] as? FirestoreID,
+      // let type = contentDocument["type"] as? String,
+      // let title = contentDocument["title"] as? String,
+      // let author = contentDocument["author"] as? [String: Any],
+      // let description = contentDocument["description"] as? String,
+      // let dateDictionary = contentDocument["date"] as? [String: Int],
+      // let sourceURLString = contentDocument["source_url"] as? String,
+      // let categoryDocument = contentDocument["tagData"] as? [String: Any]
+
+      // "id", "type", "title", "author", "description", "date", "source_url", "tagData"
+      rawShiurim.forEach((shiur) {
+        if (!(shiur.containsKey("id") &&
+            shiur.containsKey("type") &&
+            shiur.containsKey("title") &&
+            shiur.containsKey("attributionID") &&
+            shiur.containsKey("description") &&
+            shiur.containsKey("date") &&
+            shiur.containsKey("source_url") &&
+            shiur.containsKey("duration"))) {
+          print("Invalid data received from backend (missing keys for shiur)");
+          return;
+          // throw Exception("Invalid data received from backend");
+        }
+        // final Map<String, dynamic> rawShiur = value;
+        final Shiur content = Shiur(
+          id: shiur["id"],
+          type: shiur["type"] == "audio" ? ShiurType.audio : ShiurType.video,
+          title: shiur["title"],
+          authorID: shiur["attributionID"],
+          description: shiur["description"],
+          date: DateTime.fromMillisecondsSinceEpoch(
+              shiur["date"]["_seconds"] * 1000),
+          sourcePath: "", //shiur["source_url"],
+          duration: Duration(seconds: shiur['duration'] as int),
+        );
+        content.cachedURL = shiur["source_url"];
+        contents.add(content);
+      });
+
+      return BackendResponse(result: (contents, authors));
     }).catchError((error) => throw error);
   }
 

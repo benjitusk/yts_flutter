@@ -5,6 +5,7 @@ import 'package:safe_device/safe_device.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
 import 'package:yts_flutter/widgets/mini_player.dart';
+import 'package:yts_flutter/widgets/pages/rabbi_page.dart';
 import 'package:yts_flutter/widgets/screens/favorites_screen.dart';
 import 'package:yts_flutter/widgets/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +13,7 @@ import 'package:yts_flutter/widgets/screens/home_screen_modal.dart';
 import 'package:yts_flutter/widgets/screens/loading_screen.dart';
 import 'package:yts_flutter/widgets/screens/news_screen.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:yts_flutter/widgets/screens/search_screen.dart';
 import 'firebase_options.dart';
 
 late AudioHandler audioHandler;
@@ -87,12 +89,16 @@ class AppBody extends StatefulWidget {
 class _AppBodyState extends State<AppBody> {
   bool isLoading = true;
   final homeScreenModel = HomeScreenModel();
+  @override
+  void initState() {
+    homeScreenModel.onFinishedLoading = () => setState(() => isLoading = false);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
     //     overlays: [SystemUiOverlay.top]);
-    homeScreenModel.onFinishedLoading = () => setState(() => isLoading = false);
     return Stack(children: [
       DefaultTabController(
         length: 3,
@@ -104,6 +110,33 @@ class _AppBodyState extends State<AppBody> {
                   elevation: 4,
                   shadowColor: Theme.of(context).shadowColor,
                   title: const Text('Yeshivat Torat Shraga'),
+                  actions: [
+                    IconButton(
+                      icon: const Icon(Icons.search),
+                      onPressed: () async {
+                        final result = await showSearch(
+                          context: context,
+                          delegate: ContentSearch(
+                            // newsArticles: homeScreenModel.,
+                            shiurim: homeScreenModel
+                                .recentShiurimModel.recentShiurim,
+                            rebbeim: homeScreenModel.rebbeimRowModel.rebbeim,
+                          ),
+                        );
+                        if (result?.$1 != null) {
+                          AudioManager().showMediaPlayer(context);
+                          await AudioManager().loadContent(result!.$1!);
+                          await AudioManager().play();
+                        } else if (result?.$2 != null) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    RabbiPage(rabbi: result!.$2!)),
+                          );
+                        }
+                      },
+                    ),
+                  ],
                 ),
                 persistentFooterButtons:
                     snapshot.data != null ? [MiniPlayer()] : null,
