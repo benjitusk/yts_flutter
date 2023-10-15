@@ -70,3 +70,17 @@ Future<void> initApp() async {
   });
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 }
+
+Widget ShragaLogo(
+    {bool dark = false, double? height = null, bool animated = false}) {
+  final fileExtension = animated ? 'gif' : 'png';
+  final colorSpecification = dark ? 'white' : 'black';
+  return Image(
+    image: AssetImage('assets/Shraga_$colorSpecification.$fileExtension'),
+    height: height,
+  );
+}
+
+bool isDarkTheme(BuildContext context) {
+  return Theme.of(context).brightness == Brightness.dark;
+}

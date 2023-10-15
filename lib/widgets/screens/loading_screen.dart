@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yts_flutter/utils.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
 import 'package:yts_flutter/widgets/screens/loading_screen_model.dart';
 
@@ -7,21 +8,13 @@ class LoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
-    final themeSensitiveIcon = isDarkTheme
-        ? const AssetImage('assets/Shraga_white.png')
-        : const AssetImage('assets/Shraga_black.png');
-
     return Container(
       color: Theme.of(context).colorScheme.background,
       child: Center(
         child: Column(children: [
           Spacer(),
           Spacer(),
-          Image(
-            image: themeSensitiveIcon,
-            fit: BoxFit.contain,
-          ),
+          ShragaLogo(dark: isDarkTheme(context), animated: true),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: CircularProgressIndicator(),

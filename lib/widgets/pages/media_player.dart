@@ -4,6 +4,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:yts_flutter/classes/favorites_manager.dart';
+import 'package:yts_flutter/utils.dart';
 import 'package:yts_flutter/widgets/helpers/TextScrollWrapper.dart';
 
 class MediaPlayer extends StatelessWidget {
@@ -14,16 +15,12 @@ class MediaPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
-    final themeSensitiveIcon = isDarkTheme
-        ? const AssetImage('assets/Shraga_white.png')
-        : const AssetImage('assets/Shraga_black.png');
     return Padding(
       padding: const EdgeInsets.all(24.00),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Image(image: themeSensitiveIcon),
+          ShragaLogo(dark: isDarkTheme(context), animated: true),
           _buildContentMetadeta(context),
           _buildPositionSlider(context),
           _buildTimeLabelRow(context),
