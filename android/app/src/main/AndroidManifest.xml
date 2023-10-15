@@ -16,7 +16,7 @@
       android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
       android:hardwareAccelerated="true"
       android:windowSoftInputMode="adjustResize"
-        tools:ignore="MissingClass">
+      tools:ignore="MissingClass">
       <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
@@ -35,6 +35,9 @@
     <meta-data
       android:name="flutterEmbedding"
       android:value="2" />
+    <meta-data
+      android:name="com.google.firebase.messaging.default_notification_channel_id"
+      android:value="@string/default_notification_channel_id" />
 
     <service
       android:name="com.ryanheise.audioservice.AudioService"
@@ -45,7 +48,14 @@
       <intent-filter>
         <action android:name="android.media.browse.MediaBrowserService" />
       </intent-filter>
+
+      <!-- Notifications -->
+      <intent-filter>
+        <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
     </service>
+
 
     <receiver
       android:name="com.ryanheise.audioservice.MediaButtonReceiver"

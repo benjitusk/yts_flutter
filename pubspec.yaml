@@ -19,15 +19,18 @@ dependencies:
     cloud_firestore: ^4.4.3
     cloud_functions: ^4.0.12
     collection: ^1.17.0
+    firebase_analytics: ^10.5.1
     firebase_app_check: ^0.1.1+14
     firebase_auth: ^4.2.9
     firebase_core: ^2.7.0
     firebase_dynamic_links: ^5.3.1
+    firebase_messaging: ^14.6.9
     firebase_storage: ^11.0.14
     flutter:
         sdk: flutter
     flutter_markdown: ^0.6.14
     get_it: ^7.2.0
+    google_api_availability: ^5.0.0
     intl: ^0.17.0
     just_audio: ^0.9.32
     safe_device: ^1.1.4
