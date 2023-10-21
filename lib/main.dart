@@ -6,6 +6,7 @@ import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
 import 'package:yts_flutter/widgets/mini_player.dart';
 import 'package:yts_flutter/widgets/pages/rabbi_page.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/settings_screen.dart';
 import 'package:yts_flutter/widgets/screens/favorites_screen.dart';
 import 'package:yts_flutter/widgets/screens/home_screen.dart';
 import 'package:yts_flutter/widgets/screens/home_screen_modal.dart';
@@ -61,7 +62,7 @@ class _AppBodyState extends State<AppBody> {
     //     overlays: [SystemUiOverlay.top]);
     return Stack(children: [
       DefaultTabController(
-        length: 3,
+        length: 4,
         child: StreamBuilder(
             stream: AudioManager.instance.currentContentStream,
             builder: (context, snapshot) {
@@ -104,6 +105,7 @@ class _AppBodyState extends State<AppBody> {
                   Tab(icon: Icon(Icons.home), text: "Home"),
                   Tab(icon: Icon(Icons.bookmark), text: "Bookmarked"),
                   Tab(icon: Icon(Icons.article), text: "Articles"),
+                  Tab(icon: Icon(Icons.settings), text: "Settings")
                 ]),
                 body: TabBarView(
                   children: [
@@ -112,6 +114,7 @@ class _AppBodyState extends State<AppBody> {
                     ),
                     FavoritesScreen(),
                     NewsScreen(),
+                    SettingsScreen(),
                   ],
                 ),
               );
