@@ -11,18 +11,15 @@ class HomeScreenModel extends ChangeNotifier {
   final CategoriesRowModel categoriesRowModel = CategoriesRowModel();
   final SlideshowRowModel slideshowRowModel = SlideshowRowModel();
 
-  HomeScreenModel({this.onFinishedLoading = null}) {
-    _loadAll().then((_) {
-      onFinishedLoading?.call();
-    });
-  }
+  HomeScreenModel({this.onFinishedLoading = null}) {}
 
-  Future<void> _loadAll() async {
+  Future<void> loadAll() async {
     return Future.wait([
       rebbeimRowModel.load().then((_) => recentShiurimModel.load()),
       slideshowRowModel.load(),
       categoriesRowModel.load()
     ]).then((_) {
+      onFinishedLoading?.call();
       notifyListeners();
     });
   }

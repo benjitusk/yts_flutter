@@ -2,41 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:yts_flutter/classes/sponsorship.dart';
 import 'package:yts_flutter/services/backend_manager.dart';
 
-class LoadingScreenModel with ChangeNotifier {
-  bool _isLoadingSponsorship = false;
+class LoadingScreenBloc extends ChangeNotifier {
+  final VoidCallback? _onSponsorshipLoaded;
+
   Sponsorship? _sponsorship = null;
-
-  bool get isLoadingSponsorship => _isLoadingSponsorship;
   Sponsorship? get sponsorship => _sponsorship;
+  bool _isLoadingSponsorship = true;
+  bool get isLoadingSponsorship => _isLoadingSponsorship;
 
-  LoadingScreenModel() {
-    loadSponsorship();
+  LoadingScreenBloc({VoidCallback? onSponsorshipLoaded})
+      : _onSponsorshipLoaded = onSponsorshipLoaded {
+    _loadSponsorship().then((loadedSponsorship) {
+      _sponsorship = loadedSponsorship;
+      _isLoadingSponsorship = false;
+      notifyListeners();
+      _onSponsorshipLoaded?.call();
+    });
   }
 
-  void setLoadingSponsorship(bool value) {
-    _isLoadingSponsorship = value;
-    notifyListeners();
-  }
-
-  void setSponsorship(Sponsorship? value) {
-    _sponsorship = value;
-    _isLoadingSponsorship = false;
-    notifyListeners();
-  }
-
-  void loadSponsorship() async {
-    setLoadingSponsorship(true);
-    // First see if we can get anything from the cache
-    Sponsorship? cachedSponsorship =
-        await Sponsorship.getSponsorshipFromCache();
-    if (!(cachedSponsorship?.isActive ?? false)) {
-      cachedSponsorship = null;
-    }
-    setSponsorship(cachedSponsorship);
-    setLoadingSponsorship(false);
-    // If not, get it from the database, and save it to the cache if it exists
-    Sponsorship? newSponsor = await BackendManager.fetchCurrentSponsorship()
+  Future<Sponsorship?> _loadSponsorship() async {
+    return BackendManager.fetchCurrentSponsorship()
         .then((response) => response.result);
-    Sponsorship.saveToCache(newSponsor);
   }
 }

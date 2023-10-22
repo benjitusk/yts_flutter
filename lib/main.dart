@@ -120,7 +120,7 @@ class _AppBodyState extends State<AppBody> {
               );
             }),
       ),
-      if (isLoading) const LoadingScreen(),
+      if (isLoading) LoadingScreen(onSponsorhipLoaded: homeScreenModel.loadAll)
     ]);
   }
 }

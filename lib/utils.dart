@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_device/safe_device.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/firebase_options.dart';
 
@@ -24,7 +25,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> initApp() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -42,7 +42,6 @@ Future<void> initApp() async {
   await FirebaseAnalytics.instance
       .logAppOpen(callOptions: AnalyticsCallOptions(global: true));
   // Initialize audio service
-  print("Initializing audio service");
   await AudioService.init(
     builder: () => AudioManager(),
     config: const AudioServiceConfig(
@@ -83,4 +82,34 @@ Widget ShragaLogo(
 
 bool isDarkTheme(BuildContext context) {
   return Theme.of(context).brightness == Brightness.dark;
+}
+
+Future<void> onSponsorshipPromptClick() async {
+  await launchUrl(Uri(
+      path: "office@toratshraga.com",
+      scheme: "mailto",
+      queryParameters: {"subject": "Sponsorship Inquiry"}));
+}
+
+class GradientText extends StatelessWidget {
+  const GradientText(
+    this.text, {
+    required this.gradient,
+    this.style,
+  });
+
+  final String text;
+  final TextStyle? style;
+  final Gradient gradient;
+
+  @override
+  Widget build(BuildContext context) {
+    return ShaderMask(
+      blendMode: BlendMode.srcIn,
+      shaderCallback: (bounds) => gradient.createShader(
+        Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+      ),
+      child: Text(text, style: style),
+    );
+  }
 }

@@ -217,11 +217,12 @@ class BackendManager {
       }
       return BackendResponse(
           result: querySnapshot.docs
-              .map((doc) {
-                return Sponsorship.getSponsorshipFromDoc(doc);
-              })
-              .where((s) => s.isActive)
-              .firstOrNull);
+                  .map((doc) {
+                    return Sponsorship.getSponsorshipFromDoc(doc);
+                  })
+                  .where((s) => s.isActive)
+                  .firstOrNull ??
+              Sponsorship.expiredSponsorship);
     }).catchError((error) => throw error);
   }
 

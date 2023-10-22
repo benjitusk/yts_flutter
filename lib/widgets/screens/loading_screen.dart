@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:yts_flutter/classes/sponsorship.dart';
 import 'package:yts_flutter/utils.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
+// import 'package:yts_flutter/widgets/helpers/Constants.dart';
 import 'package:yts_flutter/widgets/screens/loading_screen_model.dart';
 
 class LoadingScreen extends StatelessWidget {
-  const LoadingScreen({super.key});
+  final VoidCallback? onSponsorhipLoaded;
+  final LoadingScreenBloc bloc;
+  LoadingScreen({super.key, this.onSponsorhipLoaded})
+      : bloc = LoadingScreenBloc(onSponsorshipLoaded: onSponsorhipLoaded);
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +25,30 @@ class LoadingScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: CircularProgressIndicator(),
           ),
-          Text(
-            'Loading...',
-            style: Theme.of(context).textTheme.bodyLarge,
+          ListenableBuilder(
+            listenable: bloc,
+            builder: (context, _) {
+              // We want to show the SPONSOR button only if we've loaded the sponsorship and found that it's expired
+              // otherwise, if the sponsorship is null or not expired, we don't want to show the button. also, if we're
+              // still loading the sponsorship, we don't want to show the button.
+              // Show the plaque conditionally:
+              if ((bloc.sponsorship != null &&
+                      bloc.sponsorship!.isActive &&
+                      false) ||
+                  bloc.isLoadingSponsorship)
+                return Visibility(
+                  child: SponsorshipPlaque(bloc.sponsorship),
+                  visible: bloc.sponsorship != null &&
+                      bloc.sponsorship!.isActive &&
+                      !bloc.isLoadingSponsorship,
+                  maintainSize: true,
+                  maintainState: true,
+                  maintainAnimation: true,
+                );
+              else
+                return SponsorshipPrompt();
+            },
           ),
-          SponsorshipPlaque(),
           Spacer(),
         ]),
       ),
@@ -31,9 +56,45 @@ class LoadingScreen extends StatelessWidget {
   }
 }
 
+class SponsorshipPrompt extends StatelessWidget {
+  const SponsorshipPrompt({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
+        margin: EdgeInsets.all(30),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+                padding: EdgeInsets.all(18),
+                constraints: BoxConstraints(minWidth: 200, minHeight: 100),
+                decoration: BoxDecoration(
+                    gradient: isDarkTheme
+                        ? UI.darkCardGradient
+                        : UI.lightCardGradient),
+                child: Column(
+                  children: [
+                    Text("SPONSORSHIP_APPEAL_HEADER",
+                        textAlign: TextAlign.center,
+                        softWrap: true,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(color: Colors.white)),
+                    SizedBox(height: 10),
+                    ElevatedButton(
+                        onPressed: onSponsorshipPromptClick,
+                        child: Text("SPONSOR_BUTTON_TEXT"))
+                  ],
+                ))));
+  }
+}
+
 class SponsorshipPlaque extends StatelessWidget {
-  SponsorshipPlaque({super.key});
-  final LoadingScreenModel model = LoadingScreenModel();
+  final Sponsorship? sponsorship;
+  SponsorshipPlaque(this.sponsorship);
 
   @override
   Widget build(BuildContext context) {
@@ -49,42 +110,35 @@ class SponsorshipPlaque extends StatelessWidget {
               gradient:
                   isDarkTheme ? UI.darkCardGradient : UI.lightCardGradient),
           child: IntrinsicWidth(
-            child: ListenableBuilder(
-                listenable: model,
-                builder: (context, _) {
-                  if (model.isLoadingSponsorship || model.sponsorship == null)
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(height: 10),
-                      Text(
-                          "Learning for the month of Sivan is sponsored by ${model.sponsorship?.name}",
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
-                          softWrap: true,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(color: Colors.white)),
-                      SizedBox(height: 10),
-                      if (model.sponsorship!.dedication != null)
-                        Text(model.sponsorship!.dedication!,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            softWrap: true,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(color: Colors.white)),
-                    ],
-                  );
-                }),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(height: 10),
+                Text(sponsorship?.title ?? "",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .copyWith(color: Colors.white)),
+                SizedBox(height: 10),
+                Visibility(
+                  child: Text(sponsorship?.dedication ?? "",
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      softWrap: true,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(color: Colors.white)),
+                  visible: sponsorship?.dedication != null,
+                ),
+              ],
+            ),
           ),
         ),
       ),
