@@ -52,7 +52,8 @@ class ContentTableRow extends StatelessWidget {
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(shiur.duration.toHoursMinutesSeconds()),
+            Text(shiur.duration.toHoursMinutesSeconds(),
+                style: Theme.of(context).textTheme.bodySmall),
             if (showFav)
               StreamBuilder(
                   stream: FavoritesManager().favoritesStream,
@@ -60,7 +61,8 @@ class ContentTableRow extends StatelessWidget {
                     final isFavorite = FavoritesManager().isFavorite(shiur.id);
 
                     if (isFavorite)
-                      return Icon(Icons.bookmark_added, color: Colors.white);
+                      return Icon(Icons.bookmark_added,
+                          color: Theme.of(context).colorScheme.tertiary);
                     return SizedBox();
                   }),
           ],

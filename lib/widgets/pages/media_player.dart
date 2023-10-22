@@ -198,12 +198,13 @@ class MediaPlayer extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(16.0)),
-                          ),
-                          padding: const EdgeInsets.all(16.0),
-                        ),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(16.0)),
+                            ),
+                            padding: const EdgeInsets.all(16.0),
+                            foregroundColor:
+                                Theme.of(context).colorScheme.tertiary),
                         onPressed: currentContent == null
                             ? null
                             : () {
