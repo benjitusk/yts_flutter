@@ -33,6 +33,7 @@ dependencies:
     google_api_availability: ^5.0.0
     intl: ^0.17.0
     just_audio: ^0.9.32
+    package_info_plus: ^4.2.0
     safe_device: ^1.1.4
     shared_preferences: ^2.2.2
     text_scroll: ^0.2.0
