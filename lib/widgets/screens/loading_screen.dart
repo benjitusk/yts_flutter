@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:yts_flutter/classes/sponsorship.dart';
 import 'package:yts_flutter/utils.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
-// import 'package:yts_flutter/widgets/helpers/Constants.dart';
 import 'package:yts_flutter/widgets/screens/loading_screen_model.dart';
 
 class LoadingScreen extends StatelessWidget {
-  final VoidCallback? onSponsorhipLoaded;
+  final CallbackCallback? onSponsorhipLoaded;
   final LoadingScreenBloc bloc;
   LoadingScreen({super.key, this.onSponsorhipLoaded})
       : bloc = LoadingScreenBloc(onSponsorshipLoaded: onSponsorhipLoaded);
@@ -32,9 +30,7 @@ class LoadingScreen extends StatelessWidget {
               // otherwise, if the sponsorship is null or not expired, we don't want to show the button. also, if we're
               // still loading the sponsorship, we don't want to show the button.
               // Show the plaque conditionally:
-              if ((bloc.sponsorship != null &&
-                      bloc.sponsorship!.isActive &&
-                      false) ||
+              if ((bloc.sponsorship != null && bloc.sponsorship!.isActive) ||
                   bloc.isLoadingSponsorship)
                 return Visibility(
                   child: SponsorshipPlaque(bloc.sponsorship),
@@ -76,7 +72,7 @@ class SponsorshipPrompt extends StatelessWidget {
                         : UI.lightCardGradient),
                 child: Column(
                   children: [
-                    Text("SPONSORSHIP_APPEAL_HEADER",
+                    Text("Keep the flame of Torat Shraga burning!",
                         textAlign: TextAlign.center,
                         softWrap: true,
                         style: Theme.of(context)
@@ -86,7 +82,7 @@ class SponsorshipPrompt extends StatelessWidget {
                     SizedBox(height: 10),
                     ElevatedButton(
                         onPressed: onSponsorshipPromptClick,
-                        child: Text("SPONSOR_BUTTON_TEXT"))
+                        child: Text("Sponsor the app"))
                   ],
                 ))));
   }
@@ -117,7 +113,7 @@ class SponsorshipPlaque extends StatelessWidget {
                 SizedBox(height: 10),
                 Text(sponsorship?.title ?? "",
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
+                    maxLines: 4,
                     textAlign: TextAlign.center,
                     softWrap: true,
                     style: Theme.of(context)
@@ -128,7 +124,7 @@ class SponsorshipPlaque extends StatelessWidget {
                 Visibility(
                   child: Text(sponsorship?.dedication ?? "",
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
+                      maxLines: 4,
                       textAlign: TextAlign.center,
                       softWrap: true,
                       style: Theme.of(context)

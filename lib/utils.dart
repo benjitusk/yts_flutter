@@ -10,6 +10,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/firebase_options.dart';
 
+typedef CallbackCallback = Future<VoidCallback> Function();
+
 class Constants {
   static double MarqueeVelocity = 35.0;
 }

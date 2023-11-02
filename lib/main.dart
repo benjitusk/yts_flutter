@@ -38,28 +38,15 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class AppBody extends StatefulWidget {
+class AppBody extends StatelessWidget {
   AppBody({
     super.key,
   });
 
-  @override
-  State<AppBody> createState() => _AppBodyState();
-}
-
-class _AppBodyState extends State<AppBody> {
-  bool isLoading = true;
   final homeScreenModel = HomeScreenModel();
-  @override
-  void initState() {
-    homeScreenModel.onFinishedLoading = () => setState(() => isLoading = false);
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-    //     overlays: [SystemUiOverlay.top]);
     return Stack(children: [
       DefaultTabController(
         length: 4,
@@ -120,7 +107,16 @@ class _AppBodyState extends State<AppBody> {
               );
             }),
       ),
-      if (isLoading) LoadingScreen(onSponsorhipLoaded: homeScreenModel.loadAll)
+      ListenableBuilder(
+        listenable: homeScreenModel,
+        builder: (context, _) {
+          if (homeScreenModel.isLoading)
+            return LoadingScreen(
+              onSponsorhipLoaded: homeScreenModel.initialLoad,
+            );
+          return Container();
+        },
+      )
     ]);
   }
 }

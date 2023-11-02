@@ -5,22 +5,42 @@ import 'package:yts_flutter/widgets/screens/HomeScreen/recent_shiurim_row_model.
 import 'package:yts_flutter/widgets/screens/HomeScreen/slideshow_row_model.dart';
 
 class HomeScreenModel extends ChangeNotifier {
-  VoidCallback? onFinishedLoading;
   final RecentShiurimRowModel recentShiurimModel = RecentShiurimRowModel();
   final RebbeimRowModel rebbeimRowModel = RebbeimRowModel();
   final CategoriesRowModel categoriesRowModel = CategoriesRowModel();
   final SlideshowRowModel slideshowRowModel = SlideshowRowModel();
+  bool _isLoading = true;
+  bool _didInitialLoad = false;
+  bool get isLoading => _isLoading;
 
-  HomeScreenModel({this.onFinishedLoading = null}) {}
-
-  Future<void> loadAll() async {
+  Future<VoidCallback> _loadAll() async {
+    if (!_isLoading) {
+      _isLoading = true;
+      notifyListeners();
+    }
     return Future.wait([
       rebbeimRowModel.load().then((_) => recentShiurimModel.load()),
       slideshowRowModel.load(),
       categoriesRowModel.load()
     ]).then((_) {
-      onFinishedLoading?.call();
-      notifyListeners();
+      return () {
+        _isLoading = false;
+        notifyListeners();
+      };
     });
+  }
+
+  Future<VoidCallback> initialLoad() async {
+    print("HomeScreenModel initialLoad: $_didInitialLoad");
+    if (!_didInitialLoad) {
+      _didInitialLoad = true;
+      return _loadAll();
+    }
+    return () {};
+  }
+
+  void setLoadingState(bool isLoading) {
+    _isLoading = isLoading;
+    notifyListeners();
   }
 }
