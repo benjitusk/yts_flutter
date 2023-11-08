@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
-import 'package:yts_flutter/widgets/helpers/TextScrollWrapper.dart';
+import 'package:yts_flutter/utils.dart';
 
 class MiniPlayer extends StatelessWidget {
   const MiniPlayer({super.key});
@@ -50,17 +50,15 @@ class MiniPlayer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      height: 20,
-                      width: MediaQuery.of(context).size.width * 0.65,
-                      child: MarqueeText(
-                        text: snapshot.data?.title ?? "--",
-                        // velocity: Constants.MarqueeVelocity,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
+                        height: 20,
+                        width: MediaQuery.of(context).size.width * 0.65,
+                        child: AutoMarqueeText(
+                          snapshot.data?.title ?? "--",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        )),
                     Text(
                       snapshot.data?.artist ?? "--",
                       style: TextStyle(

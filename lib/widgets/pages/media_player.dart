@@ -5,7 +5,6 @@ import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:yts_flutter/classes/favorites_manager.dart';
 import 'package:yts_flutter/utils.dart';
-import 'package:yts_flutter/widgets/helpers/TextScrollWrapper.dart';
 
 class MediaPlayer extends StatelessWidget {
   final AudioManager audioManager = AudioManager();
@@ -39,11 +38,14 @@ class MediaPlayer extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            MarqueeText(
-              width: MediaQuery.of(context).size.width * 0.7,
-              text: mediaState.data?.title ?? '--',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            Container(
+                height: /* must be responsive to text height*/
+                    Theme.of(context).textTheme.titleLarge!.height! * 20,
+                width: MediaQuery.of(context).size.width * 0.7,
+                child: AutoMarqueeText(
+                  mediaState.data?.title ?? '--',
+                  style: Theme.of(context).textTheme.titleLarge,
+                )),
             Text(
               mediaState.data?.artist ?? '--',
               style: Theme.of(context).textTheme.titleMedium,

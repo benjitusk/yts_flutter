@@ -90,7 +90,7 @@ class AppBody extends StatelessWidget {
                     snapshot.data != null ? [MiniPlayer()] : null,
                 bottomNavigationBar: TabBar(tabs: [
                   Tab(icon: Icon(Icons.home), text: "Home"),
-                  Tab(icon: Icon(Icons.bookmark), text: "Bookmarked"),
+                  Tab(icon: Icon(Icons.bookmark), text: "Saved"),
                   Tab(icon: Icon(Icons.article), text: "Articles"),
                   Tab(icon: Icon(Icons.settings), text: "Settings")
                 ]),

@@ -1,10 +1,12 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:marquee/marquee.dart';
 import 'package:safe_device/safe_device.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
@@ -114,4 +116,22 @@ class GradientText extends StatelessWidget {
       child: Text(text, style: style),
     );
   }
+}
+
+Widget AutoMarqueeText(String text, {TextStyle? style, double? velocity}) {
+  return AutoSizeText(
+    text,
+    maxLines: 1,
+    style: style,
+    overflowReplacement: Marquee(
+      text: text,
+      style: style,
+      velocity: velocity ?? 50,
+      startAfter: const Duration(seconds: 1),
+      blankSpace: 20,
+      fadingEdgeStartFraction: 0.1,
+      fadingEdgeEndFraction: 0.1,
+      pauseAfterRound: const Duration(seconds: 1),
+    ),
+  );
 }

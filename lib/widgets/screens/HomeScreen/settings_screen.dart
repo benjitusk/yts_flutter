@@ -40,26 +40,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => Scaffold(
                                 appBar: AppBar(title: Text("Notifications")),
-                                body: ListView(
-                                  padding: const EdgeInsets.all(8.0),
-                                  children: [
-                                    Card(
-                                      child: ListTile(
-                                        leading:
-                                            const Icon(Icons.notifications),
-                                        title: const Text("Notifications"),
-                                        subtitle: const Text(
-                                            "Manage notifications from YTS"),
-                                        trailing: Switch(
-                                          // This bool value toggles the switch.
-                                          value: false,
-                                          activeColor: Colors.red,
-                                          onChanged: null,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                body: ListenableBuilder(
+                                    listenable: bloc,
+                                    builder: (context, snapshot) {
+                                      return ListView(
+                                        padding: const EdgeInsets.all(8.0),
+                                        children: [
+                                          Card(
+                                            child: ListTile(
+                                              leading: const Icon(
+                                                  Icons.notifications),
+                                              title:
+                                                  const Text("Notifications"),
+                                              subtitle: const Text(
+                                                  "Manage notifications from YTS"),
+                                              trailing: Switch(
+                                                // This bool value toggles the switch.
+                                                value:
+                                                    bloc.isNotificationsEnabled,
+                                                onChanged:
+                                                    bloc.setNotifications,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }),
                               )));
                     }),
               ),
@@ -191,20 +197,44 @@ class _AboutPage extends StatelessWidget {
 }
 
 class SettingsBloc extends ChangeNotifier {
+  SharedPreferences? _prefs;
   bool _isDevModeEnabled = false;
   bool get isDevModeEnabled => _isDevModeEnabled;
+  bool _isNotificationsEnabled = false;
+  bool get isNotificationsEnabled => _isNotificationsEnabled;
 
   SettingsBloc() {
     SharedPreferences.getInstance().then((prefs) {
       _isDevModeEnabled = prefs.getBool('devMode') ?? false;
+      _isNotificationsEnabled = prefs.getBool('notifications') ?? false;
       notifyListeners();
+      _prefs = prefs;
     });
   }
 
   void setDevMode(bool value) async {
+    if (_prefs == null) return;
     _isDevModeEnabled = value;
     notifyListeners();
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setBool('devMode', value);
+    _prefs?.setBool('devMode', value);
+  }
+
+  void setNotifications(bool value) async {
+    if (_prefs == null) return;
+    _isNotificationsEnabled = value;
+    notifyListeners();
+    if (value) {
+      final permissions = await FirebaseMessaging.instance.requestPermission();
+      if (permissions.authorizationStatus == AuthorizationStatus.authorized) {
+        print("Notifications enabled");
+        FirebaseMessaging.instance.subscribeToTopic('all');
+      } else {
+        // TODO: Show a dialog explaining why we need notifications
+      }
+    } else {
+      print("Notifications disabled");
+      FirebaseMessaging.instance.unsubscribeFromTopic('all');
+    }
+    _prefs?.setBool('notifications', value);
   }
 }
