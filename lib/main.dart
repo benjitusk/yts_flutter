@@ -4,6 +4,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
+import 'package:yts_flutter/widgets/screens/Onboarding/onboarding.dart';
 import 'package:yts_flutter/widgets/screens/Player/mini_player.dart';
 import 'package:yts_flutter/widgets/screens/HomeScreen/Rebbeim/rabbi_page.dart';
 import 'package:yts_flutter/widgets/screens/Settings/settings_screen.dart';
@@ -110,6 +111,11 @@ class AppBody extends StatelessWidget {
       ListenableBuilder(
         listenable: homeScreenModel,
         builder: (context, _) {
+          if (homeScreenModel.isFirstLaunch) {
+            return Onboarding(
+              onFinished: () => homeScreenModel.setFirstLaunch(false),
+            );
+          }
           if (homeScreenModel.isLoading)
             return LoadingScreen(
               onSponsorhipLoaded: homeScreenModel.initialLoad,

@@ -39,6 +39,24 @@ class UI {
       Color.fromARGB(255, 82, 126, 200),
     ],
   );
+
+  static final lightErrorCardGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color.fromARGB(0xFF, 0xBA, 0x0C, 0x0c),
+      Color.fromARGB(255, 0xF2, 0xA3, 0x11),
+    ],
+  );
+
+  static final darkErrorCardGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color.fromARGB(0xFF, 0x64, 0x04, 0x04),
+      Color.fromARGB(255, 0x87, 0x5B, 0x08),
+    ],
+  );
   static getCardGradient({required BuildContext using}) {
     return using.isDarkMode ? darkCardGradient : lightCardGradient;
   }
