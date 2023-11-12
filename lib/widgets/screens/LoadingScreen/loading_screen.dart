@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/classes/sponsorship.dart';
 import 'package:yts_flutter/utils.dart';
@@ -21,7 +23,14 @@ class LoadingScreen extends StatelessWidget {
           ShragaLogo(dark: isDarkTheme(context), animated: true),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: CircularProgressIndicator(),
+            child: ListenableBuilder(
+                listenable: bloc,
+                builder: (context, _) {
+                  return Visibility(
+                    child: CircularProgressIndicator(),
+                    visible: !bloc.isError,
+                  );
+                }),
           ),
           ListenableBuilder(
             listenable: bloc,
@@ -30,7 +39,10 @@ class LoadingScreen extends StatelessWidget {
               // otherwise, if the sponsorship is null or not expired, we don't want to show the button. also, if we're
               // still loading the sponsorship, we don't want to show the button.
               // Show the plaque conditionally:
-              if ((bloc.sponsorship != null && bloc.sponsorship!.isActive) ||
+              if (bloc.isError)
+                return ErrorPlaque();
+              else if ((bloc.sponsorship != null &&
+                      bloc.sponsorship!.isActive) ||
                   bloc.isLoadingSponsorship)
                 return Visibility(
                   child: SponsorshipPlaque(bloc.sponsorship),
@@ -133,6 +145,65 @@ class SponsorshipPlaque extends StatelessWidget {
                           .copyWith(color: Colors.white)),
                   visible: sponsorship?.dedication != null,
                 ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ErrorPlaque extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      margin: EdgeInsets.all(30),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          padding: EdgeInsets.all(16),
+          constraints: BoxConstraints(minWidth: 200, minHeight: 100),
+          decoration: BoxDecoration(
+              gradient: isDarkTheme
+                  ? UI.darkErrorCardGradient
+                  : UI.lightErrorCardGradient),
+          child: IntrinsicWidth(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(height: 10),
+                Text("Something went wrong.",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 4,
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
+                SizedBox(height: 10),
+                Text(
+                    "We can't reach the server. Check your internet connection, or try again later.",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 4,
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .copyWith(color: Colors.white)),
+                SizedBox(height: 10),
+                Text(
+                    "Here's an randomly generated error code: 0x${Random().nextInt(100000).toRadixString(16).toUpperCase()}",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 4,
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .copyWith(color: Colors.white)),
               ],
             ),
           ),

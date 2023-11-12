@@ -11,6 +11,8 @@ class LoadingScreenBloc extends ChangeNotifier {
   Sponsorship? get sponsorship => _sponsorship;
   bool _isLoadingSponsorship = true;
   bool get isLoadingSponsorship => _isLoadingSponsorship;
+  bool _isError = false;
+  bool get isError => _isError;
 
   LoadingScreenBloc({
     CallbackCallback? onSponsorshipLoaded,
@@ -45,7 +47,13 @@ class LoadingScreenBloc extends ChangeNotifier {
 
   Future<Sponsorship?> _loadSponsorship() async {
     return BackendManager.fetchCurrentSponsorship()
-        .then((response) => response.result);
+        .then((response) => response.result)
+        .catchError((_) {
+      print("Error loading sponsorship");
+      _isError = true;
+      notifyListeners();
+      return null;
+    });
   }
 
   CallbackCallback _functionWrapper(CallbackCallback? function) {
