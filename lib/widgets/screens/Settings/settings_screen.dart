@@ -2,8 +2,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:yts_flutter/utils.dart';
+// import 'package:yts_flutter/widgets/screens/Settings/Upload/upload_screen.dart';
 import 'package:yts_flutter/widgets/screens/Settings/settings_screen_modal.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 
 class SettingsScreen extends StatelessWidget {
   SettingsScreen({super.key});
@@ -70,18 +70,18 @@ class SettingsScreen extends StatelessWidget {
               Card(
                   clipBehavior: Clip.hardEdge,
                   child: ListTile(
-                      leading: const Icon(Icons.mic_none_outlined),
-                      title: const Text("Upload a shiur"),
-                      subtitle: const Text(
-                          "Submit a shiur to be uploaded to the app"),
-                      trailing: const Icon(Icons.chevron_right),
-                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Scaffold(
-                                appBar: AppBar(title: Text("Upload a shiur")),
-                                body: UploadShiurPage(
-                                  bloc: bloc,
-                                ),
-                              ))))),
+                    leading: const Icon(Icons.mic_none_outlined),
+                    title: const Text("Upload a shiur"),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: null,
+                    enabled: false,
+                    subtitle: const Text("This feature is not yet available"),
+                    // () => Navigator.of(context).push(MaterialPageRoute(
+                    //     builder: (context) => Scaffold(
+                    //           appBar: AppBar(title: Text("Upload a shiur")),
+                    //           body: UploadShiurScreen(),
+                    //         )))
+                  )),
               Card(
                   clipBehavior: Clip.hardEdge,
                   child: ListTile(
@@ -138,7 +138,7 @@ class _AboutPage extends StatelessWidget {
                       subtitle: Text("Developed by Benji Tusk"),
                       onLongPress: () => showDialog(
                           context: context,
-                          builder: (context) => AlertDialog(
+                          builder: (alertContext) => AlertDialog(
                                 title: Text("Developer mode"),
                                 content: Text("Developer mode enables extra features for testing and debugging. " +
                                     "Certain features may not work as expected, and you may receive unwanted notifications. " +
@@ -148,11 +148,11 @@ class _AboutPage extends StatelessWidget {
                                 actions: [
                                   TextButton(
                                       onPressed: () =>
-                                          Navigator.of(context).pop(),
+                                          Navigator.of(alertContext).pop(),
                                       child: Text("Cancel")),
                                   TextButton(
                                       onPressed: () {
-                                        Navigator.of(context).pop();
+                                        Navigator.of(alertContext).pop();
                                         bloc.setDevMode(
                                             !bloc.isDevModeEnabled, context);
                                       },
@@ -225,93 +225,5 @@ class _AboutPage extends StatelessWidget {
     } else {
       return copyRightText;
     }
-  }
-}
-
-class UploadShiurPage extends StatelessWidget {
-  UploadShiurPage({super.key, required this.bloc});
-  final SettingsBloc bloc;
-  final list = [
-    "Rabbi",
-    "Category",
-    "Rosh Yeshiva",
-    "Rosh Kollel",
-    "Mashgiach",
-    "Maggid Shiur",
-    "Maggid Shiur",
-  ];
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        // decoration: BoxDecoration(border: Border.all(color: Colors.amber)),
-        margin: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextFormField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Shiur title',
-              ),
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Expanded(
-                  flex: 5,
-                  child: Container(
-                      child: DropdownButton2<String>(
-                    value: list.first,
-                    onChanged: (String? value) {
-                      // This is called when the user selects an item.
-                    },
-                    items: list.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  )),
-                ),
-                SizedBox(width: 8),
-                Expanded(
-                  flex: 4,
-                  child: Container(
-                      child: DropdownButton2<String>(
-                    value: list[1],
-                    underline: Container(
-                      height: 2,
-                      color: Colors.deepPurpleAccent,
-                    ),
-                    onChanged: (String? value) {
-                      // This is called when the user selects an item.
-                    },
-                    items: list.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  )),
-                ),
-              ],
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: Theme.of(context).dividerColor)),
-              child: Column(
-                children: <Widget>[
-                  Text("Record"),
-                  Text("Upload"),
-                ],
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text("Submit"),
-            )
-          ],
-        ));
   }
 }
