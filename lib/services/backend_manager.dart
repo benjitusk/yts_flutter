@@ -175,8 +175,25 @@ class BackendManager {
         .get()
         .then((querySnapshot) => Future.wait(querySnapshot.docs
             .map((doc) async => await Category.getCategoryFromDoc(doc))))
-        .then((value) => BackendResponse(result: value))
-        .catchError((error) => throw error);
+        // .then((value) => BackendResponse(result: value))
+        .catchError((error) => throw error)
+        .then((parentCategories) {
+      return Future.wait(parentCategories.map((parentCat) async {
+        if (parentCat.subCategories == null) {
+          return parentCat;
+        }
+        return Future.wait(parentCat.subCategories!.map((subCatID) async {
+          return FirebaseFirestore.instance
+              .collection('tags')
+              .doc(subCatID)
+              .get()
+              .then((doc) async => await Category.getCategoryFromDoc(doc));
+        })).then((subCategories) {
+          parentCat = parentCat.copyWith(children: subCategories);
+          return parentCat;
+        });
+      })).then((value) => BackendResponse(result: value));
+    });
   }
 
   static Future<BackendResponse<Category>> fetchCategoryByID(

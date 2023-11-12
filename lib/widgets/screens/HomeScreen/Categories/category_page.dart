@@ -27,19 +27,19 @@ class CategoryPage extends StatelessWidget {
               return const Center(child: Text('No content found.'));
             return ListView.separated(
                 itemBuilder: (context, index) {
-                  if (index < model.subCategories!.length) {
+                  if (index < (category.children?.length ?? 0)) {
                     return ListTile(
                       leading: Icon(Icons.folder),
-                      title: Text(model.subCategories![index].displayName),
+                      title: Text(category.children![index].displayName),
                       onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => CategoryPage(
-                                  category: model.subCategories![index]))),
+                                  category: category.children![index]))),
                     );
                   }
                   if (index <
-                      model.subCategories!.length + model.content!.length)
+                      (category.children?.length ?? 0) + model.content!.length)
                     return ContentTableRow(shiur: model.content![index]);
 
                   if (model.isLoadingMore) {
@@ -56,8 +56,9 @@ class CategoryPage extends StatelessWidget {
                   return const SizedBox.shrink();
                 },
                 separatorBuilder: (context, index) => const Divider(),
-                itemCount:
-                    model.subCategories!.length + model.content!.length + 1);
+                itemCount: (category.children?.length ?? 0) +
+                    model.content!.length +
+                    1);
           },
         ));
   }

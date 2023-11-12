@@ -4,15 +4,15 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/classes/audio_manager.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
-import 'package:yts_flutter/widgets/mini_player.dart';
-import 'package:yts_flutter/widgets/pages/rabbi_page.dart';
-import 'package:yts_flutter/widgets/screens/HomeScreen/settings_screen.dart';
-import 'package:yts_flutter/widgets/screens/favorites_screen.dart';
-import 'package:yts_flutter/widgets/screens/home_screen.dart';
-import 'package:yts_flutter/widgets/screens/home_screen_modal.dart';
-import 'package:yts_flutter/widgets/screens/loading_screen.dart';
-import 'package:yts_flutter/widgets/screens/news_screen.dart';
-import 'package:yts_flutter/widgets/screens/search_screen.dart';
+import 'package:yts_flutter/widgets/screens/Player/mini_player.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Rebbeim/rabbi_page.dart';
+import 'package:yts_flutter/widgets/screens/Settings/settings_screen.dart';
+import 'package:yts_flutter/widgets/screens/Bookmarks/favorites_screen.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/home_screen.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/home_screen_modal.dart';
+import 'package:yts_flutter/widgets/screens/LoadingScreen/loading_screen.dart';
+import 'package:yts_flutter/widgets/screens/News/news_screen.dart';
+import 'package:yts_flutter/widgets/screens/Search/search_screen.dart';
 
 late AudioHandler audioHandler;
 

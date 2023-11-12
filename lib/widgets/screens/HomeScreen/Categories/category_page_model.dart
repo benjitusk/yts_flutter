@@ -12,15 +12,15 @@ class CategoryPageModel extends ChangeNotifier {
   bool _isLoadingMore = false;
   FirebaseDoc? _topOfNextPage;
   Category category;
-  List<Category>? _subCategories;
-  List<Category>? get subCategories => _subCategories;
+  // List<Category>? _subCategories;
+  // List<Category>? get subCategories => _subCategories;
   BuildContext? stupidContextHack;
 
   List<Shiur>? _content;
   List<Shiur>? get content => _content;
 
   bool get isEmpty =>
-      (_content?.isEmpty ?? true) && (_subCategories?.isEmpty ?? true);
+      (_content?.isEmpty ?? true) && (category.children?.isEmpty ?? true);
 
   CategoryPageModel({required this.category});
 
@@ -32,11 +32,11 @@ class CategoryPageModel extends ChangeNotifier {
         _content = value;
       }),
     ];
-    if (category.isParent && category.children != null) {
-      tasks.add(loadSubcategories());
-    } else {
-      _subCategories = [];
-    }
+    // if (category.isParent && category.children != null) {
+    //   tasks.add(loadSubcategories());
+    // } else {
+    //   _subCategories = [];
+    // }
     await Future.wait(tasks);
     _isLoading = false;
     notifyListeners();
@@ -54,17 +54,17 @@ class CategoryPageModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future loadSubcategories() {
-    return Future.wait(category.children!.map((childCategoryID) async {
-      return BackendManager.fetchCategoryByID(childCategoryID).then((response) {
-        final childCategory = response.result;
+  // Future loadSubcategories() {
+  //   return Future.wait(category.children!.map((childCategoryID) async {
+  //     return BackendManager.fetchCategoryByID(childCategoryID).then((response) {
+  //       final childCategory = response.result;
 
-        return childCategory;
-      });
-    })).then((categories) {
-      _subCategories = categories;
-    });
-  }
+  //       return childCategory;
+  //     });
+  //   })).then((categories) {
+  //     _subCategories = categories;
+  //   });
+  // }
 
   Future<List<Shiur>> _loadContent(int limit) async {
     // Load parent category content

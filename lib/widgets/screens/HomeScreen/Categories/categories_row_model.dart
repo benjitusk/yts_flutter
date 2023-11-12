@@ -7,10 +7,9 @@ class CategoriesRowModel extends ChangeNotifier {
 
   Future<void> load() async {
     return BackendManager.loadCategories().then((response) {
-      final categories = response.result;
-
-      this.categories.clear();
-      this.categories.addAll(categories);
+      Category.addToRegistry(response.result);
+      categories.clear();
+      categories.addAll(response.result);
     });
   }
 }

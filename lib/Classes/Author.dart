@@ -17,7 +17,11 @@ class Author extends BasicAuthor implements ContentFilterable {
     return other is Author && other.id == this.id;
   }
 
+  @override
+  int get hashCode => id.hashCode;
+
   static Set<Author> _authorRegistry = {};
+  static Set<Author> get authorRegistry => _authorRegistry;
   static void addToRegistry(List<Author> authors) {
     _authorRegistry.addAll(authors);
   }
