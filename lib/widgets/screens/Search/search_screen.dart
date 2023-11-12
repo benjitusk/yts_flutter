@@ -55,7 +55,16 @@ class ContentSearch extends SearchDelegate<(Shiur?, Author?)?> {
           final List<Shiur> shiurimResults = snapshot.data!.$1;
           final List<Author> rebbeimResults = snapshot.data!.$2;
           if (shiurimResults.isEmpty && rebbeimResults.isEmpty)
-            return Text("No results");
+            return Center(
+              child: Text("No results found.",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onBackground
+                          .withOpacity(0.5))),
+            );
           return ListView.builder(
             itemCount: shiurimResults.length + rebbeimResults.length,
             itemBuilder: (context, index) {
@@ -85,9 +94,21 @@ class ContentSearch extends SearchDelegate<(Shiur?, Author?)?> {
     // This function is called when the user types in the search bar (live search)
     // The results displayed here will be pulled from only currently loaded content
     // As in, content that happens to be loaded in the HomeScreen (shiurim, rebbeim, etc.)
+    print("buildSuggestions called: $query");
     if (query.isEmpty) {
       if (model.searchHistory.isEmpty) {
-        return const Text("Search for shiurim, rebbeim, etc.");
+        return Center(
+            child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text("Search for shiurim, rebbeim, etc.",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onBackground
+                      .withOpacity(0.5))),
+        ));
       }
       final List<String> searchHistory = model.searchHistory.reversed.toList();
       return ListView.builder(
@@ -121,8 +142,16 @@ class ContentSearch extends SearchDelegate<(Shiur?, Author?)?> {
     }
 
     return ListView.builder(
-      itemCount: shiurResults.length + rabbiResults.length,
+      itemCount: shiurResults.length + rabbiResults.length + 1,
       itemBuilder: (context, index) {
+        if (index == 0) {
+          return ListTile(
+            leading: const Icon(Icons.search),
+            title: Text(query),
+            onTap: () => showResults(context),
+          );
+        }
+        index -= 1;
         if (index < shiurResults.length) {
           return ListTile(
             leading: const Icon(Icons.mic),
