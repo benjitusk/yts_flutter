@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/classes/author.dart';
-import 'package:yts_flutter/widgets/content_table_row.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/content_table_row.dart';
 import 'package:yts_flutter/widgets/helpers/TextDivider.dart';
-import 'package:yts_flutter/widgets/pages/rabbi_page_model.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Rebbeim/rabbi_page_model.dart';
 
 class RabbiPage extends StatelessWidget {
   RabbiPage({super.key, required Author rabbi}) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:yts_flutter/widgets/screens/home_screen.dart';
-import 'package:yts_flutter/widgets/slideshow.dart';
-import 'package:yts_flutter/widgets/screens/HomeScreen/slideshow_row_model.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/home_screen.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Slideshow/slideshow.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Slideshow/slideshow_row_model.dart';
 
 class SlideshowRow extends StatelessWidget {
   const SlideshowRow({

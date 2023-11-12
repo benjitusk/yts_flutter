@@ -1,18 +1,15 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yts_flutter/utils.dart';
+import 'package:yts_flutter/widgets/screens/Settings/settings_screen_modal.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
-class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+class SettingsScreen extends StatelessWidget {
+  SettingsScreen({super.key});
 
-  @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
   final bloc = SettingsBloc();
+
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
@@ -58,8 +55,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                                 // This bool value toggles the switch.
                                                 value:
                                                     bloc.isNotificationsEnabled,
-                                                onChanged:
-                                                    bloc.setNotifications,
+                                                onChanged: (value) =>
+                                                    bloc.setNotifications(
+                                                        value, context),
                                               ),
                                             ),
                                           ),
@@ -72,12 +70,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Card(
                   clipBehavior: Clip.hardEdge,
                   child: ListTile(
-                      leading: const Icon(Icons.cloud_upload_rounded),
+                      leading: const Icon(Icons.mic_none_outlined),
                       title: const Text("Upload a shiur"),
                       subtitle: const Text(
                           "Submit a shiur to be uploaded to the app"),
                       trailing: const Icon(Icons.chevron_right),
-                      onTap: () => null)),
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => Scaffold(
+                                appBar: AppBar(title: Text("Upload a shiur")),
+                                body: UploadShiurPage(
+                                  bloc: bloc,
+                                ),
+                              ))))),
               Card(
                   clipBehavior: Clip.hardEdge,
                   child: ListTile(
@@ -95,7 +99,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () => Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => Scaffold(
-                                appBar: AppBar(title: Text("About")),
+                                appBar: AppBar(title: Text("Upload")),
                                 body: _AboutPage(
                                   bloc: bloc,
                                 ),
@@ -132,8 +136,34 @@ class _AboutPage extends StatelessWidget {
                       // ),
                       title: Text("Yeshivat Torat Shraga"),
                       subtitle: Text("Developed by Benji Tusk"),
-                      onLongPress: () =>
-                          bloc.setDevMode(!bloc.isDevModeEnabled),
+                      onLongPress: () => showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: Text("Developer mode"),
+                                content: Text("Developer mode enables extra features for testing and debugging. " +
+                                    "Certain features may not work as expected, and you may receive unwanted notifications. " +
+                                    "You can check the version number at the bottom of the screen to see if you are in developer mode. " +
+                                    "You can ${bloc.isDevModeEnabled ? "enable" : "disable"} developer mode again at any time by holding down on the YTS card.\n\n" +
+                                    "Are you sure you want to ${bloc.isDevModeEnabled ? "disable" : "enable"} developer mode?"),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
+                                      child: Text("Cancel")),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        bloc.setDevMode(
+                                            !bloc.isDevModeEnabled, context);
+                                      },
+                                      child: Text(
+                                          bloc.isDevModeEnabled
+                                              ? "Disable"
+                                              : "Enable",
+                                          style: TextStyle(
+                                              color: Colors.red.shade400)))
+                                ],
+                              )),
                     )),
                 Spacer(),
                 // Version number
@@ -156,6 +186,8 @@ class _AboutPage extends StatelessWidget {
                               child: bloc.isDevModeEnabled
                                   ? GradientText(
                                       'Version: ${snapshot.data?.version} (${snapshot.data?.buildNumber}) DEV',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                       gradient: LinearGradient(colors: [
                                         Colors.blue.shade400,
                                         Colors.blue.shade900,
@@ -196,45 +228,90 @@ class _AboutPage extends StatelessWidget {
   }
 }
 
-class SettingsBloc extends ChangeNotifier {
-  SharedPreferences? _prefs;
-  bool _isDevModeEnabled = false;
-  bool get isDevModeEnabled => _isDevModeEnabled;
-  bool _isNotificationsEnabled = false;
-  bool get isNotificationsEnabled => _isNotificationsEnabled;
-
-  SettingsBloc() {
-    SharedPreferences.getInstance().then((prefs) {
-      _isDevModeEnabled = prefs.getBool('devMode') ?? false;
-      _isNotificationsEnabled = prefs.getBool('notifications') ?? false;
-      notifyListeners();
-      _prefs = prefs;
-    });
-  }
-
-  void setDevMode(bool value) async {
-    if (_prefs == null) return;
-    _isDevModeEnabled = value;
-    notifyListeners();
-    _prefs?.setBool('devMode', value);
-  }
-
-  void setNotifications(bool value) async {
-    if (_prefs == null) return;
-    _isNotificationsEnabled = value;
-    notifyListeners();
-    if (value) {
-      final permissions = await FirebaseMessaging.instance.requestPermission();
-      if (permissions.authorizationStatus == AuthorizationStatus.authorized) {
-        print("Notifications enabled");
-        FirebaseMessaging.instance.subscribeToTopic('all');
-      } else {
-        // TODO: Show a dialog explaining why we need notifications
-      }
-    } else {
-      print("Notifications disabled");
-      FirebaseMessaging.instance.unsubscribeFromTopic('all');
-    }
-    _prefs?.setBool('notifications', value);
+class UploadShiurPage extends StatelessWidget {
+  UploadShiurPage({super.key, required this.bloc});
+  final SettingsBloc bloc;
+  final list = [
+    "Rabbi",
+    "Category",
+    "Rosh Yeshiva",
+    "Rosh Kollel",
+    "Mashgiach",
+    "Maggid Shiur",
+    "Maggid Shiur",
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        // decoration: BoxDecoration(border: Border.all(color: Colors.amber)),
+        margin: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextFormField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Shiur title',
+              ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: Container(
+                      child: DropdownButton2<String>(
+                    value: list.first,
+                    onChanged: (String? value) {
+                      // This is called when the user selects an item.
+                    },
+                    items: list.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  )),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  flex: 4,
+                  child: Container(
+                      child: DropdownButton2<String>(
+                    value: list[1],
+                    underline: Container(
+                      height: 2,
+                      color: Colors.deepPurpleAccent,
+                    ),
+                    onChanged: (String? value) {
+                      // This is called when the user selects an item.
+                    },
+                    items: list.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  )),
+                ),
+              ],
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: Theme.of(context).dividerColor)),
+              child: Column(
+                children: <Widget>[
+                  Text("Record"),
+                  Text("Upload"),
+                ],
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              child: Text("Submit"),
+            )
+          ],
+        ));
   }
 }

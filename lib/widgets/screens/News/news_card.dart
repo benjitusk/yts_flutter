@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:yts_flutter/classes/news_article.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
 import 'package:yts_flutter/widgets/helpers/markdown_helper.dart';
-import 'package:yts_flutter/widgets/pages/article_page.dart';
+import 'package:yts_flutter/widgets/screens/News/article_page.dart';
 
 const double _iconPadding = 3;
 const double _outerBorderRadius = 8.0;

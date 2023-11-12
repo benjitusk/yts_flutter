@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:yts_flutter/widgets/cards/home_shiur_card.dart';
-import 'package:yts_flutter/widgets/screens/HomeScreen/recent_shiurim_row_model.dart';
-import 'package:yts_flutter/widgets/screens/home_screen.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Recents/home_shiur_card.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Recents/recent_shiurim_row_model.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/home_screen.dart';
 
 class RecentShiurimRow extends StatelessWidget {
   const RecentShiurimRow({

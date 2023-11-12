@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/classes/category.dart';
 import 'package:yts_flutter/widgets/helpers/BaseCard.dart';
-import 'package:yts_flutter/widgets/pages/category_page.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Categories/category_page.dart';
 
 class CategoryCard extends StatelessWidget {
   CategoryCard({super.key, required this.category});

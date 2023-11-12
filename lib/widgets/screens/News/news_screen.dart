@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yts_flutter/widgets/cards/news_card.dart';
-import 'package:yts_flutter/widgets/screens/news_screen_modal.dart';
+import 'package:yts_flutter/widgets/screens/News/news_card.dart';
+import 'package:yts_flutter/widgets/screens/News/news_screen_modal.dart';
 
 class NewsScreen extends StatelessWidget {
   NewsScreen({super.key});

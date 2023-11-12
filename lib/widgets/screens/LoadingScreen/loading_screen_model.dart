@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:yts_flutter/classes/sponsorship.dart';
 import 'package:yts_flutter/services/backend_manager.dart';
 import 'package:yts_flutter/utils.dart';
 
-// Typedef for future void callback
+const secondsToWait = kDebugMode ? 0 : 5;
+
 class LoadingScreenBloc extends ChangeNotifier {
   final CallbackCallback? _onSponsorshipLoaded;
   Sponsorship? _sponsorship = null;
@@ -26,7 +27,7 @@ class LoadingScreenBloc extends ChangeNotifier {
         )
         .then((_) => Future.wait<VoidCallback?>([
               _functionWrapper(_onSponsorshipLoaded)(),
-              Future.delayed(Duration(seconds: 5)).then(
+              Future.delayed(Duration(seconds: secondsToWait)).then(
                 (_) {
                   return;
                 },

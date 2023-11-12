@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/shiur.dart';
-import 'package:yts_flutter/widgets/screens/search_screen_model.dart';
+import 'package:yts_flutter/widgets/screens/Search/search_screen_model.dart';
 
 class ContentSearch extends SearchDelegate<(Shiur?, Author?)?> {
   final ContentSearchModel model = ContentSearchModel();

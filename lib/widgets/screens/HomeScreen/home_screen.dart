@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:yts_flutter/widgets/screens/HomeScreen/categories_row.dart';
-import 'package:yts_flutter/widgets/screens/HomeScreen/rebbeim_row.dart';
-import 'package:yts_flutter/widgets/screens/HomeScreen/recent_shiurim_row.dart';
-import 'package:yts_flutter/widgets/screens/home_screen_modal.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Categories/categories_row.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Rebbeim/rebbeim_row.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Recents/recent_shiurim_row.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/home_screen_modal.dart';
 import 'package:yts_flutter/widgets/helpers/Constants.dart';
 import 'package:yts_flutter/widgets/helpers/TextDivider.dart';
-import 'package:yts_flutter/widgets/screens/HomeScreen/slideshow_row.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Slideshow/slideshow_row.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({

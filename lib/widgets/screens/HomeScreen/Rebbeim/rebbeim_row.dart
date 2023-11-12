@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:yts_flutter/widgets/cards/home_rabbi_card.dart';
-import 'package:yts_flutter/widgets/screens/HomeScreen/rebbeim_row_model.dart';
-import 'package:yts_flutter/widgets/screens/home_screen.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Rebbeim/home_rabbi_card.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Rebbeim/rebbeim_row_model.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/home_screen.dart';
 
 class RebbeimRow extends StatelessWidget {
   const RebbeimRow({

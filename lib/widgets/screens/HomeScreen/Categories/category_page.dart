@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yts_flutter/classes/category.dart';
-import 'package:yts_flutter/widgets/content_table_row.dart';
-import 'package:yts_flutter/widgets/pages/category_page_model.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/content_table_row.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Categories/category_page_model.dart';
 
 class CategoryPage extends StatelessWidget {
   CategoryPage({super.key, required this.category}) {

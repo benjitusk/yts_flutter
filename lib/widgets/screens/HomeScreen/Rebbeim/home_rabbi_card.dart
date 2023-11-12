@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import "../helpers/BaseCard.dart";
+import '../../../helpers/BaseCard.dart';
 import 'package:yts_flutter/classes/author.dart';
-import 'package:yts_flutter/widgets/pages/rabbi_page.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Rebbeim/rabbi_page.dart';
 
 const double _defaultCardDimentions = 140;
 

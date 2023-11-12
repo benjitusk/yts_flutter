@@ -7,7 +7,7 @@ import 'package:yts_flutter/classes/author.dart';
 import 'package:yts_flutter/classes/streamable.dart';
 import 'package:yts_flutter/classes/misc_types.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:yts_flutter/widgets/pages/media_player.dart';
+import 'package:yts_flutter/widgets/screens/Player/media_player.dart';
 
 class AudioManager extends BaseAudioHandler {
   static final AudioManager _instance = AudioManager._internal();

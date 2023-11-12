@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:yts_flutter/widgets/cards/category_card.dart';
-import 'package:yts_flutter/widgets/screens/HomeScreen/categories_row_model.dart';
-import 'package:yts_flutter/widgets/screens/home_screen.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Categories/category_card.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Categories/categories_row_model.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/home_screen.dart';
 
 class CategoriesRow extends StatelessWidget {
   const CategoriesRow({

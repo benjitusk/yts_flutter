@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yts_flutter/widgets/content_table_row.dart';
-import 'package:yts_flutter/widgets/screens/favorites_screen_model.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/content_table_row.dart';
+import 'package:yts_flutter/widgets/screens/Bookmarks/favorites_screen_model.dart';
 // import 'package:yts_flutter/widgets/content_table_row.dart';
 
 class FavoritesScreen extends StatelessWidget {

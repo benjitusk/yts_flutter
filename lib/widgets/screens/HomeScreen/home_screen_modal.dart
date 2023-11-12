@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:yts_flutter/widgets/screens/HomeScreen/categories_row_model.dart';
-import 'package:yts_flutter/widgets/screens/HomeScreen/rebbeim_row_model.dart';
-import 'package:yts_flutter/widgets/screens/HomeScreen/recent_shiurim_row_model.dart';
-import 'package:yts_flutter/widgets/screens/HomeScreen/slideshow_row_model.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Categories/categories_row_model.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Rebbeim/rebbeim_row_model.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Recents/recent_shiurim_row_model.dart';
+import 'package:yts_flutter/widgets/screens/HomeScreen/Slideshow/slideshow_row_model.dart';
 
 class HomeScreenModel extends ChangeNotifier {
   final RecentShiurimRowModel recentShiurimModel = RecentShiurimRowModel();
