@@ -42,8 +42,8 @@ class NewsScreen extends StatelessWidget {
                               ?.copyWith(
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .onBackground
-                                      .withOpacity(0.5)),
+                                      .onSurface
+                                      .withValues(alpha: 0.5)),
                         ),
                         Text(
                           'Please check back later.',
@@ -53,8 +53,8 @@ class NewsScreen extends StatelessWidget {
                               ?.copyWith(
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .onBackground
-                                      .withOpacity(0.5)),
+                                      .onSurface
+                                      .withValues(alpha: 0.5)),
                         ),
                       ],
                     ),

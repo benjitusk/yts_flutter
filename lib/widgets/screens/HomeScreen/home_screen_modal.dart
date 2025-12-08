@@ -18,7 +18,7 @@ class HomeScreenModel extends ChangeNotifier {
 
   HomeScreenModel() {
     SharedPreferences.getInstance().then((prefs) async {
-      _isFirstLaunch = prefs.getBool('--isFirstLaunch') ?? true;
+      _isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
       notifyListeners();
     });
   }

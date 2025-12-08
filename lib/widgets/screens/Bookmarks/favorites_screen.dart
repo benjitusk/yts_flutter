@@ -29,8 +29,8 @@ class FavoritesScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: Theme.of(context)
                             .colorScheme
-                            .onBackground
-                            .withOpacity(0.5)),
+                            .onSurface
+                            .withValues(alpha: 0.5)),
                   ),
                   RichText(
                     text: TextSpan(
@@ -43,8 +43,8 @@ class FavoritesScreen extends StatelessWidget {
                             Icons.bookmark_add_outlined,
                             color: Theme.of(context)
                                 .colorScheme
-                                .onBackground
-                                .withOpacity(0.5),
+                                .onSurface
+                                .withValues(alpha: 0.5),
                           ),
                         ),
                         TextSpan(
@@ -54,8 +54,8 @@ class FavoritesScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Theme.of(context)
                               .colorScheme
-                              .onBackground
-                              .withOpacity(0.5)),
+                              .onSurface
+                              .withValues(alpha: 0.5)),
                     ),
                   ),
                 ],

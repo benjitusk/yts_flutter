@@ -62,8 +62,9 @@ class DefaultFirebaseOptions {
     projectId: 'yeshivat-torat-shraga',
     databaseURL: 'https://yeshivat-torat-shraga-default-rtdb.firebaseio.com',
     storageBucket: 'yeshivat-torat-shraga.appspot.com',
-    iosClientId: '3976870161-9c4hbmni8av1jl1clfgpoo7b59855aun.apps.googleusercontent.com',
-    iosBundleId: 'com.benjitusk.YTS',
+    iosClientId:
+        '3976870161-9c4hbmni8av1jl1clfgpoo7b59855aun.apps.googleusercontent.com',
+    iosBundleId: 'com.benjitusk.yts_flutter',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -73,7 +74,8 @@ class DefaultFirebaseOptions {
     projectId: 'yeshivat-torat-shraga',
     databaseURL: 'https://yeshivat-torat-shraga-default-rtdb.firebaseio.com',
     storageBucket: 'yeshivat-torat-shraga.appspot.com',
-    iosClientId: '3976870161-9c4hbmni8av1jl1clfgpoo7b59855aun.apps.googleusercontent.com',
-    iosBundleId: 'com.benjitusk.YTS',
+    iosClientId:
+        '3976870161-9c4hbmni8av1jl1clfgpoo7b59855aun.apps.googleusercontent.com',
+    iosBundleId: 'com.benjitusk.yts_flutter',
   );
 }

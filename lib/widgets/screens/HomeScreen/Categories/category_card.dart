@@ -35,14 +35,14 @@ class CategoryCard extends StatelessWidget {
                           begin: Alignment.bottomLeft,
                           end: Alignment.topRight,
                           colors: [
-                            Colors.red.withOpacity(1),
-                            Colors.orange.withOpacity(1),
+                            Colors.red.withValues(alpha: 1),
+                            Colors.orange.withValues(alpha: 1),
                           ],
                         )
                       : null,
                 ),
                 child: Container(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withValues(alpha: 0.2),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 50.0),
                     child: Center(

@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-  <string name="default_notification_channel_id">com.benjitusk.YTS.notifications</string>
+  <string name="default_notification_channel_id">com.benjitusk.yts_flutter.notifications</string>
 </resources>

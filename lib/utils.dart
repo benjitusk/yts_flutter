@@ -22,16 +22,28 @@ class Constants {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
 
   print("Handling a background message: ${message.messageId}");
 }
 
 Future<void> initApp() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  print("Firebase initialized: ${Firebase.apps.isNotEmpty}");
+  if (Firebase.apps.isEmpty) {
+    try {
+      await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform);
+    } catch (e) {
+      print("Error initializing Firebase: $e");
+    }
+  }
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
+
+  // Check if firebase has been initialized
+  print("Firebase initialized: ${Firebase.apps.isNotEmpty}");
 
   // App Check
   final isPhysicalDevice = await SafeDevice.isRealDevice;

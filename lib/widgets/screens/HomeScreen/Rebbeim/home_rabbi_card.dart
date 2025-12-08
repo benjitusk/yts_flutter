@@ -37,7 +37,7 @@ class HomeRabbiCard extends StatelessWidget {
             borderRadius:
                 const BorderRadius.only(topRight: Radius.circular(12)),
             child: Container(
-              color: Colors.black.withOpacity(0.5),
+              color: Colors.black.withValues(alpha: 0.5),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
                 child: Padding(

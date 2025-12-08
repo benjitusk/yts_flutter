@@ -16,7 +16,7 @@ class CustomMarkdownBody extends MarkdownWidget {
     List<md.BlockSyntax>? blockSyntaxes,
     List<md.InlineSyntax>? inlineSyntaxes,
     md.ExtensionSet? extensionSet,
-    MarkdownImageBuilder? imageBuilder,
+    MarkdownSizedImageBuilder? sizedImageBuilder,
     MarkdownCheckboxBuilder? checkboxBuilder,
     Map<String, MarkdownElementBuilder> builders = const {},
     MarkdownListItemCrossAxisAlignment listItemCrossAxisAlignment =
@@ -38,7 +38,7 @@ class CustomMarkdownBody extends MarkdownWidget {
           blockSyntaxes: blockSyntaxes,
           inlineSyntaxes: inlineSyntaxes,
           extensionSet: extensionSet,
-          imageBuilder: imageBuilder,
+          sizedImageBuilder: sizedImageBuilder,
           checkboxBuilder: checkboxBuilder,
           builders: builders,
           listItemCrossAxisAlignment: listItemCrossAxisAlignment,
@@ -58,10 +58,10 @@ class CustomMarkdownBody extends MarkdownWidget {
       if (item is RichText) {
         final RichText newRichText = RichText(
           text: item.text,
-          textScaleFactor: item.textScaleFactor,
           textAlign: item.textAlign,
           maxLines: maxLines,
           overflow: overflow ?? TextOverflow.visible,
+          textScaler: TextScaler.linear(item.textScaler.scale(1.0)),
         );
 
         list.insert(0, newRichText);

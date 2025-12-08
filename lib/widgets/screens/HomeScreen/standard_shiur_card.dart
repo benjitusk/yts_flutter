@@ -20,7 +20,7 @@ class ShiurCard extends StatelessWidget {
             // border: Border.all(color: Theme.of(context).colorScheme.secondary)
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
+                color: Colors.grey.withValues(alpha: 0.5),
                 spreadRadius: 0,
                 blurRadius: 7,
               )

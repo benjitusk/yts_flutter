@@ -62,8 +62,8 @@ class ContentSearch extends SearchDelegate<(Shiur?, Author?)?> {
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context)
                           .colorScheme
-                          .onBackground
-                          .withOpacity(0.5))),
+                          .onSurface
+                          .withValues(alpha: 0.5))),
             );
           return ListView.builder(
             itemCount: shiurimResults.length + rebbeimResults.length,
@@ -106,8 +106,8 @@ class ContentSearch extends SearchDelegate<(Shiur?, Author?)?> {
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context)
                       .colorScheme
-                      .onBackground
-                      .withOpacity(0.5))),
+                      .onSurface
+                      .withValues(alpha: 0.5))),
         ));
       }
       final List<String> searchHistory = model.searchHistory.reversed.toList();

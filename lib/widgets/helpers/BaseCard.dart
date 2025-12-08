@@ -28,8 +28,8 @@ class BaseCard extends StatelessWidget {
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: onClick,
-                            // splashColor: Colors.black.withOpacity(0.2),
-                            // highlightColor: Colors.black.withOpacity(0.1),
+                            // splashColor: Colors.black.withValues(alpha: 0.2),
+                            // highlightColor: Colors.black.withValues(alpha: 0.1),
                           ))),
               ]),
             )));

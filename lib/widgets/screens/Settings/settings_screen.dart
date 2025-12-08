@@ -99,7 +99,7 @@ class SettingsScreen extends StatelessWidget {
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () => Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => Scaffold(
-                                appBar: AppBar(title: Text("Upload")),
+                                appBar: AppBar(title: Text("About")),
                                 body: _AboutPage(
                                   bloc: bloc,
                                 ),
@@ -119,7 +119,8 @@ class _AboutPage extends StatelessWidget {
         listenable: bloc,
         builder: (context, snapshot) {
           return Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 16.0),
+            padding: const EdgeInsets.only(
+                left: 8.0, right: 8.0, top: 16.0, bottom: 24.0),
             child: Column(
               // As big as the screen
               mainAxisSize: MainAxisSize.max,
@@ -135,7 +136,8 @@ class _AboutPage extends StatelessWidget {
                           ShragaLogo(dark: isDarkTheme(context)),
                       // ),
                       title: Text("Yeshivat Torat Shraga"),
-                      subtitle: Text("Developed by Benji Tusk"),
+                      subtitle:
+                          Text("Developed by Benji Tusk, a proud alumnus."),
                       onLongPress: () => showDialog(
                           context: context,
                           builder: (alertContext) => AlertDialog(
@@ -167,49 +169,55 @@ class _AboutPage extends StatelessWidget {
                     )),
                 Spacer(),
                 // Version number
-                Row(
-                  children: [
-                    Text(getCopyrightText(),
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onBackground
-                                .withOpacity(0.5))),
-                    Spacer(),
-                    FutureBuilder<PackageInfo>(
-                      future: PackageInfo.fromPlatform(),
-                      builder: (context, snapshot) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.done:
-                            return Align(
-                              alignment: Alignment.bottomCenter,
-                              child: bloc.isDevModeEnabled
-                                  ? GradientText(
-                                      'Version: ${snapshot.data?.version} (${snapshot.data?.buildNumber}) DEV',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                      gradient: LinearGradient(colors: [
-                                        Colors.blue.shade400,
-                                        Colors.blue.shade900,
-                                      ]))
-                                  : Text(
-                                      'Version: ${snapshot.data?.version} (${snapshot.data?.buildNumber})',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onBackground
-                                                  .withOpacity(0.5)),
-                                    ),
-                            );
-                          default:
-                            return const SizedBox();
-                        }
-                      },
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Row(
+                    children: [
+                      Text(getCopyrightText(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.5))),
+                      Spacer(),
+                      FutureBuilder<PackageInfo>(
+                        future: PackageInfo.fromPlatform(),
+                        builder: (context, snapshot) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.done:
+                              return Align(
+                                alignment: Alignment.bottomCenter,
+                                child: bloc.isDevModeEnabled
+                                    ? GradientText(
+                                        'Version: ${snapshot.data?.version} (${snapshot.data?.buildNumber}) DEV',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                        gradient: LinearGradient(colors: [
+                                          Colors.blue.shade400,
+                                          Colors.blue.shade900,
+                                        ]))
+                                    : Text(
+                                        'Version: ${snapshot.data?.version} (${snapshot.data?.buildNumber})',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface
+                                                    .withValues(alpha: 0.5)),
+                                      ),
+                              );
+                            default:
+                              return const SizedBox();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
